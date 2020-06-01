@@ -1,0 +1,3 @@
+from logging import Handler
+
+class RichHandler(Handler): ...

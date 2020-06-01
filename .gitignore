@@ -1,0 +1,22 @@
+# PYTHON
+.pytest_cache
+__pycache__
+*.pyc
+*.egg-info
+
+# MACS
+.DS_Store
+
+# TESTS
+junit.xml
+# coverage
+.coverage
+coverage.xml
+htmlcov
+# mypy
+.mypy_cache
+
+# POETRY
+/dist/
+/pyproject.tmp
+/setup.py

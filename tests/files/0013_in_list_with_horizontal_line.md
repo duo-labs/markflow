@@ -1,0 +1,8 @@
+---
+- I am a list
+  - With a few entries
+- And for some reason
+- I am surrounded by new lines
+---
+- I'm a single entry list with a horizontal line after me
+---
