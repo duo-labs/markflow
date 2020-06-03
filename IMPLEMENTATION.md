@@ -50,10 +50,10 @@ to the language.
 ### Rendering Consistency
 
 Another nice thing would be to enforce consistent rendering of the input files. Progress
-on this has started as it is enforce by most tests, but there are two big barriers:
-
-  * mdformat Modifies Block Quotes Changing HTML
-  * The [commonmark library][commonmark_pkg] does not support tables.
+on this has started as it is enforce by most tests, but since tables are an extension to
+commonmark, the [library][commonmark_pkg]. A potential option that makes even more sense
+in a plugin architecture would be having individual formatters handle validating
+rendering consistency.
 
 If you end up debugging an issue because of this, you can pass `--write-renders` to save
 off the inputs. Pass `--dev-help` to see other developer options.
