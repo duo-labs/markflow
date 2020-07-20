@@ -5,8 +5,15 @@ consistent looking Markdown files.
 
 ## Quickstart
 
-To use this tool, simply install this package and run `mdformat`. Assuming you already
-have `poetry` installed, from the project directory:
+To use this tool, install it with pip then run `mdformat`:
+
+```shell
+pip install mdformat
+mdformat SOMETHING.md
+```
+
+To install from source, assuming you already have `poetry` installed, from the project
+directory, run:
 
 ```shell
 poetry install
@@ -18,8 +25,6 @@ Just want to see if there will be any changes? Use the `--check` flag:
 ```shell
 mdformat --check $PATH_TO_MARKDOWN_FILE
 ```
-
-One day we'll be on pypi.
 
 ## Enforced Rules
 
