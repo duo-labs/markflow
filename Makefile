@@ -30,12 +30,12 @@ _venv_3.8:
 
 
 # --- AUDITS ---
-.PHONY: audits black flake8 mdformat
+.PHONY: audits black flake8 markflow
 
 # Runs all of our audits regardless of if any fail
 audits:
 	@status=0; \
-	for target in black flake8 mdformat; do \
+	for target in black flake8 markflow; do \
 		$(MAKE) $${target}; \
 		status=$$(($$status + $$?)); \
 		echo ""; \
@@ -49,18 +49,18 @@ flake8: _venv_3.8
 	git ls-files | egrep '.*\.py$$' | egrep -v 'docs/' | \
 		xargs poetry run flake8 --max-line-length 88
 
-mdformat: _venv_3.8
-	git ls-files | egrep ".md$$" | grep -v "/files/" | poetry run mdformat --check
+markflow: _venv_3.8
+	git ls-files | egrep ".md$$" | grep -v "/files/" | poetry run markflow --check
 
 # --- TESTS ---
 .PHONY: tests
 tests: utests mypy ensure_deps
 
 ensure_deps:
-	# Ensure dependencies mdformat needs didn't sneak into dev dependencies
+	# Ensure dependencies markflow needs didn't sneak into dev dependencies
 	poetry env use 3.8
 	poetry install --no-dev
-	poetry run mdformat
+	poetry run markflow
 	poetry install
 
 # MyPy
@@ -70,7 +70,7 @@ mypy: mypy_lib mypy_tests
 mypy_lib: _venv_3.8
 	# --implicity-reexport means that we don't have to explicitly tell mypy about our
 	# modules' members via a `__all__`
-	MYPYPATH=$(CURDIR)/stubs poetry run mypy --strict --implicit-reexport mdformat
+	MYPYPATH=$(CURDIR)/stubs poetry run mypy --strict --implicit-reexport markflow
 
 mypy_tests: _venv_3.8
 	# --implicity-reexport means that we don't have to explicitly tell mypy about our
@@ -84,7 +84,7 @@ utests: utests_3.6 utests_3.7 utests_3.8
 
 _utests:
 	poetry env use ${PYTHON_VERSION}
-	cd $(CURDIR)/tests && poetry run pytest --cov=mdformat --cov-report=term \
+	cd $(CURDIR)/tests && poetry run pytest --cov=markflow --cov-report=term \
 		--cov-report=html --junit-xml=junit.xml
 	@echo For more detailed information, see $(CURDIR)/tests/htmlcov/index.html
 
@@ -107,4 +107,4 @@ package:
 .PHONY: container
 
 container:
-	echo docker build . -t mdformat_builder
+	echo docker build . -t markflow_builder

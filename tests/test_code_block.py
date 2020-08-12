@@ -1,4 +1,4 @@
-from mdformat.formatters.code_block import MarkdownCodeBlock
+from markflow.formatters.code_block import MarkdownCodeBlock
 
 from .util import create_section, render
 

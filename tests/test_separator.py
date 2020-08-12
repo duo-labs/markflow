@@ -1,4 +1,4 @@
-from mdformat.formatters.separator import MarkdownSeparator
+from markflow.formatters.separator import MarkdownSeparator
 
 from .util import create_section, render
 

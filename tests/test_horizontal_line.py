@@ -1,6 +1,6 @@
 import math
 
-from mdformat.formatters.horizontal_line import MarkdownHorizontalLine
+from markflow.formatters.horizontal_line import MarkdownHorizontalLine
 
 from .util import create_section, render
 

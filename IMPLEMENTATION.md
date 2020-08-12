@@ -1,6 +1,6 @@
-# mdformat Behind Scenes
+# markflow Behind Scenes
 
-mdformat is a pretty simple tool that formats code in three steps:
+markflow is a pretty simple tool that formats code in three steps:
 
 * [Parse the text](#parsing-markdown)
 * [Reformat each section and stitch the sections back together](#reformatting-sections)
@@ -34,7 +34,7 @@ rules.
 
 ## Future Architecture Ideas
 
-Random ramblings on the future of mdformat.
+Random ramblings on the future of markflow.
 
 ### Plugins
 

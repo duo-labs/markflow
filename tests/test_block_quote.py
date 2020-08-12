@@ -1,6 +1,6 @@
 import textwrap
 
-from mdformat.formatters import MarkdownBlockQuote
+from markflow.formatters import MarkdownBlockQuote
 
 # TODO: Apparently rendered HTML cares about blank block quotes
 # In retrospect, this kind of spacing is respected in non-block quotes, so we should be

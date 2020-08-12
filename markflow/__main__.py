@@ -125,7 +125,7 @@ def parse_args(argv: List[str]) -> argparse.Namespace:
         type=File(permissions=[WRITABLE], must_exist=False),
         action="append",
         help=(
-            "Write the output of mdformat to a file. You must specify as many output "
+            "Write the output of markflow to a file. You must specify as many output "
             "files as there are input files. The two lists of files will be "
             "co-indexed. You can only specify output files or an output directory."
         )

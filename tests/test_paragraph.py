@@ -1,6 +1,6 @@
 import textwrap
 
-from mdformat.formatters.paragraph import MarkdownParagraph
+from markflow.formatters.paragraph import MarkdownParagraph
 
 from .util import create_section, render
 

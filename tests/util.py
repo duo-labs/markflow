@@ -4,7 +4,7 @@ from typing import Type
 
 import commonmark
 
-from mdformat.formatters import MarkdownSection
+from markflow.formatters import MarkdownSection
 
 IGNORED_HTML_CHARACTERS = re.compile(r"[\n\s]")
 # We need to remove starts to ignore our numbering corrections.

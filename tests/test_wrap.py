@@ -1,6 +1,6 @@
 import textwrap
 
-from mdformat.formatters.textwrap import (
+from markflow.formatters.textwrap import (
     code_split,
     link_split,
     newline_split,

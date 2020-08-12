@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "mdformat"
+name = "markflow"
 version = "0.1.0"
 description = "Make your Markdown Sparkle!"
 authors = ["Joshua Holland <jholland@duosecurity.com>"]
@@ -22,4 +22,4 @@ requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"
 
 [tool.poetry.scripts]
-mdformat = "mdformat.__main__:__main__"
+markflow = "markflow.__main__:__main__"

@@ -6,7 +6,7 @@ from typing import DefaultDict, List, Optional
 
 import pytest
 
-from mdformat import reformat_markdown_text
+from markflow import reformat_markdown_text
 
 from .util import render
 
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 # TODO: File bug report for 0015
 PYCOMMONMARK_BUG_FILES = ["0015"]
-MDFORMAT_BUG_FILES = ["0016", "0017", "0018"]
+MARKFLOW_BUG_FILES = ["0016", "0017", "0018"]
 
 
 class FilePair:
@@ -84,8 +84,8 @@ class TestFiles:
         ),
     )
     def test_files(self, file_pair: FilePair) -> None:
-        if any(num in file_pair.input.name for num in MDFORMAT_BUG_FILES):
-            pytest.xfail("Marking test xfail due to mdformat bug.")
+        if any(num in file_pair.input.name for num in MARKFLOW_BUG_FILES):
+            pytest.xfail("Marking test xfail due to markflow bug.")
 
         input_text = file_pair.input.read_text()
         output_text = file_pair.output.read_text()

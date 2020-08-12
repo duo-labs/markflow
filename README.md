@@ -1,15 +1,15 @@
-# mdformat
+# markflow
 
-Welcome to mdformat. This tool automatically reformats your Markdown to provided
+Welcome to markflow. This tool automatically reformats your Markdown to provided
 consistent looking Markdown files.
 
 ## Quickstart
 
-To use this tool, install it with pip then run `mdformat`:
+To use this tool, install it with pip then run `markflow`:
 
 ```shell
-pip install mdformat
-mdformat SOMETHING.md
+pip install markflow
+markflow SOMETHING.md
 ```
 
 To install from source, assuming you already have `poetry` installed, from the project
@@ -17,13 +17,13 @@ directory, run:
 
 ```shell
 poetry install
-poetry run mdformat
+poetry run markflow
 ```
 
 Just want to see if there will be any changes? Use the `--check` flag:
 
 ```shell
-mdformat --check $PATH_TO_MARKDOWN_FILE
+markflow --check $PATH_TO_MARKDOWN_FILE
 ```
 
 ## Enforced Rules
@@ -174,7 +174,7 @@ becomes:
 The tool also provides a function to reformat markdown strings yourself.
 
 ```python
-from mdformat import reformat_markdown_text
+from markflow import reformat_markdown_text
 
 markdown = "   # Header 1"
 nice_markdown = reformat_markdown_text(markdown, width=88)
@@ -214,7 +214,7 @@ for char in text:
 output_path.write_text(output)
 ```
 
-[issues]: https://github.com/duo-labs/mdformat/issues
+[issues]: https://github.com/duo-labs/markflow/issues
 
 ## Implementation
 

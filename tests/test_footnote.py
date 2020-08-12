@@ -1,4 +1,4 @@
-from mdformat.formatters.footnote import MarkdownFootnote
+from markflow.formatters.footnote import MarkdownFootnote
 
 from .util import create_section, render
 

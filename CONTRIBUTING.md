@@ -1,4 +1,4 @@
-# Contributing to mdformat
+# Contributing to markflow
 
 The following are the contributing guidelines when making changes to this project.
 
@@ -18,7 +18,7 @@ audits we run are as follows:
 
 ```shell
 # Ensure all Markdown files would not be reformatted by us :)
-make mdformat
+make markflow
 # Ensure all python files would not be reformatted by black
 make black
 # Ensure all pythons follow a few other rules enforced by flake8
@@ -27,8 +27,8 @@ make flake
 make audits
 ```
 
-The poetry environment comes with [black][black] and of course mdformat so you can
-quickly run the tools with `poetry run black` or `poetry run mdformat` or just drop down
+The poetry environment comes with [black][black] and of course markflow so you can
+quickly run the tools with `poetry run black` or `poetry run markflow` or just drop down
 to a shell with them by running `poetry shell`.
 
 [black]: https://black.readthedocs.io/en/latest/
@@ -41,7 +41,7 @@ strict type checking enforced via [mypy][mypy]. The commands to run them are as 
 ```shell
 # Run tests in /tests
 make pytests
-# Run mypy against the mdformat library
+# Run mypy against the markflow library
 make mypy_lib
 # Run mypy against our tests
 make mypy_tests
@@ -67,14 +67,14 @@ expected output to `tests/files`. In the folder, inputs and outputs are matched 
 on their leading numeric. So, `0010_in_tests.md`'s expected output is
 `0010_out_tests.md`.
 
-[pr]: https://github.com/duo-labs/mdformat/pulls
+[pr]: https://github.com/duo-labs/markflow/pulls
 
 ## Proposing Changes
 
 If you want to propose a rule change, like making inline code blocks split across lines,
 feel free to open an [issue][issues].
 
-[issues]: https://github.com/duo-labs/mdformat/issues
+[issues]: https://github.com/duo-labs/markflow/issues
 
 # Duplicate CI Locally
 
@@ -90,9 +90,9 @@ To run commands in the container, you'll need to mount our source. The following
 do the trick when run from the project's directory:
 
 ```shell
-docker run -v "`pwd`:/src" -w /src mdformat_builder make
+docker run -v "`pwd`:/src" -w /src markflow_builder make
 # Build the wheel
-docker run -v "`pwd`:/src" -w /src mdformat_builder make package
+docker run -v "`pwd`:/src" -w /src markflow_builder make package
 ```
 
 [docker]: https://www.docker.com/

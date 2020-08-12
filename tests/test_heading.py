@@ -1,4 +1,4 @@
-from mdformat.formatters.heading import MarkdownHeading
+from markflow.formatters.heading import MarkdownHeading
 
 from .util import create_section, render
 

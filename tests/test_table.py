@@ -1,7 +1,7 @@
 import textwrap
 
-from mdformat.formatters.table import MarkdownTable
-from mdformat.formatters.table import center_align, left_align, right_align
+from markflow.formatters.table import MarkdownTable
+from markflow.formatters.table import center_align, left_align, right_align
 
 from .util import create_section
 
