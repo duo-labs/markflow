@@ -107,4 +107,4 @@ package:
 .PHONY: container
 
 container:
-	echo docker build . -t markflow_builder
+	docker build . -t markflow_builder
