@@ -1,6 +1,6 @@
-# markflow Behind Scenes
+# MarkFlow Behind Scenes
 
-markflow is a pretty simple tool that formats code in three steps:
+MarkFlow is a pretty simple tool that formats code in three steps:
 
 * [Parse the text](#parsing-markdown)
 * [Reformat each section and stitch the sections back together](#reformatting-sections)
@@ -34,7 +34,7 @@ rules.
 
 ## Future Architecture Ideas
 
-Random ramblings on the future of markflow.
+Random ramblings on the future of MarkFlow.
 
 ### Plugins
 

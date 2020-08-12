@@ -1,6 +1,6 @@
-# markflow
+# MarkFlow
 
-Welcome to markflow. This tool automatically reformats your Markdown to provided
+Welcome to MarkFlow. This tool automatically reformats your Markdown to provided
 consistent looking Markdown files.
 
 ## Quickstart

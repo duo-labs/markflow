@@ -1,4 +1,4 @@
-# Contributing to markflow
+# Contributing to MarkFlow
 
 The following are the contributing guidelines when making changes to this project.
 
@@ -27,7 +27,7 @@ make flake
 make audits
 ```
 
-The poetry environment comes with [black][black] and of course markflow so you can
+The poetry environment comes with [black][black] and of course MarkFlow so you can
 quickly run the tools with `poetry run black` or `poetry run markflow` or just drop down
 to a shell with them by running `poetry shell`.
 
