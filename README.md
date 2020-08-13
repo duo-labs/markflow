@@ -32,7 +32,7 @@ The tool ensures that the following rules are enforced for each different type o
 Markdown section. For all sections, trailing spaces on each line are removed. It also
 ensures that Markdown files end with a single newline and newlines are all `'\n'`.
 
-This tools uses the Markdown standard defined by [CommonMark 0.29][commonmark]. It is
+This tools uses the Markdown standard defined by [CommonMark 0.29][commonmark_spec]. It is
 expected to evolve with the standard and this section will be updated as support is
 added. If you notice an discrepancies, please open an issue.
 
