@@ -4,7 +4,7 @@ import math
 import pathlib
 import sys
 
-from typing import List
+from typing import List, TextIO
 from .typing import Number
 
 import rich.console
@@ -217,25 +217,23 @@ def _write_renders(
     second_output_path.write_text(second_contents)
 
 
-def main(argv: List[str]) -> int:
-    args = parse_args(argv)
+def _print_renders(text: str, width: Number = 88) -> None:
+    first_contents = _reformat_markdown_text(text, width)
+    logger.debug("Writing first render to STDOUT")
+    print(first_contents)
 
-    if not args.paths:
-        if sys.stdin.isatty():
-            print_markdown("**No path provided. Nothing to do.**")
-            return 0
-        else:
-            args.paths = [pathlib.Path(path.strip()) for path in sys.stdin]
+    second_contents = _reformat_markdown_text(first_contents, width)
+    logger.debug("Writing second render to STDOUT")
+    print(second_contents)
 
+
+def _reformat_files(args: argparse.Namespace) -> int:
     if args.output_directory:
         output_paths = [args.output_directory / p.name for p in args.paths]
     elif args.output_files:
         output_paths = args.output_files
     else:
         output_paths = args.paths
-
-    if args.line_length < 1:
-        args.line_length = math.inf
 
     files_left_unchanged = 0
     files_changed = 0
@@ -293,6 +291,51 @@ def main(argv: List[str]) -> int:
             )
     print_markdown(" ".join(messages))
     return return_value
+
+
+def _reformat_stdin(args: argparse.Namespace, stdin: TextIO) -> int:
+    if args.output_directory or args.output_files:
+        logger.warning(
+            "MarkFlow is being run in interactive mode. Results will be written to "
+            "STDOUT."
+        )
+
+    old_contents = stdin.read()
+    try:
+        new_contents = reformat_markdown_text(old_contents, args.line_length)
+    except RuntimeError as runtime_error:
+        if args.write_renders and isinstance(
+            runtime_error, ReformatInconsistentException
+        ):
+            _print_renders(old_contents, args.line_length)
+        raise
+
+    if args.check:
+        if new_contents != old_contents:
+            print_markdown(f"STDIN would be reformatted.")
+            return 1
+        else:
+            print_markdown("STDIN would be unchanged.")
+            return 0
+    else:
+        print(new_contents, end="")
+        return 0
+
+
+def main(argv: List[str]) -> int:
+    args = parse_args(argv)
+
+    if args.line_length < 1:
+        args.line_length = math.inf
+
+    if not args.paths:
+        if sys.stdin.isatty():
+            print_markdown("**No path provided. Nothing to do.**")
+            return 0
+        else:
+            return _reformat_stdin(args, sys.stdin)
+    else:
+        return _reformat_files(args)
 
 
 def __main__() -> None:

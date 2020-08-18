@@ -50,7 +50,7 @@ flake8: _venv_3.8
 		xargs poetry run flake8 --max-line-length 88
 
 markflow: _venv_3.8
-	git ls-files | egrep ".md$$" | grep -v "/files/" | poetry run markflow --check
+	git ls-files | egrep ".md$$" | grep -v "/files/" | xargs poetry run markflow --check
 
 # --- TESTS ---
 .PHONY: tests
