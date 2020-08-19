@@ -50,7 +50,7 @@ jobs:
         # Remove this once this issue is no longer in preview: https://github.com/python-poetry/poetry/issues/2742
         source $HOME/.poetry/env
         poetry self update --preview
-    - name: Audit
+    - name: Test
       run: |
         export PATH="$HOME/.poetry/bin:${PATH}"
         make tests_${{ matrix.python-version }}
