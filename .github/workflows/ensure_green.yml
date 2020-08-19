@@ -1,0 +1,36 @@
+name: Test changes
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - name: Install dependencies
+      run: |
+        sudo apt-get update && sudo apt-get install -y make
+        python -m pip install --upgrade pip
+        pip install setuptools wheel twine
+        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+    - name: Audit
+      run: |
+        export PATH="$HOME/.poetry/bin:${PATH}"
+        make audits
+    - name: Test
+      run: |
+        export PATH="$HOME/.poetry/bin:${PATH}"
+        make tests
+
