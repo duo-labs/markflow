@@ -65,7 +65,7 @@ ensure_deps: ensure_deps_3.6 ensure_deps_3.7 ensure_deps_3.8
 
 _ensure_deps:
 	# Ensure dependencies markflow needs didn't sneak into dev dependencies
-	poetry env use {$PYTHON_VERSION}
+	poetry env use ${PYTHON_VERSION}
 	poetry install --no-dev
 	poetry run markflow
 	poetry install
