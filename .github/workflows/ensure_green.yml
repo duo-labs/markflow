@@ -9,36 +9,25 @@ on:
       - '**'
 
 jobs:
-  deploy:
-
+  audit:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.6
+    - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.6'
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.7'
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.8'
+        python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
         sudo apt-get update && sudo apt-get install -y make
-        python -m pip install --upgrade pip
+        python3 -m pip install --upgrade pip
         pip install setuptools wheel twine
-        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
+        curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
     - name: Audit
       run: |
         export PATH="$HOME/.poetry/bin:${PATH}"
         make audits
-    - name: Test
-      run: |
-        export PATH="$HOME/.poetry/bin:${PATH}"
-        make tests
 
