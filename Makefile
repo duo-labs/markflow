@@ -53,15 +53,31 @@ markflow: _venv_3.8
 	git ls-files | egrep ".md$$" | grep -v "/files/" | xargs poetry run markflow --check
 
 # --- TESTS ---
-.PHONY: tests
+.PHONY: tests tests_3.6 tests_3.7 tests_3.8
 tests: utests mypy ensure_deps
+tests_3.6: utests_3.6 ensure_deps_3.6
+tests_3.7: utests_3.7 ensure_deps_3.7
+tests_3.8: utests_3.8 mypy ensure_deps_3.8
 
-ensure_deps:
+# Ensure dependencies are properly specified
+.PHONY: ensure_deps _ensure_deps ensure_deps_3.6 ensure_deps_3.7 ensure_deps_3.8
+ensure_deps: ensure_deps_3.6 ensure_deps_3.7 ensure_deps_3.8
+
+_ensure_deps:
 	# Ensure dependencies markflow needs didn't sneak into dev dependencies
-	poetry env use 3.8
+	poetry env use {$PYTHON_VERSION}
 	poetry install --no-dev
 	poetry run markflow
 	poetry install
+
+ensure_deps_3.6:
+	PYTHON_VERSION=3.6 $(MAKE) _ensure_deps
+
+ensure_deps_3.7:
+	PYTHON_VERSION=3.7 $(MAKE) _ensure_deps
+
+ensure_deps_3.8:
+	PYTHON_VERSION=3.8 $(MAKE) _ensure_deps
 
 # MyPy
 .PHONY: mypy mypy_lib mypy_tests
@@ -80,7 +96,7 @@ mypy_tests: _venv_3.8
 # Unit Tests
 # Bit of  a misnomer since `test_files.py` is more of a system/integration test
 .PHONY: utests _utests utests_3.6 utests_3.7 utests_3.8
-utests: utests_3.6 utests_3.7 utests_3.8
+utests: _utests utests_3.6 utests_3.7 utests_3.8
 
 _utests:
 	poetry env use ${PYTHON_VERSION}
