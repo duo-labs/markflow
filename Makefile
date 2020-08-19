@@ -68,7 +68,6 @@ _ensure_deps:
 	poetry env use ${PYTHON_VERSION}
 	poetry install --no-dev
 	poetry run markflow
-	poetry install
 
 ensure_deps_3.6:
 	PYTHON_VERSION=3.6 $(MAKE) _ensure_deps
