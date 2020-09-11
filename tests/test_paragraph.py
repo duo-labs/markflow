@@ -37,3 +37,16 @@ class TestParagraph:
         paragraph = create_section(MarkdownParagraph, expected)
         assert paragraph.reformatted() == expected
         assert render(expected) == render(input_)
+
+    def test_semantic_paragraph(self) -> None:
+        input_ = textwrap.dedent(
+            """\
+            Some words with a double
+            space after them.  """
+        )
+        expected = "Some words with a double space after them.  "
+        paragraph = create_section(MarkdownParagraph, input_)
+        assert paragraph.reformatted() == expected
+        paragraph = create_section(MarkdownParagraph, expected)
+        assert paragraph.reformatted() == expected
+        assert render(expected) == render(input_)
