@@ -82,7 +82,7 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
             if sections:
                 logger.info("Last section: %s", repr(sections[-1]))
 
-            elif block_quote_started(line, i, lines):
+            if block_quote_started(line, i, lines):
                 state = LineState.CODE_BLOCK
                 ended_function = block_quote_ended
                 sections.append(MarkdownBlockQuote(i))
