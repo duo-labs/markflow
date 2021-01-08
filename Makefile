@@ -46,14 +46,17 @@ audits:
 	done; \
 	exit $$status
 
-black: _venv_3.8
+black: _venv_3.9
+	poetry env use 3.9
 	git ls-files | egrep '.*\.pyi?$$' | xargs poetry run black --check
 
-flake8: _venv_3.8
+flake8: _venv_3.9
+	poetry env use 3.9
 	git ls-files | egrep '.*\.py$$' | egrep -v 'docs/' | \
 		xargs poetry run flake8 --max-line-length 88
 
-markflow: _venv_3.8
+markflow: _venv_3.9
+	poetry env use 3.9
 	git ls-files | egrep ".md$$" | grep -v "/files/" | xargs poetry run markflow --check
 
 # --- TESTS ---
