@@ -64,8 +64,8 @@ markflow: _venv_3.9
 tests: utests mypy ensure_deps
 tests_3.6: utests_3.6 ensure_deps_3.6
 tests_3.7: utests_3.7 ensure_deps_3.7
-tests_3.8: utests_3.8 mypy ensure_deps_3.8
-tests_3.9: utests_3.9 ensure_deps_3.9
+tests_3.8: utests_3.8 ensure_deps_3.8
+tests_3.9: utests_3.9 ensure_deps_3.9 mypy
 
 # Ensure dependencies are properly specified
 .PHONY: ensure_deps _ensure_deps ensure_deps_3.6 ensure_deps_3.7 ensure_deps_3.8 ensure_deps_3.9
