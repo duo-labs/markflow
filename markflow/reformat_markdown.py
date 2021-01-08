@@ -131,9 +131,6 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
     if sections and isinstance(sections[-1], MarkdownSeparator):
         sections.pop()
 
-    if sections:
-        logger.info("Last section: %s", repr(sections[-1]))
-
     return "\n".join([section.reformatted(width=width) for section in sections]) + "\n"
 
 
