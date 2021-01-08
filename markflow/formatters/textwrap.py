@@ -249,6 +249,7 @@ def space_split(
 
 
 def wrap(text: str, width: Number) -> str:
+    # TODO: Should wrap be modifying the input. Maybe assert there's no newlines?
     lines = text.splitlines()
     text = " ".join([line.strip() for line in lines])
 

@@ -23,7 +23,8 @@ def paragraph_started(line: str, index: int, lines: List[str]) -> bool:
 
 def paragraph_ended(line: str, index: int, lines: List[str]) -> bool:
     return (
-        block_quote_started(line, index, lines)
+        ((index > 0) and lines[index - 1].endswith("  "))
+        or block_quote_started(line, index, lines)
         or tilda_code_block_started(line, index, lines)
         or heading_started(line, index, lines)
         or horizontal_line_started(line, index, lines)

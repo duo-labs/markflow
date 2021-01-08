@@ -11,4 +11,7 @@ class MarkdownParagraph(MarkdownSection):
         self.lines.append(line)
 
     def reformatted(self, width: Number = 88) -> str:
-        return wrap(" ".join([line.strip() for line in self.lines]), width)
+        text = wrap(" ".join([line.strip() for line in self.lines]), width)
+        if self.lines[-1].endswith("  "):
+            text += "  "
+        return text
