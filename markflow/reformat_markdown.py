@@ -144,6 +144,6 @@ def reformat_markdown_text(text: str, width: Number = 88) -> str:
     new_text = _reformat_markdown_text(text, width)
     if new_text != _reformat_markdown_text(new_text, width):
         raise ReformatInconsistentException(
-            f"Reformat of reformatted code results in different text."
+            "Reformat of reformatted code results in different text."
         )
     return new_text
