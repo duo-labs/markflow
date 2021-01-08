@@ -93,17 +93,19 @@ mypy: mypy_lib mypy_tests
 mypy_lib: _venv_3.8
 	# --implicity-reexport means that we don't have to explicitly tell mypy about our
 	# modules' members via a `__all__`
+	poetry env use 3.8
 	MYPYPATH=$(CURDIR)/stubs poetry run mypy --strict --implicit-reexport markflow
 
 mypy_tests: _venv_3.8
 	# --implicity-reexport means that we don't have to explicitly tell mypy about our
 	# modules' members via a `__all__`
+	poetry env use 3.8
 	MYPYPATH=$(CURDIR)/stubs poetry run mypy --strict --implicit-reexport tests
 
 # Unit Tests
 # Bit of  a misnomer since `test_files.py` is more of a system/integration test
 .PHONY: utests _utests utests_3.6 utests_3.7 utests_3.8 utests_3.9
-utests: _utests utests_3.6 utests_3.7 utests_3.8 utests_3.9
+utests: utests_3.6 utests_3.7 utests_3.8 utests_3.9
 
 _utests:
 	poetry env use ${PYTHON_VERSION}
