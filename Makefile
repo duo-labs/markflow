@@ -97,7 +97,7 @@ mypy_lib: _venv_3.9
 	# --implicity-reexport means that we don't have to explicitly tell mypy about our
 	# modules' members via a `__all__`
 	poetry env use 3.9
-	MYPYPATH=$(CURDIR)/stubs poetry run mypy --strict --implicit-reexport markflow
+	MYPYPATH=$(CURDIR)/stubs poetry run mypy -vv --strict --implicit-reexport markflow
 
 mypy_tests: _venv_3.9
 	# --implicity-reexport means that we don't have to explicitly tell mypy about our
