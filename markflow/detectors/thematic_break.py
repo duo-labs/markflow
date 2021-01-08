@@ -1,25 +1,27 @@
+"""
+4.1 Thematic breaks
+
+A line consisting of 0-3 spaces of indentation, followed by a sequence of three or more
+matching -, _, or * characters, each followed optionally by any number of spaces or
+tabs, forms a thematic break.
+
+It is required that all of the non-whitespace characters be the same.
+
+TODO: Revisit when working on lists.
+
+When both a thematic break and a list item are possible interpretations of a line, the
+thematic break takes precedence.
+
+If you want a thematic break in a list item, use a different bullet.
+
+https://spec.commonmark.org/0.29/#thematic-breaks
+"""
+
 from typing import List
 
 from .code_block import indented_code_block_started
 
 SEPARATOR_SYMBOLS = ["*", "_", "-"]
-
-# 4.1 Thematic breaks
-#
-# A line consisting of 0-3 spaces of indentation, followed by a sequence of three or
-# more matching -, _, or * characters, each followed optionally by any number of spaces
-# or tabs, forms a thematic break.
-#
-# It is required that all of the non-whitespace characters be the same.
-#
-# TODO: Revisit when working on lists.
-#
-# When both a thematic break and a list item are possible interpretations of a line, the
-# thematic break takes precedence.
-#
-# If you want a thematic break in a list item, use a different bullet.
-#
-# https://spec.commonmark.org/0.29/#thematic-breaks
 
 
 def thematic_break_started(line: str, index: int, lines: List[str]) -> bool:
