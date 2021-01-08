@@ -89,12 +89,6 @@ Heading 1
 ---------
 ```
 
-### Thematic Breaks
-
-Thematic Breaks are extended or reduced to match the length of the document. If line
-length is set to infinity, it will instead use 3 of the separating character which must
-be one of "-", "_", or "*"..
-
 ### Lists
 
 Lists will be corrected to proper indentation. In addition, ordered lists will be
@@ -168,7 +162,21 @@ becomes:
 | abcde | abcde | abcde | abcde |
 ```
 
-[commonmark_pkg]: https://github.com/readthedocs/commonmark.py
+### Thematic Breaks
+
+Thematic Breaks are extended or reduced to match the length of the document. If line
+length is set to infinity, it will instead use 3 of the separating character which must
+be one of "-", "_", or "*"..
+
+```markdown
+-- - -
+```
+
+becomes:
+
+```markdown
+----------------------------------------------------------------------------------------
+```
 
 ## API Reference
 
