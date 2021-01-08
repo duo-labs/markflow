@@ -14,7 +14,7 @@ understand what that's doing, though, read on.
 ### Running Audits
 
 We run checks against every commit to ensure all files follow standards we enforce. The
-audits we run are as follows:
+audits we run are as follows (they require python 3.9 to run):
 
 ```shell
 # Ensure all Markdown files would not be reformatted by us :)
