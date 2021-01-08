@@ -14,12 +14,13 @@ class MarkdownHorizontalLine(MarkdownSection):
         self.lines.append(line)
 
     def reformatted(self, width: Number = 88) -> str:
+        char = self.lines[0].strip()[0]
         if isinstance(width, float):
             if width == math.inf:
-                return "-" * 3
+                return char * 3
             else:
                 raise RuntimeError(
                     f"Invalid width {repr(width)} passed. How did you manage this?"
                 )
         else:
-            return "-" * width
+            return char * width
