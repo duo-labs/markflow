@@ -92,7 +92,8 @@ Heading 1
 ### Horizontal Lines
 
 Horizontal Lines are extended or reduced to match the length of the document. If line
-length is set to infinity, it will instead use 3 dashes.
+length is set to infinity, it will instead use 3 of the separating character which must
+be one of "-", "_", or "*"..
 
 ### Lists
 
