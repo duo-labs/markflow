@@ -46,14 +46,17 @@ audits:
 	done; \
 	exit $$status
 
-black: _venv_3.8
+black: _venv_3.9
+	poetry env use 3.9
 	git ls-files | egrep '.*\.pyi?$$' | xargs poetry run black --check
 
-flake8: _venv_3.8
+flake8: _venv_3.9
+	poetry env use 3.9
 	git ls-files | egrep '.*\.py$$' | egrep -v 'docs/' | \
 		xargs poetry run flake8 --max-line-length 88
 
-markflow: _venv_3.8
+markflow: _venv_3.9
+	poetry env use 3.9
 	git ls-files | egrep ".md$$" | grep -v "/files/" | xargs poetry run markflow --check
 
 # --- TESTS ---
@@ -61,8 +64,8 @@ markflow: _venv_3.8
 tests: utests mypy ensure_deps
 tests_3.6: utests_3.6 ensure_deps_3.6
 tests_3.7: utests_3.7 ensure_deps_3.7
-tests_3.8: utests_3.8 mypy ensure_deps_3.8
-tests_3.9: utests_3.9 ensure_deps_3.9
+tests_3.8: utests_3.8 ensure_deps_3.8
+tests_3.9: utests_3.9 ensure_deps_3.9 mypy
 
 # Ensure dependencies are properly specified
 .PHONY: ensure_deps _ensure_deps ensure_deps_3.6 ensure_deps_3.7 ensure_deps_3.8 ensure_deps_3.9
@@ -90,16 +93,16 @@ ensure_deps_3.9:
 .PHONY: mypy mypy_lib mypy_tests
 mypy: mypy_lib mypy_tests
 
-mypy_lib: _venv_3.8
+mypy_lib: _venv_3.9
 	# --implicity-reexport means that we don't have to explicitly tell mypy about our
 	# modules' members via a `__all__`
-	poetry env use 3.8
-	MYPYPATH=$(CURDIR)/stubs poetry run mypy --strict --implicit-reexport markflow
+	poetry env use 3.9
+	MYPYPATH=$(CURDIR)/stubs poetry run mypy -vv --strict --implicit-reexport markflow
 
-mypy_tests: _venv_3.8
+mypy_tests: _venv_3.9
 	# --implicity-reexport means that we don't have to explicitly tell mypy about our
 	# modules' members via a `__all__`
-	poetry env use 3.8
+	poetry env use 3.9
 	MYPYPATH=$(CURDIR)/stubs poetry run mypy --strict --implicit-reexport tests
 
 # Unit Tests
