@@ -5,6 +5,8 @@ from typing import List
 from .typing import Number, SectionEndedFunc
 
 from .detectors import (
+    atx_heading_started,
+    atx_heading_ended,
     block_quote_started,
     block_quote_ended,
     code_block_started,
@@ -26,6 +28,7 @@ from .detectors import (
 )
 from .exceptions import ReformatInconsistentException
 from .formatters import (
+    MarkdownATXHeading,
     MarkdownBlockQuote,
     MarkdownCodeBlock,
     MarkdownFootnote,
@@ -45,6 +48,7 @@ logger = logging.getLogger(__name__)
 
 class LineState(Enum):
     DEFAULT = "default"
+    ATX_HEADING = "atx heading"
     BLOCK_QUOTE = "block quote"
     CODE_BLOCK = "code block"
     FOOTNOTE = "footnote"
@@ -82,7 +86,11 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
             if sections:
                 logger.info("Last section: %s", repr(sections[-1]))
 
-            if block_quote_started(line, i, lines):
+            if atx_heading_started(line, i, lines):
+                state = LineState.ATX_HEADING
+                ended_function = atx_heading_ended
+                sections.append(MarkdownATXHeading(i))
+            elif block_quote_started(line, i, lines):
                 state = LineState.CODE_BLOCK
                 ended_function = block_quote_ended
                 sections.append(MarkdownBlockQuote(i))
