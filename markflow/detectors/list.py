@@ -2,7 +2,7 @@ import re
 
 from typing import List
 
-from .horizontal_line import horizontal_line_started
+from .thematic_break import thematic_break_started
 from .separator import separator_started
 from .table import table_started
 
@@ -23,7 +23,7 @@ def list_started(line: str, index: int, lines: List[str]) -> bool:
 
 def list_ended(line: str, index: int, lines: List[str]) -> bool:
     return (
-        horizontal_line_started(line, index, lines)
+        thematic_break_started(line, index, lines)
         or table_started(line, index, lines)
         or separator_started(line, index, lines)
     )

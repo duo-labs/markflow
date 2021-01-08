@@ -89,9 +89,9 @@ Heading 1
 ---------
 ```
 
-### Horizontal Lines
+### Thematic Breaks
 
-Horizontal Lines are extended or reduced to match the length of the document. If line
+Thematic Breaks are extended or reduced to match the length of the document. If line
 length is set to infinity, it will instead use 3 of the separating character which must
 be one of "-", "_", or "*"..
 

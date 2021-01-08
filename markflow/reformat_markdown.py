@@ -13,8 +13,8 @@ from .detectors import (
     footnote_ended,
     heading_started,
     heading_ended,
-    horizontal_line_started,
-    horizontal_line_ended,
+    thematic_break_started,
+    thematic_break_ended,
     list_started,
     list_ended,
     paragraph_started,
@@ -30,7 +30,7 @@ from .formatters import (
     MarkdownCodeBlock,
     MarkdownFootnote,
     MarkdownHeading,
-    MarkdownHorizontalLine,
+    MarkdownThematicBreak,
     MarkdownList,
     MarkdownParagraph,
     MarkdownSection,
@@ -49,7 +49,7 @@ class LineState(Enum):
     CODE_BLOCK = "code block"
     FOOTNOTE = "footnote"
     HEADING = "headings"
-    HORIZONTAL_LINE = "horizontal line"
+    THEMATIC_BREAK = "thematic break"
     LIST = "list"
     PARAGRAPH = "paragraph"
     SEPARATOR = "separator"
@@ -98,10 +98,10 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
                 state = LineState.HEADING
                 ended_function = heading_ended
                 sections.append(MarkdownHeading(i))
-            elif horizontal_line_started(line, i, lines):
-                state = LineState.HORIZONTAL_LINE
-                ended_function = horizontal_line_ended
-                sections.append(MarkdownHorizontalLine(i))
+            elif thematic_break_started(line, i, lines):
+                state = LineState.THEMATIC_BREAK
+                ended_function = thematic_break_ended
+                sections.append(MarkdownThematicBreak(i))
             elif list_started(line, i, lines):
                 state = LineState.LIST
                 ended_function = list_ended

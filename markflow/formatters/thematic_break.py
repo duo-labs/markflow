@@ -4,13 +4,13 @@ from ..typing import Number
 
 from .base import MarkdownSection
 
-__all__ = ["MarkdownHorizontalLine"]
+__all__ = ["MarkdownThematicBreak"]
 
 
-class MarkdownHorizontalLine(MarkdownSection):
+class MarkdownThematicBreak(MarkdownSection):
     def append(self, line: str) -> None:
         if self.lines:
-            raise RuntimeError("Horizontal lines cannot span multiple lines")
+            raise RuntimeError("Thematic breaks cannot span multiple lines")
         self.lines.append(line)
 
     def reformatted(self, width: Number = 88) -> str:
