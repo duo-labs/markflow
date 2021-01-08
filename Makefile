@@ -10,10 +10,11 @@ clean:
 	-poetry env remove 3.6
 	-poetry env remove 3.7
 	-poetry env remove 3.8
+	-poetry env remove 3.9
 
 
-.PHONY: clean _venv _venv_3.6 _venv_3.7 _venv_3.8 venvs
-venvs: _venv_3.6 _venv_3.7 _venv_3.8
+.PHONY: clean _venv _venv_3.6 _venv_3.7 _venv_3.8 _venv_3.9 venvs
+venvs: _venv_3.6 _venv_3.7 _venv_3.8 _venv_3.9
 
 _venv:
 	poetry env use ${PYTHON_VERSION}
@@ -27,6 +28,9 @@ _venv_3.7:
 
 _venv_3.8:
 	PYTHON_VERSION=3.8 $(MAKE) _venv
+
+_venv_3.9:
+	PYTHON_VERSION=3.9 $(MAKE) _venv
 
 
 # --- AUDITS ---
@@ -53,15 +57,16 @@ markflow: _venv_3.8
 	git ls-files | egrep ".md$$" | grep -v "/files/" | xargs poetry run markflow --check
 
 # --- TESTS ---
-.PHONY: tests tests_3.6 tests_3.7 tests_3.8
+.PHONY: tests tests_3.6 tests_3.7 tests_3.8 tests_3.9
 tests: utests mypy ensure_deps
 tests_3.6: utests_3.6 ensure_deps_3.6
 tests_3.7: utests_3.7 ensure_deps_3.7
 tests_3.8: utests_3.8 mypy ensure_deps_3.8
+tests_3.9: utests_3.9 ensure_deps_3.9
 
 # Ensure dependencies are properly specified
-.PHONY: ensure_deps _ensure_deps ensure_deps_3.6 ensure_deps_3.7 ensure_deps_3.8
-ensure_deps: ensure_deps_3.6 ensure_deps_3.7 ensure_deps_3.8
+.PHONY: ensure_deps _ensure_deps ensure_deps_3.6 ensure_deps_3.7 ensure_deps_3.8 ensure_deps_3.9
+ensure_deps: ensure_deps_3.6 ensure_deps_3.7 ensure_deps_3.8 ensure_deps_3.9
 
 _ensure_deps:
 	# Ensure dependencies markflow needs didn't sneak into dev dependencies
@@ -77,6 +82,9 @@ ensure_deps_3.7:
 
 ensure_deps_3.8:
 	PYTHON_VERSION=3.8 $(MAKE) _ensure_deps
+
+ensure_deps_3.9:
+	PYTHON_VERSION=3.9 $(MAKE) _ensure_deps
 
 # MyPy
 .PHONY: mypy mypy_lib mypy_tests
@@ -94,8 +102,8 @@ mypy_tests: _venv_3.8
 
 # Unit Tests
 # Bit of  a misnomer since `test_files.py` is more of a system/integration test
-.PHONY: utests _utests utests_3.6 utests_3.7 utests_3.8
-utests: _utests utests_3.6 utests_3.7 utests_3.8
+.PHONY: utests _utests utests_3.6 utests_3.7 utests_3.8 utests_3.9
+utests: _utests utests_3.6 utests_3.7 utests_3.8 utests_3.9
 
 _utests:
 	poetry env use ${PYTHON_VERSION}
@@ -111,6 +119,9 @@ utests_3.7: _venv_3.7
 
 utests_3.8: _venv_3.8
 	PYTHON_VERSION=3.8 $(MAKE) _utests
+
+utests_3.9: _venv_3.9
+	PYTHON_VERSION=3.9 $(MAKE) _utests
 
 # --- EXPORTING ---
 .PHONY: package

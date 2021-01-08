@@ -8,8 +8,8 @@ RUN apt-get update && apt-get -y upgrade
 
 RUN apt-get install -y git
 
-RUN apt-get install -y python3.6 python3.7 python3.8 python3-pip
-RUN apt-get install -y python3.6-venv python3.7-venv python3.8-venv
+RUN apt-get install -y python3.6 python3.7 python3.8 python-3.9 python3-pip
+RUN apt-get install -y python3.6-venv python3.7-venv python3.8-venv python3.9-venv
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 RUN apt-get install -y curl
