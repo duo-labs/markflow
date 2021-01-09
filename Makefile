@@ -17,7 +17,6 @@ clean:
 venvs: _venv_3.6 _venv_3.7 _venv_3.8 _venv_3.9
 
 _venv:
-	echo VENV
 	poetry env use ${PYTHON_VERSION}
 	poetry install
 
@@ -71,7 +70,6 @@ ensure_deps: ensure_deps_3.6 ensure_deps_3.7 ensure_deps_3.8 ensure_deps_3.9
 
 _ensure_deps:
 	# Ensure dependencies markflow needs didn't sneak into dev dependencies
-	echo ENSURE_DEPS
 	poetry env use ${PYTHON_VERSION}
 	poetry install --no-dev
 	echo -e "Hello\n--" | poetry run markflow
@@ -110,26 +108,21 @@ mypy_tests: _venv_3.8
 utests: utests_3.6 utests_3.7 utests_3.8 utests_3.9
 
 _utests:
-	echo UTESTS
 	poetry env use ${PYTHON_VERSION}
 	cd $(CURDIR)/tests && poetry run pytest --cov=markflow --cov-report=term \
 		--cov-report=html --junit-xml=junit.xml
 	@echo For more detailed information, see $(CURDIR)/tests/htmlcov/index.html
 
 utests_3.6: _venv_3.6
-	echo 3.6
 	PYTHON_VERSION=3.6 $(MAKE) _utests
 
 utests_3.7: _venv_3.7
-	echo 3.7
 	PYTHON_VERSION=3.7 $(MAKE) _utests
 
 utests_3.8: _venv_3.8
-	echo 3.8
 	PYTHON_VERSION=3.8 $(MAKE) _utests
 
 utests_3.9: _venv_3.9
-	echo 3.9
 	PYTHON_VERSION=3.9 $(MAKE) _utests
 
 # --- EXPORTING ---
