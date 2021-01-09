@@ -192,7 +192,7 @@ becomes:
 
 ### Thematic Breaks
 
-Thematic Breaks are extended or reduced to match the length of the document. If line
+Thematic breaks are extended or reduced to match the length of the document. If line
 length is set to infinity, it will instead use 3 of the separating character which must
 be one of "-", "_", or "*"..
 
