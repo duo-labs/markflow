@@ -5,37 +5,40 @@ from typing import List
 from .typing import Number, SectionEndedFunc
 
 from .detectors import (
+    atx_heading_started,
+    atx_heading_ended,
     block_quote_started,
     block_quote_ended,
     code_block_started,
     create_code_block_ended_func,
     footnote_started,
     footnote_ended,
-    heading_started,
-    heading_ended,
-    thematic_break_started,
-    thematic_break_ended,
     list_started,
     list_ended,
     paragraph_started,
     paragraph_ended,
     separator_started,
     separator_ended,
+    setext_heading_started,
+    setext_heading_ended,
     table_started,
     table_ended,
+    thematic_break_started,
+    thematic_break_ended,
 )
 from .exceptions import ReformatInconsistentException
 from .formatters import (
+    MarkdownATXHeading,
     MarkdownBlockQuote,
     MarkdownCodeBlock,
     MarkdownFootnote,
-    MarkdownHeading,
-    MarkdownThematicBreak,
     MarkdownList,
     MarkdownParagraph,
     MarkdownSection,
     MarkdownSeparator,
+    MarkdownSetextHeading,
     MarkdownTable,
+    MarkdownThematicBreak,
 )
 
 __all__ = ["reformat_markdown_text"]
@@ -45,6 +48,7 @@ logger = logging.getLogger(__name__)
 
 class LineState(Enum):
     DEFAULT = "default"
+    ATX_HEADING = "atx heading"
     BLOCK_QUOTE = "block quote"
     CODE_BLOCK = "code block"
     FOOTNOTE = "footnote"
@@ -53,11 +57,12 @@ class LineState(Enum):
     LIST = "list"
     PARAGRAPH = "paragraph"
     SEPARATOR = "separator"
+    SETEXT_HEADING = "setext heading"
     TABLE = "table"
 
 
 def _reformat_markdown_text(text: str, width: Number = 88) -> str:
-    """ Reformat a block of markdown text
+    """Reformat a block of markdown text
 
     See the README for how the Markdown text gets reformatted.
 
@@ -82,7 +87,11 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
             if sections:
                 logger.info("Last section: %s", repr(sections[-1]))
 
-            if block_quote_started(line, i, lines):
+            if atx_heading_started(line, i, lines):
+                state = LineState.ATX_HEADING
+                ended_function = atx_heading_ended
+                sections.append(MarkdownATXHeading(i))
+            elif block_quote_started(line, i, lines):
                 state = LineState.CODE_BLOCK
                 ended_function = block_quote_ended
                 sections.append(MarkdownBlockQuote(i))
@@ -94,18 +103,15 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
                 state = LineState.FOOTNOTE
                 ended_function = footnote_ended
                 sections.append(MarkdownFootnote(i))
-            elif heading_started(line, i, lines):
-                state = LineState.HEADING
-                ended_function = heading_ended
-                sections.append(MarkdownHeading(i))
-            elif thematic_break_started(line, i, lines):
-                state = LineState.THEMATIC_BREAK
-                ended_function = thematic_break_ended
-                sections.append(MarkdownThematicBreak(i))
             elif list_started(line, i, lines):
                 state = LineState.LIST
                 ended_function = list_ended
                 sections.append(MarkdownList(i))
+            # This must be checked before paragraph checking.
+            elif setext_heading_started(line, i, lines):
+                state = LineState.SETEXT_HEADING
+                ended_function = setext_heading_ended
+                sections.append(MarkdownSetextHeading(i))
             elif paragraph_started(line, i, lines):
                 state = LineState.PARAGRAPH
                 ended_function = paragraph_ended
@@ -118,6 +124,10 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
                 state = LineState.TABLE
                 ended_function = table_ended
                 sections.append(MarkdownTable(i))
+            elif thematic_break_started(line, i, lines):
+                state = LineState.THEMATIC_BREAK
+                ended_function = thematic_break_ended
+                sections.append(MarkdownThematicBreak(i))
             else:
                 raise RuntimeError(f"Could not detect section type on line {i + 1}.")
 
@@ -131,14 +141,11 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
     if sections and isinstance(sections[-1], MarkdownSeparator):
         sections.pop()
 
-    if sections:
-        logger.info("Last section: %s", repr(sections[-1]))
-
     return "\n".join([section.reformatted(width=width) for section in sections]) + "\n"
 
 
 def reformat_markdown_text(text: str, width: Number = 88) -> str:
-    """ Reformat a block of markdown text
+    """Reformat a block of markdown text
 
     See the README for how the Markdown text gets reformatted.
 
