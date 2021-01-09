@@ -31,12 +31,19 @@ from .list import list_started
 from .paragraph import paragraph_started, paragraph_ended
 
 
+def _is_underline(str_: str) -> bool:
+    return bool(str_.strip()) and (
+        all([c == "=" for c in str_.strip()]) or all([c == "-" for c in str_.strip()])
+    )
+
+
 def setext_heading_started(line: str, index: int, lines: List[str]) -> bool:
     if list_started(line, index, lines):
         # Lists can't be headings
         return False
     elif indented_code_block_started(line, index, lines):
-        # TODO: This should likely detect more than three spaces of indentation.
+        # TODO: This should likely detect more than three spaces of indentation instead
+        #  of code block.
         return False
 
     # Avoid looking beyond the end of the file. This is clearly not a setext heading at
@@ -44,31 +51,35 @@ def setext_heading_started(line: str, index: int, lines: List[str]) -> bool:
     if len(lines) <= index + 1:
         return False
 
+    # Well an underline clearly isn't a title
+    if _is_underline(line):
+        return False
+
     # We're basically checking if the lines up to the underlining could be a paragraph.
     # We could also move to checking not this: code fence, ATX heading, block quote,
     # thematic break, list item, or HTML block, though that may be more useful in the
     # paragraph detector.
     potential_lines = []
-    for j, potential_line in enumerate(lines[index:]):
-        if setext_heading_ended(potential_line, index + j, lines):
+    for potential_line in lines[index:]:
+        if _is_underline(potential_line):
             break
-        else:
-            potential_lines.append(potential_line)
+        potential_lines.append(potential_line)
+    else:
+        return False
 
     # TODO: Change when detectors are classes or something more reasonable
     if not paragraph_started(potential_lines[0], 0, potential_lines):
         return False
-    for potential_i, potential_line in enumerate(potential_lines[:-1]):
+    for potential_i, potential_line in enumerate(potential_lines):
         if potential_i == 0:
             continue
         if paragraph_ended(potential_line, potential_i, potential_lines):
             return False
 
-    # Assuming no matter what the last line was, it could end a paragraph.
-    return True
+    return paragraph_ended(
+        potential_lines[-1], len(potential_lines) - 1, potential_lines
+    )
 
 
 def setext_heading_ended(line: str, index: int, lines: List[str]) -> bool:
-    return line.strip() and (
-        all([c == "=" for c in line.strip()]) or all([c == "-" for c in line.strip()])
-    )
+    return _is_underline(lines[index - 1])

@@ -27,6 +27,7 @@ https://spec.commonmark.org/0.29/#setext-headings
 from ..typing import Number
 
 from .base import MarkdownSection
+from .textwrap import wrap
 
 __all__ = ["MarkdownSetextHeading"]
 
@@ -36,32 +37,27 @@ REPR_CONTENT_LEN = 20
 class MarkdownSetextHeading(MarkdownSection):
     @property
     def char(self) -> str:
-        if len(self.lines) != 2:
+        if len(self.lines) < 2:
             raise RuntimeError(
                 f"Attempted access of uninitialized {self.__class__.__name__}."
             )
-        return self.lines[1].strip()[0]
+        return self.lines[-1].strip()[0]
 
     @property
     def content(self) -> str:
-        if len(self.lines) != 2:
+        if len(self.lines) < 2:
             raise RuntimeError(
                 f"Attempted access of uninitialized {self.__class__.__name__}."
             )
-        return self.lines[0].strip()
+        return " ".join(l.strip() for l in self.lines[:-1])
 
     def append(self, line: str) -> None:
-        if self.lines:
-            if not (
-                any(c == "-" for c in line.strip())
-                or any(c == "=" for c in line.strip())
-            ):
-                # TODO: What if the user's file causes this
-                raise RuntimeError("Improper underlining passed to header.")
         self.lines.append(line)
 
     def reformatted(self, width: Number = 88) -> str:
-        return self.content + "\n" + self.char * len(self.content)
+        heading_str = wrap(self.content, width)
+        heading_len = max(len(l) for l in heading_str.splitlines())
+        return heading_str + "\n" + self.char * heading_len
 
     def __repr__(self) -> str:
         printable_content = self.content

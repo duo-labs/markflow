@@ -30,6 +30,7 @@ def paragraph_ended(line: str, index: int, lines: List[str]) -> bool:
         or tilda_code_block_started(line, index, lines)
         or list_started(line, index, lines)
         or separator_started(line, index, lines)
+        or index + 1 == len(lines)
         # A setext heading cannot interrupt a paragraph (CommonMark 0.29 4.3)
         or thematic_break_started(line, index, lines)
     )
