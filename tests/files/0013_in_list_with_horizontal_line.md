@@ -4,5 +4,5 @@
 - And for some reason
 - I am surrounded by new lines
 ---
-- I'm a single entry list with a horizontal line after me
+- I'm a single entry list with a thematic break after me
 ---
