@@ -74,9 +74,21 @@ Footnote lines begin and end with no whitespace.
 
 ### Headings
 
-Heading lines begin and end with no whitespace. If you are using setext headings (i.e.
-underlined headings), they will automatically be fixed to ensure underlining matches the
-heading length. e.g:
+Heading lines begin and end with no whitespace. If you're using ATX headings (leading
+`#`s), ut will correct missing or extra spaces between the octothorpe's and the heading.
+
+```markdown
+#Non-Standard Heading
+```
+
+becomes
+
+```markdown
+# Non-Standard Heading
+```
+
+If you are using setext headings (i.e. underlined headings), they will automatically be
+fixed to ensure underlining matches the heading length. e.g:
 
 ```markdown
 Heading 1
@@ -90,17 +102,19 @@ Heading 1
 ---------
 ```
 
-If you're using ATX headings (leading `#`), we will correct missing or extra spaces
-between the octothorpe's and the heading.
+If you have a heading that extends beyond an entire line, MarkFlow will wrap it for you.
 
 ```markdown
-#Non-Standard Heading
+This is a really long heading that I had to make up so that it would be at least 88 characters long
+--
 ```
 
 becomes
 
 ```markdown
-# Non-Standard Heading
+This is a really long heading that I had to make up so that it would be at least 88
+characters long
+-----------------------------------------------------------------------------------
 ```
 
 ### Lists
