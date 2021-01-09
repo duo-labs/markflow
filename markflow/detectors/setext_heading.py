@@ -28,6 +28,7 @@ from typing import List
 
 from .code_block import indented_code_block_started
 from .list import list_started
+from .paragraph import paragraph_started, paragraph_ended
 
 
 def setext_heading_started(line: str, index: int, lines: List[str]) -> bool:
@@ -37,24 +38,37 @@ def setext_heading_started(line: str, index: int, lines: List[str]) -> bool:
     elif indented_code_block_started(line, index, lines):
         # TODO: This should likely detect more than three spaces of indentation.
         return False
-    else:
-        # Avoid looking beyond the end of the file. This is clearly not a setext heading
-        # at that point.
-        if len(lines) <= index + 1:
+
+    # Avoid looking beyond the end of the file. This is clearly not a setext heading at
+    # that point.
+    if len(lines) <= index + 1:
+        return False
+
+    # We're basically checking if the lines up to the underlining could be a paragraph.
+    # We could also move to checking not this: code fence, ATX heading, block quote,
+    # thematic break, list item, or HTML block, though that may be more useful in the
+    # paragraph detector.
+    potential_lines = []
+    for j, potential_line in enumerate(lines[index:]):
+        if setext_heading_ended(potential_line, index + j, lines):
+            break
+        else:
+            potential_lines.append(potential_line)
+
+    # TODO: Change when detectors are classes or something more reasonable
+    if not paragraph_started(potential_lines[0], 0, potential_lines):
+        return False
+    for potential_i, potential_line in enumerate(potential_lines[:-1]):
+        if potential_i == 0:
+            continue
+        if paragraph_ended(potential_line, potential_i, potential_lines):
             return False
-        lookahead = lines[index + 1]
-        if not lookahead.strip():
-            return False
-        return all([c == "=" for c in lookahead.strip()]) or all(
-            [c == "-" for c in lookahead.strip()]
-        )
+
+    # Assuming no matter what the last line was, it could end a paragraph.
+    return True
 
 
 def setext_heading_ended(line: str, index: int, lines: List[str]) -> bool:
-    # TODO: Consecutive "---" or "===" lines are errors
-    if line.strip() and (
+    return line.strip() and (
         all([c == "=" for c in line.strip()]) or all([c == "-" for c in line.strip()])
-    ):
-        return False
-    else:
-        return True
+    )

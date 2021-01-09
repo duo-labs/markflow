@@ -58,7 +58,7 @@ class MarkdownATXHeading(MarkdownSection):
         # TODO: This prints out twice. We probably need a first pass step that calls out
         #  errors we will be fixing to suppress extra statements from reprocessing the
         #  document.
-        if not self.lines[0].strip().rstrip("#").startswith(" "):
+        if not self.lines[0].strip().lstrip("#").startswith(" "):
             logger.warning(
                 "Line %d is an ATX Header without a space after #'s. This has been "
                 "corrected.",

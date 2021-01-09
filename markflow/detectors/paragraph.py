@@ -5,7 +5,6 @@ from .block_quote import block_quote_started
 from .code_block import code_block_started, tilda_code_block_started
 from .list import list_started
 from .separator import separator_started
-from .setext_heading import setext_heading_started
 from .table import table_started
 from .thematic_break import thematic_break_started
 
@@ -17,7 +16,7 @@ def paragraph_started(line: str, index: int, lines: List[str]) -> bool:
         or code_block_started(line, index, lines)
         or list_started(line, index, lines)
         or separator_started(line, index, lines)
-        or setext_heading_started(line, index, lines)
+        # A setext heading is just a paragraph with a line of - or = after
         or table_started(line, index, lines)
         or thematic_break_started(line, index, lines)
     )

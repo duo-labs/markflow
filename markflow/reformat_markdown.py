@@ -62,7 +62,7 @@ class LineState(Enum):
 
 
 def _reformat_markdown_text(text: str, width: Number = 88) -> str:
-    """ Reformat a block of markdown text
+    """Reformat a block of markdown text
 
     See the README for how the Markdown text gets reformatted.
 
@@ -107,6 +107,11 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
                 state = LineState.LIST
                 ended_function = list_ended
                 sections.append(MarkdownList(i))
+            # This must be checked before paragraph checking.
+            elif setext_heading_started(line, i, lines):
+                state = LineState.SETEXT_HEADING
+                ended_function = setext_heading_ended
+                sections.append(MarkdownSetextHeading(i))
             elif paragraph_started(line, i, lines):
                 state = LineState.PARAGRAPH
                 ended_function = paragraph_ended
@@ -115,10 +120,6 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
                 state = LineState.SEPARATOR
                 ended_function = separator_ended
                 sections.append(MarkdownSeparator(i))
-            elif setext_heading_started(line, i, lines):
-                state = LineState.SETEXT_HEADING
-                ended_function = setext_heading_ended
-                sections.append(MarkdownSetextHeading(i))
             elif table_started(line, i, lines):
                 state = LineState.TABLE
                 ended_function = table_ended
@@ -144,7 +145,7 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
 
 
 def reformat_markdown_text(text: str, width: Number = 88) -> str:
-    """ Reformat a block of markdown text
+    """Reformat a block of markdown text
 
     See the README for how the Markdown text gets reformatted.
 
