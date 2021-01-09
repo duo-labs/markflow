@@ -79,6 +79,9 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
             state = LineState.DEFAULT
 
         if state == LineState.DEFAULT:
+            if sections:
+                logger.info("Last section: %s", repr(sections[-1]))
+
             if block_quote_started(line, i, lines):
                 state = LineState.CODE_BLOCK
                 ended_function = block_quote_ended
@@ -121,6 +124,9 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
         sections[-1].append(line)
 
         logger.debug("Line %d state: %s", i + 1, state)
+
+    if sections:
+        logger.info("Last section: %s", repr(sections[-1]))
 
     if sections and isinstance(sections[-1], MarkdownSeparator):
         sections.pop()
