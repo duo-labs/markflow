@@ -74,8 +74,9 @@ Footnote lines begin and end with no whitespace.
 
 ### Headings
 
-Heading lines being and end with no whitespace. If you are using underlined headings,
-they will automatically be fixed to ensure underlining matches the heading length. e.g:
+Heading lines begin and end with no whitespace. If you are using setext headings (i.e.
+underlined headings), they will automatically be fixed to ensure underlining matches the
+heading length. e.g:
 
 ```markdown
 Heading 1
@@ -87,6 +88,19 @@ becomes
 ```markdown
 Heading 1
 ---------
+```
+
+If you're using ATX headings (leading `#`), we will correct missing or extra spaces
+between the octothorpe's and the heading.
+
+```markdown
+#Non-Standard Heading
+```
+
+becomes
+
+```markdown
+# Non-Standard Heading
 ```
 
 ### Lists
