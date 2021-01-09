@@ -13,18 +13,18 @@ from .detectors import (
     create_code_block_ended_func,
     footnote_started,
     footnote_ended,
-    heading_started,
-    heading_ended,
-    thematic_break_started,
-    thematic_break_ended,
     list_started,
     list_ended,
     paragraph_started,
     paragraph_ended,
     separator_started,
     separator_ended,
+    setext_heading_started,
+    setext_heading_ended,
     table_started,
     table_ended,
+    thematic_break_started,
+    thematic_break_ended,
 )
 from .exceptions import ReformatInconsistentException
 from .formatters import (
@@ -32,13 +32,13 @@ from .formatters import (
     MarkdownBlockQuote,
     MarkdownCodeBlock,
     MarkdownFootnote,
-    MarkdownHeading,
-    MarkdownThematicBreak,
     MarkdownList,
     MarkdownParagraph,
     MarkdownSection,
     MarkdownSeparator,
+    MarkdownSetextHeading,
     MarkdownTable,
+    MarkdownThematicBreak,
 )
 
 __all__ = ["reformat_markdown_text"]
@@ -57,6 +57,7 @@ class LineState(Enum):
     LIST = "list"
     PARAGRAPH = "paragraph"
     SEPARATOR = "separator"
+    SETEXT_HEADING = "setext heading"
     TABLE = "table"
 
 
@@ -102,14 +103,6 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
                 state = LineState.FOOTNOTE
                 ended_function = footnote_ended
                 sections.append(MarkdownFootnote(i))
-            elif heading_started(line, i, lines):
-                state = LineState.HEADING
-                ended_function = heading_ended
-                sections.append(MarkdownHeading(i))
-            elif thematic_break_started(line, i, lines):
-                state = LineState.THEMATIC_BREAK
-                ended_function = thematic_break_ended
-                sections.append(MarkdownThematicBreak(i))
             elif list_started(line, i, lines):
                 state = LineState.LIST
                 ended_function = list_ended
@@ -122,10 +115,18 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
                 state = LineState.SEPARATOR
                 ended_function = separator_ended
                 sections.append(MarkdownSeparator(i))
+            elif setext_heading_started(line, i, lines):
+                state = LineState.SETEXT_HEADING
+                ended_function = setext_heading_ended
+                sections.append(MarkdownSetextHeading(i))
             elif table_started(line, i, lines):
                 state = LineState.TABLE
                 ended_function = table_ended
                 sections.append(MarkdownTable(i))
+            elif thematic_break_started(line, i, lines):
+                state = LineState.THEMATIC_BREAK
+                ended_function = thematic_break_ended
+                sections.append(MarkdownThematicBreak(i))
             else:
                 raise RuntimeError(f"Could not detect section type on line {i + 1}.")
 
