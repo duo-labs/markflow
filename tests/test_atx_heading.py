@@ -19,7 +19,6 @@ class TestATXHeading:
         input_ = "   #Heading    "
         expected = "# Heading"
         atx_heading = create_section(MarkdownATXHeading, input_)
-        print(atx_heading.reformatted())
         assert atx_heading.reformatted() == expected
         # We skip rendering checks because the above is really a paragraph. We're just
         # helping.
