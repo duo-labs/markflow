@@ -46,5 +46,5 @@ class MarkdownThematicBreak(MarkdownSection):
         else:
             return self.char * width
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<{self.__class__.__name__}: char={repr(self.char)}>"
