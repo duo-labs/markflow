@@ -28,6 +28,7 @@ from ..typing import Number
 
 from .base import MarkdownSection
 from .textwrap import wrap
+from .util import truncate_str
 
 __all__ = ["MarkdownSetextHeading"]
 
@@ -60,13 +61,10 @@ class MarkdownSetextHeading(MarkdownSection):
         return heading_str + "\n" + self.char * heading_len
 
     def __repr__(self) -> str:
-        printable_content = self.content
-        if len(printable_content) > REPR_CONTENT_LEN:
-            printable_content = printable_content[: (REPR_CONTENT_LEN - 3)] + "..."
         return (
             f"<"
             f"{self.__class__.__name__}: "
             f"char={repr(self.char)}; "
-            f"content={repr(printable_content)}"
+            f"content={repr(truncate_str(self.content, REPR_CONTENT_LEN))}"
             f">"
         )

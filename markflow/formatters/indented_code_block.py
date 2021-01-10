@@ -21,6 +21,7 @@ import logging
 from ..typing import Number
 
 from .base import MarkdownSection
+from .util import truncate_str
 
 __all__ = ["MarkdownIndentedCodeBlock"]
 
@@ -41,7 +42,9 @@ class MarkdownIndentedCodeBlock(MarkdownSection):
         return "\n".join([line.rstrip() for line in self.lines])
 
     def __repr__(self) -> str:
-        first_line = self.first_line
-        if len(first_line) > REPR_CONTENT_LEN:
-            first_line = first_line[: (REPR_CONTENT_LEN - 3)] + "..."
-        return f"<{self.__class__.__name__}: first_line={repr(first_line)}>"
+        return (
+            f"<"
+            f"{self.__class__.__name__}: "
+            f"first_line={repr(truncate_str(self.first_line, REPR_CONTENT_LEN))}"
+            f">"
+        )

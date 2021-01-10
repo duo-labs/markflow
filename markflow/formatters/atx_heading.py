@@ -21,6 +21,7 @@ import logging
 from ..typing import Number
 
 from .base import MarkdownSection
+from .util import truncate_str
 
 __all__ = ["MarkdownATXHeading"]
 
@@ -67,13 +68,10 @@ class MarkdownATXHeading(MarkdownSection):
         return "#" * self.depth + " " + self.content
 
     def __repr__(self) -> str:
-        printable_content = self.content
-        if len(printable_content) > REPR_CONTENT_LEN:
-            printable_content = printable_content[: (REPR_CONTENT_LEN - 3)] + "..."
         return (
             f"<"
             f"{self.__class__.__name__}: "
             f"depth={repr(self.depth)}; "
-            f"content={repr(printable_content)}"
+            f"content={repr(truncate_str(self.content, REPR_CONTENT_LEN))}"
             f">"
         )
