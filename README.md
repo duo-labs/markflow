@@ -85,7 +85,7 @@ becomes
 
 Indented code blocks simply have their trailing whitespace removed.
 
-### Footnotes
+### Footnotes (or Link Reference Definitions)
 
 Footnote lines begin and end with no whitespace.
 

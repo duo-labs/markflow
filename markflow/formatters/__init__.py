@@ -3,7 +3,7 @@ from .base import *
 from .atx_heading import *
 from .block_quote import *
 from .fenced_code_block import *
-from .footnote import *
+from .link_reference_definition import *
 from .indented_code_block import *
 from .list import *
 from .paragraph import *

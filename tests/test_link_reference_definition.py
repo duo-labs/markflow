@@ -1,10 +1,12 @@
-from markflow.formatters.footnote import MarkdownFootnote
+from markflow.formatters.link_reference_definition import (
+    MarkdownLinkReferenceDefinition,
+)
 
 from .util import create_section, render
 
 
-class TestFootnote:
-    def test_footnote(self) -> None:
+class TestLinkReferenceDefinition:
+    def test_basic(self) -> None:
         input_ = (
             "[footnote1]: http://example.com\n"
             "   [footnote2]: http://example.com   \n"
@@ -15,8 +17,8 @@ class TestFootnote:
             "[footnote2]: http://example.com\n"
             "[footnote3]: http://example.com"
         )
-        footnote = create_section(MarkdownFootnote, input_)
+        footnote = create_section(MarkdownLinkReferenceDefinition, input_)
         assert footnote.reformatted() == expected
-        footnote = create_section(MarkdownFootnote, expected)
+        footnote = create_section(MarkdownLinkReferenceDefinition, expected)
         assert footnote.reformatted() == expected
         assert render(expected) == render(input_)
