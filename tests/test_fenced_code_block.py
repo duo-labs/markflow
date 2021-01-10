@@ -1,4 +1,4 @@
-from markflow.formatters.code_block import MarkdownCodeBlock
+from markflow.formatters.fenced_code_block import MarkdownFencedCodeBlock
 
 from .util import create_section, render
 
@@ -19,9 +19,9 @@ class TestCodeBlock:
             "    raise Dead()\n"
             "```"
         )
-        code_block = create_section(MarkdownCodeBlock, input_)
+        code_block = create_section(MarkdownFencedCodeBlock, input_)
         assert code_block.reformatted() == expected
-        code_block = create_section(MarkdownCodeBlock, expected)
+        code_block = create_section(MarkdownFencedCodeBlock, expected)
         assert code_block.reformatted() == expected
         assert render(expected) == render(input_)
 
@@ -42,8 +42,8 @@ class TestCodeBlock:
             "```\n"
             "~~~~"
         )
-        code_block = create_section(MarkdownCodeBlock, input_)
+        code_block = create_section(MarkdownFencedCodeBlock, input_)
         assert code_block.reformatted() == expected
-        code_block = create_section(MarkdownCodeBlock, expected)
+        code_block = create_section(MarkdownFencedCodeBlock, expected)
         assert code_block.reformatted() == expected
         assert render(expected) == render(input_)
