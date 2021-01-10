@@ -65,12 +65,21 @@ def fenced_code_block_ended(line: str, index: int, lines: List[str]) -> bool:
     global __LAST_FENCE_INDEX
     if not __LAST_FENCE:
         raise RuntimeError("End of fenced code block attempted without starting one.")
+
+    # If we're on the last line, we'll still want to warn about the fence indentation
+    if index + 1 == len(lines):
+        if line.strip() == __LAST_FENCE and len(line) - len(line.lstrip()) > 3:
+            logger.warning(
+                "Detected that the fence on line %d is over indented per the standard. "
+                "If this is intentional, please file a bug report." % (index + 1)
+            )
+
     # We'll just redetect our opening line
     if index - 1 == __LAST_FENCE_INDEX:
         return False
 
     last_line = lines[index - 1]
-    if last_line.strip().startswith(__LAST_FENCE):
+    if last_line.strip() == __LAST_FENCE:
         if len(last_line) - len(last_line.lstrip()) > 3:
             logger.warning(
                 "Detected that the fence on line %d is over indented per the standard. "
