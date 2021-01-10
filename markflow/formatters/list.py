@@ -5,9 +5,9 @@ import re
 from typing import List
 from ..typing import Number, SectionEndedFunc
 
-from ..detectors.code_block import (
-    create_code_block_ended_func,
-    tilda_code_block_started,
+from ..detectors.fenced_code_block import (
+    fenced_code_block_started,
+    fenced_code_block_ended,
 )
 
 from .base import MarkdownSection
@@ -49,11 +49,9 @@ def split_code(text: str) -> List[str]:
             if code_block_ended_function(line, index, lines):
                 in_code_block = False
         if not in_code_block:
-            if tilda_code_block_started(line, index, lines):
+            if fenced_code_block_started(line, index, lines):
                 in_code_block = True
-                code_block_ended_function = create_code_block_ended_func(
-                    line, index, lines
-                )
+                code_block_ended_function = fenced_code_block_ended
         switched = was_in_code_block != in_code_block
 
         if switched or not sections:

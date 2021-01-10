@@ -26,7 +26,7 @@ https://spec.commonmark.org/0.29/#setext-headings
 
 from typing import List
 
-from .code_block import indented_code_block_started
+from .indented_code_block import indented_code_block_started
 from .list import list_started
 from .paragraph import paragraph_started, paragraph_ended
 
