@@ -68,7 +68,16 @@ def fenced_code_block_ended(line: str, index: int, lines: List[str]) -> bool:
 
     # If we're on the last line, we'll still want to warn about the fence indentation
     if index + 1 == len(lines):
-        if line.strip() == __LAST_FENCE and len(line) - len(line.lstrip()) > 3:
+        # TODO: We add the last fence because this is used for parsing lists, and we
+        #  allow indented code blocks in lists. But, those are actually inline code
+        #  blocks according to the example render.
+        last_fence_indent = len(lines[__LAST_FENCE_INDEX]) - len(
+            lines[__LAST_FENCE_INDEX].lstrip()
+        )
+        if (
+            line.strip().startswith(__LAST_FENCE)
+            and len(line) - len(line.lstrip()) > 3 + last_fence_indent
+        ):
             logger.warning(
                 "Detected that the fence on line %d is over indented per the standard. "
                 "If this is intentional, please file a bug report." % (index + 1)
@@ -79,8 +88,11 @@ def fenced_code_block_ended(line: str, index: int, lines: List[str]) -> bool:
         return False
 
     last_line = lines[index - 1]
-    if last_line.strip() == __LAST_FENCE:
-        if len(last_line) - len(last_line.lstrip()) > 3:
+    if last_line.strip().startswith(__LAST_FENCE):
+        last_fence_indent = len(lines[__LAST_FENCE_INDEX]) - len(
+            lines[__LAST_FENCE_INDEX].lstrip()
+        )
+        if len(last_line) - len(last_line.lstrip()) > 3 + last_fence_indent:
             logger.warning(
                 "Detected that the fence on line %d is over indented per the standard. "
                 "If this is intentional, please file a bug report." % (index + 1)
