@@ -28,6 +28,8 @@ down side to the behavior described here.)
 
 A fenced code block may interrupt a paragraph, and does not require a blank line either
 before or after.
+
+https://spec.commonmark.org/0.29/#fenced-code-blocks
 """
 
 import logging

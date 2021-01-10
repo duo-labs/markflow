@@ -15,6 +15,7 @@ TODO: Keep in mind for paragraphs
 
 https://spec.commonmark.org/0.29/#indented-code-blocks
 """
+
 import logging
 
 from ..typing import Number
