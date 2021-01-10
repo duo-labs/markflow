@@ -66,7 +66,24 @@ becomes:
 
 ### Code Blocks
 
-Code block marker lines begin and end with no whitespace.
+Fenced codeblocks have any whitespace stripped from their markers anf then printed out
+as usual.
+
+````markdown
+``` markdown
+# Markdown code
+  ```
+````
+
+becomes
+
+````markdown
+```markdown
+# Markdown code
+```
+````
+
+Indented code blocks simply have their trailing whitespace removed.
 
 ### Footnotes
 

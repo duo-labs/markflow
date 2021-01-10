@@ -19,7 +19,7 @@ https://spec.commonmark.org/0.29/#thematic-breaks
 
 from typing import List
 
-from .code_block import indented_code_block_started
+from .indented_code_block import indented_code_block_started
 
 SEPARATOR_SYMBOLS = ["*", "_", "-"]
 

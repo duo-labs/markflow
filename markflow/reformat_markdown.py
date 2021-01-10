@@ -9,10 +9,12 @@ from .detectors import (
     atx_heading_ended,
     block_quote_started,
     block_quote_ended,
-    code_block_started,
-    create_code_block_ended_func,
+    fenced_code_block_started,
+    fenced_code_block_ended,
     footnote_started,
     footnote_ended,
+    indented_code_block_started,
+    indented_code_block_ended,
     list_started,
     list_ended,
     paragraph_started,
@@ -30,8 +32,9 @@ from .exceptions import ReformatInconsistentException
 from .formatters import (
     MarkdownATXHeading,
     MarkdownBlockQuote,
-    MarkdownCodeBlock,
+    MarkdownFencedCodeBlock,
     MarkdownFootnote,
+    MarkdownIndentedCodeBlock,
     MarkdownList,
     MarkdownParagraph,
     MarkdownSection,
@@ -51,8 +54,10 @@ class LineState(Enum):
     ATX_HEADING = "atx heading"
     BLOCK_QUOTE = "block quote"
     CODE_BLOCK = "code block"
+    FENCED_CODE_BLOCK = "fence code block"
     FOOTNOTE = "footnote"
     HEADING = "headings"
+    INDENTED_CODE_BLOCK = "indented code block"
     THEMATIC_BREAK = "thematic break"
     LIST = "list"
     PARAGRAPH = "paragraph"
@@ -95,10 +100,14 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
                 state = LineState.CODE_BLOCK
                 ended_function = block_quote_ended
                 sections.append(MarkdownBlockQuote(i))
-            elif code_block_started(line, i, lines):
-                state = LineState.CODE_BLOCK
-                ended_function = create_code_block_ended_func(line, i, lines)
-                sections.append(MarkdownCodeBlock(i))
+            elif indented_code_block_started(line, i, lines):
+                state = LineState.INDENTED_CODE_BLOCK
+                ended_function = indented_code_block_ended
+                sections.append(MarkdownIndentedCodeBlock(i))
+            elif fenced_code_block_started(line, i, lines):
+                state = LineState.FENCED_CODE_BLOCK
+                ended_function = fenced_code_block_ended
+                sections.append(MarkdownFencedCodeBlock(i))
             elif footnote_started(line, i, lines):
                 state = LineState.FOOTNOTE
                 ended_function = footnote_ended

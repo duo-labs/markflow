@@ -1,6 +1,6 @@
 from typing import List
 
-from .code_block import indented_code_block_started
+from .indented_code_block import indented_code_block_started
 from .list import list_started
 from .separator import separator_started
 
