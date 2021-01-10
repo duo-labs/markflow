@@ -37,6 +37,7 @@ from typing import Optional
 from ..typing import Number
 
 from .base import MarkdownSection
+from .util import truncate_str
 
 __all__ = ["MarkdownFencedCodeBlock"]
 
@@ -75,8 +76,8 @@ class MarkdownFencedCodeBlock(MarkdownSection):
 
     def __repr__(self) -> str:
         first_line = self.first_line
-        if first_line is not None and len(first_line) > REPR_CONTENT_LEN:
-            first_line = first_line[: (REPR_CONTENT_LEN - 3)] + "..."
+        if first_line is not None:
+            first_line = truncate_str(first_line, REPR_CONTENT_LEN)
         return (
             f"<"
             f"{self.__class__.__name__}: "
