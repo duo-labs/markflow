@@ -13,6 +13,8 @@ from .detectors import (
     create_code_block_ended_func,
     footnote_started,
     footnote_ended,
+    indented_code_block_started,
+    indented_code_block_ended,
     list_started,
     list_ended,
     paragraph_started,
@@ -32,6 +34,7 @@ from .formatters import (
     MarkdownBlockQuote,
     MarkdownCodeBlock,
     MarkdownFootnote,
+    MarkdownIndentedCodeBlock,
     MarkdownList,
     MarkdownParagraph,
     MarkdownSection,
@@ -53,6 +56,7 @@ class LineState(Enum):
     CODE_BLOCK = "code block"
     FOOTNOTE = "footnote"
     HEADING = "headings"
+    INDENTED_CODE_BLOCK = "indented code block"
     THEMATIC_BREAK = "thematic break"
     LIST = "list"
     PARAGRAPH = "paragraph"
@@ -95,6 +99,10 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
                 state = LineState.CODE_BLOCK
                 ended_function = block_quote_ended
                 sections.append(MarkdownBlockQuote(i))
+            elif indented_code_block_started(line, i, lines):
+                state = LineState.INDENTED_CODE_BLOCK
+                ended_function = indented_code_block_ended
+                sections.append(MarkdownIndentedCodeBlock(i))
             elif code_block_started(line, i, lines):
                 state = LineState.CODE_BLOCK
                 ended_function = create_code_block_ended_func(line, i, lines)
