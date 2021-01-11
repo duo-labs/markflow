@@ -34,7 +34,7 @@ class ListTypes(enum.Enum):
 
 
 def split_code(text: str) -> List[str]:
-    """ Splits text into a list of alternating plaintext and code sections
+    """Splits text into a list of alternating plaintext and code sections
 
     Calls in this file can take advantage of the face that this will always get called
     with text that starts with plaintext.

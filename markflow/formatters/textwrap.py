@@ -109,7 +109,7 @@ def code_split(
 def link_split(
     text: str, leading_space: bool
 ) -> Tuple[List[str], List[bool], List[bool]]:
-    """ Splits text based on links
+    """Splits text based on links
 
     This function iterates over text split by tildas. Markdown inline code begins with
     a number of tildas and only ends when that exact number is reached. If there are
