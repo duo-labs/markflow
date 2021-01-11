@@ -84,5 +84,6 @@ class MarkdownFencedCodeBlock(MarkdownSection):
             f"fence_char={repr(self.fence_char)}; "
             f"fence_count={repr(self.fence_count)}; "
             f"language={repr(self.language)}; "
-            f"first_line{repr(first_line)}"
+            f"first_line={repr(first_line)}"
+            f">"
         )
