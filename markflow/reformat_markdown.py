@@ -7,6 +7,8 @@ from .typing import Number, SectionEndedFunc
 from .detectors import (
     atx_heading_started,
     atx_heading_ended,
+    blank_line_started,
+    blank_line_ended,
     block_quote_started,
     block_quote_ended,
     fenced_code_block_started,
@@ -19,8 +21,6 @@ from .detectors import (
     list_ended,
     paragraph_started,
     paragraph_ended,
-    separator_started,
-    separator_ended,
     setext_heading_started,
     setext_heading_ended,
     table_started,
@@ -38,7 +38,7 @@ from .formatters import (
     MarkdownList,
     MarkdownParagraph,
     MarkdownSection,
-    MarkdownSeparator,
+    MarkdownBlankLine,
     MarkdownSetextHeading,
     MarkdownTable,
     MarkdownThematicBreak,
@@ -52,6 +52,7 @@ logger = logging.getLogger(__name__)
 class LineState(Enum):
     DEFAULT = "default"
     ATX_HEADING = "atx heading"
+    BLANK_LINE = "blank line"
     BLOCK_QUOTE = "block quote"
     CODE_BLOCK = "code block"
     FENCED_CODE_BLOCK = "fence code block"
@@ -60,7 +61,6 @@ class LineState(Enum):
     LINK_REFERENCE_DEFINITION = "link reference definition"
     LIST = "list"
     PARAGRAPH = "paragraph"
-    SEPARATOR = "separator"
     SETEXT_HEADING = "setext heading"
     TABLE = "table"
     THEMATIC_BREAK = "thematic break"
@@ -96,6 +96,10 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
                 state = LineState.ATX_HEADING
                 ended_function = atx_heading_ended
                 sections.append(MarkdownATXHeading(i))
+            elif blank_line_started(line, i, lines):
+                state = LineState.BLANK_LINE
+                ended_function = blank_line_ended
+                sections.append(MarkdownBlankLine(i))
             elif block_quote_started(line, i, lines):
                 state = LineState.CODE_BLOCK
                 ended_function = block_quote_ended
@@ -125,10 +129,6 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
                 state = LineState.PARAGRAPH
                 ended_function = paragraph_ended
                 sections.append(MarkdownParagraph(i))
-            elif separator_started(line, i, lines):
-                state = LineState.SEPARATOR
-                ended_function = separator_ended
-                sections.append(MarkdownSeparator(i))
             elif table_started(line, i, lines):
                 state = LineState.TABLE
                 ended_function = table_ended
@@ -147,8 +147,13 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
     if sections:
         logger.info("Last section: %s", repr(sections[-1]))
 
-    if sections and isinstance(sections[-1], MarkdownSeparator):
+    if sections and isinstance(sections[-1], MarkdownBlankLine):
         sections.pop()
+
+    while sections and isinstance(sections[0], MarkdownBlankLine):
+        sections.pop(0)
+    while sections and isinstance(sections[-1], MarkdownBlankLine):
+        sections.pop(-1)
 
     return "\n".join([section.reformatted(width=width) for section in sections]) + "\n"
 

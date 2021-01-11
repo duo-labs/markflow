@@ -2,9 +2,9 @@ import re
 
 from typing import List
 
-from .thematic_break import thematic_break_started
-from .separator import separator_started
+from .blank_line import blank_line_started
 from .table import table_started
+from .thematic_break import thematic_break_started
 
 
 LIST_REGEX = re.compile(
@@ -23,7 +23,7 @@ def list_started(line: str, index: int, lines: List[str]) -> bool:
 
 def list_ended(line: str, index: int, lines: List[str]) -> bool:
     return (
-        thematic_break_started(line, index, lines)
+        blank_line_started(line, index, lines)
         or table_started(line, index, lines)
-        or separator_started(line, index, lines)
+        or thematic_break_started(line, index, lines)
     )
