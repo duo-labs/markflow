@@ -11,6 +11,12 @@ To check to see if your submission is buildable, simply run `make`. If everythin
 passes, you are good to go on to [Submitting Changes](#submitting-changes). To
 understand what that's doing, though, read on.
 
+### Running Tools
+
+All tools that are available in the poetery environment (including MarkFlow) can easily
+be added to you command line as the commands themselves by running
+`source poetry-aliases.sh`.
+
 ### Running Audits
 
 We run checks against every commit to ensure all files follow standards we enforce. The
