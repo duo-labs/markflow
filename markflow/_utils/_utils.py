@@ -1,3 +1,5 @@
+__all__ = ["truncate_str"]
+
 ELLIPSIS = "..."
 
 

@@ -21,7 +21,7 @@ import logging
 from ..typing import Number
 
 from .base import MarkdownSection
-from .util import truncate_str
+from .._utils import truncate_str
 
 __all__ = ["MarkdownIndentedCodeBlock"]
 
