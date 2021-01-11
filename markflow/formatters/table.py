@@ -126,3 +126,6 @@ class MarkdownTable(MarkdownSection):
             new_lines.append(f"|{'|'.join(columns)}|")
 
         return "\n".join(new_lines)
+
+    def __repr__(self) -> str:
+        return f"<{self.__class__.__name__}: ToDo>"
