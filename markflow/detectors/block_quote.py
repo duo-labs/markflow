@@ -1,14 +1,15 @@
 from typing import List
 
-from .indented_code_block import indented_code_block_started
 from .list import list_started
 from .blank_line import blank_line_started
+from .._utils import line_is_indented_at_least
 
 
 def block_quote_started(line: str, index: int, lines: List[str]) -> bool:
-    return not indented_code_block_started(
-        line, index, lines
-    ) and line.lstrip().startswith(">")
+    if line_is_indented_at_least(line, 4):
+        return False
+
+    return line.lstrip().startswith(">")
 
 
 def block_quote_ended(line: str, index: int, lines: List[str]) -> bool:

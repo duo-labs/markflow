@@ -19,15 +19,16 @@ https://spec.commonmark.org/0.29/#atx-headings
 
 from typing import List
 
-from .indented_code_block import indented_code_block_started
+from .._utils import line_is_indented_at_least
 
 
 def atx_heading_started(line: str, index: int, lines: List[str]) -> bool:
+    if line_is_indented_at_least(line, 4):
+        return False
+
     # The standard says we must require a space, but it also notes that not everyone
     # follows this. Let's be lax and fix it for them in the formatter.
-    if line.lstrip().startswith("#") and not indented_code_block_started(
-        line, index, lines
-    ):
+    if line.lstrip().startswith("#"):
         return True
     else:
         return False

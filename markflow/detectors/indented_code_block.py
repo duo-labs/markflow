@@ -18,14 +18,15 @@ https://spec.commonmark.org/0.29/#indented-code-blocks
 
 from typing import List
 
-INDENT = " " * 4
+from .._utils import line_is_indented_at_least, line_is_indented_less_than
 
 
 def indented_code_block_started(line: str, index: int, lines: List[str]) -> bool:
-    return bool(line.strip()) and line.startswith(INDENT)
+    return bool(line.strip()) and line_is_indented_at_least(line, 4)
 
 
 def indented_code_block_ended(line: str, index: int, lines: List[str]) -> bool:
+    # TODO: This can be done without the conditional here
     if not line.strip():
         # If we find a blank line, we need to check and see if the next non-blank line
         # is not indented
@@ -33,13 +34,10 @@ def indented_code_block_ended(line: str, index: int, lines: List[str]) -> bool:
             # We've found a blank line
             if not line.strip():
                 continue
-            if line.startswith(INDENT):
-                return False
-            else:
-                return True
+            return line_is_indented_less_than(line, 4)
         else:
             return False
-    elif line.startswith(INDENT):
+    elif line_is_indented_at_least(line, 4):
         return False
     else:
         return True
