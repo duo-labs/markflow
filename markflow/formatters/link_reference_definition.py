@@ -28,6 +28,7 @@ import re
 from ..typing import Number
 
 from .base import MarkdownSection
+from .textwrap import wrap
 from .util import truncate_str
 
 __all__ = ["MarkdownLinkReferenceDefinition"]
@@ -81,27 +82,43 @@ class MarkdownLinkReferenceDefinition(MarkdownSection):
         self.lines.append(line)
 
     def reformatted(self, width: Number = 88) -> str:
+        # Last index indicates that last line we checked for content
+        last_index = 0
         str_ = f"[{self.name}]:"
-        if self.link in self.lines[0]:
+        if not self.link:
+            return str_
+
+        if self.link in self.lines[last_index]:
             str_ += f" {self.link}"
         else:
+            last_index = 1
             str_ += f"\n{self.link}"
-        str_ += self.link
 
-        # if " " in self.title and self.title
-        reformatted_lines = []
-        for line in self.lines:
-            reformatted_lines.append(
-                POST_COLON_SPACE_REGEX.sub(": ", line.strip(), count=1)
-            )
-        return "\n".join(reformatted_lines)
+        title = self.title
+        if not title:
+            return str_
+
+        # We don't naively wrap link reference definitions because they are allowed to
+        # overflow lines (the label and url portions).
+        if title.split()[0] in self.lines[last_index]:
+            # Our title was on the line with our link
+            if len(title.split()[0]) + len(str_.splitlines()[-1]) <= width:
+                lines = str_.splitlines()
+                str_ = "\n".join(lines[:-1] + [wrap(lines[-1] + " " + title, width)])
+            else:
+                str_ = "\n" + wrap(title, width)
+        else:
+            str_ += "\n" + wrap(title, width)
+
+
+        return str_
 
     def __repr__(self) -> str:
         return (
             f"<"
             f"{self.__class__.__name__}: "
-            f"name={truncate_str(self.name, REPR_CONTENT_LEN)} "
-            f"link={truncate_str(self.link, REPR_CONTENT_LEN)} "
-            f"title={truncate_str(self.title, REPR_CONTENT_LEN)}"
+            f"name={repr(truncate_str(self.name, REPR_CONTENT_LEN))} "
+            f"link={repr(truncate_str(self.link, REPR_CONTENT_LEN))} "
+            f"title={repr(truncate_str(self.title, REPR_CONTENT_LEN))}"
             f">"
         )

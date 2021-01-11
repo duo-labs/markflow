@@ -16,7 +16,8 @@
 
 [link_title_on_line_with_long_title]
 
-[link_title_on_line_with_long_title]: /link 'Link title that is really really really long, like really long, like so long you wouldn\'t believe'
+[link_title_on_line_with_long_title]: /link 'Link title that is really really really
+long, like really long, like so long you wouldn\'t believe'
 
 [link_title_on_next_line]
 
@@ -26,16 +27,19 @@
 [link_title_on_next_line_with_long_title]
 
 [link_title_on_next_line_with_long_title]: /link
-'Link title that is really really really long, like really long, like so long you wouldn\'t believe'
+'Link title that is really really really long, like really long, like so long you
+wouldn\'t believe'
 
 [link_title_and_url_on_next_line]:
-/link 'Link title that is really really really long, like really long, like so long you wouldn\'t believe'
+/link 'Link title that is really really really long, like really long, like so long you
+wouldn\'t believe'
 
 [link_title_and_url_on_own_lines]
 
 [link_title_and_url_on_own_lines]:
 /link
-'Link title that is really really really long, like really long, like so long you wouldn\'t believe'
+'Link title that is really really really long, like really long, like so long you
+wouldn\'t believe'
 
 [link_with_a_trailing_paragraph]: /link
 'Paragraph after this' Paragraph'
