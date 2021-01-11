@@ -55,5 +55,4 @@ Paragraph
 
 [line_with_unclosed_title_at_end]
 
-[line_with_unclosed_title_at_end:
-/link 'Test
+[line_with_unclosed_title_at_end: /link 'Test

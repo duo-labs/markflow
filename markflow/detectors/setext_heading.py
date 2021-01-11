@@ -76,9 +76,7 @@ def setext_heading_started(line: str, index: int, lines: List[str]) -> bool:
         if paragraph_ended(potential_line, potential_i, potential_lines):
             return False
 
-    return paragraph_ended(
-        potential_lines[-1], len(potential_lines) - 1, potential_lines
-    )
+    return True
 
 
 def setext_heading_ended(line: str, index: int, lines: List[str]) -> bool:
