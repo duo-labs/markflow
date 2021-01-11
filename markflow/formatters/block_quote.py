@@ -56,3 +56,6 @@ class MarkdownBlockQuote(MarkdownSection):
             else:
                 new_lines.append(line_prefix.rstrip())
         return "\n".join(new_lines)
+
+    def __repr__(self) -> str:
+        return f"<{self.__class__.__name__}: ToDo>"

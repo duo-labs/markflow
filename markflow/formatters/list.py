@@ -232,3 +232,6 @@ class MarkdownList(MarkdownSection):
             new_entries.append(output_text.rstrip())
 
         return "\n".join(new_entries)
+
+    def __repr__(self) -> str:
+        return f"<{self.__class__.__name__}: ToDo>"

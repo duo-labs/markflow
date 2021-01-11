@@ -18,3 +18,6 @@ class MarkdownSection:
     @abc.abstractmethod
     def reformatted(self, width: Number = 88) -> str:
         """Reformat the section based on publicized rules"""
+
+    def __repr__(self) -> str:
+        raise NotImplementedError("MarkdownSections must implement `__repr__`.")
