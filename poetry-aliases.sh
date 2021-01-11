@@ -1,0 +1,6 @@
+alias black="poetry run black"
+alias flake8="poetry run flake8"
+alias markflow="poetry run markflow"
+alias mypy="poetry run mypy"
+alias pytest="poetry run pytest"
+alias python="poetry run python"
