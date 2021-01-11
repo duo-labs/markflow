@@ -6,6 +6,7 @@ from .util import create_section, render
 
 
 class TestLinkReferenceDefinition:
+    # TODO: Port footnotes from file 0007 to here
     def test_basic(self) -> None:
         input_ = (
             "[footnote1]: http://example.com\n"
