@@ -110,7 +110,6 @@ class MarkdownLinkReferenceDefinition(MarkdownSection):
         else:
             str_ += "\n" + wrap(title, width)
 
-
         return str_
 
     def __repr__(self) -> str:
