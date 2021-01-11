@@ -6,7 +6,7 @@ from .link_reference_definition import *
 from .indented_code_block import *
 from .list import *
 from .paragraph import *
-from .separator import *
+from .blank_line import *
 from .setext_heading import *
 from .table import *
 from .thematic_break import *
