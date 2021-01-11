@@ -1,6 +1,10 @@
 import textwrap
 
-from markflow._utils._utils import truncate_str
+from markflow._utils._utils import (
+    line_is_indented_at_least,
+    line_is_indented_less_than,
+    truncate_str,
+)
 from markflow._utils.textwrap import (
     code_split,
     link_split,
@@ -22,6 +26,16 @@ class TestTruncateStr:
 
     def test_truncate_less_than_ellipsis(self) -> None:
         assert truncate_str("123456789", 2) == ".."
+
+
+class TestIndentChecks:
+    def test_is_indented_at_least(self) -> None:
+        assert line_is_indented_at_least("  Test", 2)
+        assert not line_is_indented_at_least("  Test", 3)
+
+    def test_is_indented_less_than(self) -> None:
+        assert not line_is_indented_less_than("  Test", 2)
+        assert line_is_indented_less_than("  Test", 3)
 
 
 class TestTextWrap:

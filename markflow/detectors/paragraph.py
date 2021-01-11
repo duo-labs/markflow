@@ -4,19 +4,21 @@ from .atx_heading import atx_heading_started
 from .blank_line import blank_line_started
 from .block_quote import block_quote_started
 from .fenced_code_block import fenced_code_block_started
-from .indented_code_block import indented_code_block_started
 from .list import list_started
 from .table import table_started
 from .thematic_break import thematic_break_started
+from .._utils import line_is_indented_at_least
 
 
 def paragraph_started(line: str, index: int, lines: List[str]) -> bool:
+    if line_is_indented_at_least(line, 4):
+        return False
+
     return not (
         atx_heading_started(line, index, lines)
         or blank_line_started(line, index, lines)
         or block_quote_started(line, index, lines)
         or fenced_code_block_started(line, index, lines)
-        or indented_code_block_started(line, index, lines)
         or list_started(line, index, lines)
         # A setext heading is just a paragraph with a line of - or = after
         or table_started(line, index, lines)

@@ -26,9 +26,9 @@ https://spec.commonmark.org/0.29/#setext-headings
 
 from typing import List
 
-from .indented_code_block import indented_code_block_started
 from .list import list_started
 from .paragraph import paragraph_started, paragraph_ended
+from .._utils import line_is_indented_at_least
 
 
 def _is_underline(str_: str) -> bool:
@@ -41,9 +41,7 @@ def setext_heading_started(line: str, index: int, lines: List[str]) -> bool:
     if list_started(line, index, lines):
         # Lists can't be headings
         return False
-    elif indented_code_block_started(line, index, lines):
-        # TODO: This should likely detect more than three spaces of indentation instead
-        #  of code block.
+    elif line_is_indented_at_least(line, 4):
         return False
 
     # Avoid looking beyond the end of the file. This is clearly not a setext heading at
@@ -68,6 +66,7 @@ def setext_heading_started(line: str, index: int, lines: List[str]) -> bool:
         return False
 
     # TODO: Change when detectors are classes or something more reasonable
+    # TODO: It is also likely everything before potential_lines is unnecessary.
     if not paragraph_started(potential_lines[0], 0, potential_lines):
         return False
     for potential_i, potential_line in enumerate(potential_lines):

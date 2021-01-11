@@ -1,6 +1,14 @@
-__all__ = ["truncate_str"]
+__all__ = ["line_is_indented_at_least", "line_is_indented_less_than", "truncate_str"]
 
 ELLIPSIS = "..."
+
+
+def line_is_indented_less_than(line: str, count: int) -> bool:
+    return len(line) - len(line.lstrip()) < count
+
+
+def line_is_indented_at_least(line: str, count: int) -> bool:
+    return not line_is_indented_less_than(line, count)
 
 
 def truncate_str(str_: str, length: int) -> str:

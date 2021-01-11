@@ -19,19 +19,17 @@ https://spec.commonmark.org/0.29/#thematic-breaks
 
 from typing import List
 
-from .indented_code_block import indented_code_block_started
+from .._utils import line_is_indented_at_least
 
 SEPARATOR_SYMBOLS = ["*", "_", "-"]
 
 
 def thematic_break_started(line: str, index: int, lines: List[str]) -> bool:
-    spaceless_line = "".join(line.split())
-    if indented_code_block_started(line, index, lines):
-        # A line consisting of more than four spaces of indentation
-        # TODO: Should we move that to an explicit call instead of depending on the
-        #  indented code block code. Probably.
+    if line_is_indented_at_least(line, 4):
         return False
-    elif len(spaceless_line) < 3:
+
+    spaceless_line = "".join(line.split())
+    if len(spaceless_line) < 3:
         # Thematic breaks must be at least three characters long
         return False
     else:

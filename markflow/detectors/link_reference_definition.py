@@ -29,10 +29,11 @@ import re
 
 from typing import List
 
+from .._utils import line_is_indented_at_least
+
 logger = logging.getLogger(__name__)
 
 LINK_REFERENCE_DEFINITION_FIRST_ELEMENT_REGEX = re.compile(
-    r" {0,3}"  # Indent
     r"\["  # Open bracket
     r"[^\]]{1,999}"  # At least one and up to 999 characters as the name
     r"\]:"  # End bracket and colon
@@ -46,13 +47,16 @@ __END_INDEX = -1
 def link_reference_definition_started(line: str, index: int, lines: List[str]) -> bool:
     global __END_INDEX
     global __QUOTATION
+    if line_is_indented_at_least(line, 4):
+        return False
 
-    match = LINK_REFERENCE_DEFINITION_FIRST_ELEMENT_REGEX.match(line)
+    rest_of_line = line.lstrip()
+    match = LINK_REFERENCE_DEFINITION_FIRST_ELEMENT_REGEX.match(rest_of_line)
     if not match:
         return False
 
     # We've already validated that the first word is the link definition
-    rest_of_line = line[match.end() :]
+    rest_of_line = rest_of_line[match.end() :]
     url_and_title = rest_of_line.split(maxsplit=1)
     # At the end of this, index is set to the line with the beginning of the title and
     # rest of line contains the title whether, even if it is the entire line. If there
