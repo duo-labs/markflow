@@ -45,7 +45,7 @@ def code_split(
     # beginning, ending, or still in code.
     for code_marker in INLINE_CODE_MARKER_REGEX.finditer(text):
         if open_marker_len == 0:
-            plaintext = text[last_end : code_marker.start()]  # noqa: E203
+            plaintext = text[last_end : code_marker.start()]
             if (
                 plaintext.startswith(".")
                 and not plaintext.startswith("..")
@@ -71,12 +71,12 @@ def code_split(
             split_text.append("`" * open_marker_len)
         elif len(code_marker.group()) == open_marker_len:
             # We've found the close of our inline code
-            code = text[last_end : code_marker.start()]  # noqa: E203
+            code = text[last_end : code_marker.start()]
             split_text[-1] += code + "`" * open_marker_len
             open_marker_len = 0
         else:
             # We've found more inline code
-            split_text[-1] += text[last_end : code_marker.end()]  # noqa: E203
+            split_text[-1] += text[last_end : code_marker.end()]
 
         last_end = code_marker.end()
 
@@ -137,7 +137,7 @@ def link_split(
     # Each iteration of this for loop operates operates on non-link text followed by
     # link text.
     for match in matches:
-        non_link_text = text[last_end : match.start()]  # noqa: E203
+        non_link_text = text[last_end : match.start()]
         if non_link_text.strip():
             if (
                 split_text
@@ -203,7 +203,7 @@ def newline_split(
     # Each iteration of this for loop operates operates on plaintext followed by an HML
     # newline.
     for match in HTML_NEWLINE_REGEX.finditer(text):
-        non_newline_text = text[last_end : match.start()]  # noqa: E203
+        non_newline_text = text[last_end : match.start()]
         if not leading_spaces:
             leading_spaces.append(leading_space)
         else:
