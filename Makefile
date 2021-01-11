@@ -51,7 +51,7 @@ black: _venv_3.8
 
 flake8: _venv_3.8
 	git ls-files | egrep '.*\.py$$' | egrep -v 'docs/' | \
-		xargs poetry run flake8 --max-line-length 88
+		xargs poetry run flake8
 
 markflow: _venv_3.8
 	git ls-files | egrep ".md$$" | grep -v "/files/" | xargs poetry run markflow --check

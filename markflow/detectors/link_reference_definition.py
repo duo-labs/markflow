@@ -52,7 +52,7 @@ def link_reference_definition_started(line: str, index: int, lines: List[str]) -
         return False
 
     # We've already validated that the first word is the link definition
-    rest_of_line = line[match.end() :]  # noqa: E203
+    rest_of_line = line[match.end() :]
     url_and_title = rest_of_line.split(maxsplit=1)
     # At the end of this, index is set to the line with the beginning of the title and
     # rest of line contains the title whether, even if it is the entire line. If there
@@ -128,7 +128,7 @@ def link_reference_definition_started(line: str, index: int, lines: List[str]) -
                 __END_INDEX = index + 1
                 return True
 
-    if line[match.end() :] == rest_of_line:  # noqa: E203
+    if line[match.end() :] == rest_of_line:
         raise RuntimeError(
             "`rest_of_line` went unchanged. Please open a bug report or shoot me "
             "an email at jholland@duosecurity.com"
@@ -138,7 +138,7 @@ def link_reference_definition_started(line: str, index: int, lines: List[str]) -
     closing_regex = re.compile(r"(?<!\\)(\\\\)*{}".format(quotation))
 
     for index, line in enumerate(
-        itertools.chain([rest_of_line[1:]], lines[index + 1 :]),  # noqa: E203
+        itertools.chain([rest_of_line[1:]], lines[index + 1 :]),
         start=index,
     ):
         match = closing_regex.search(line.rstrip())

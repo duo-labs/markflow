@@ -208,7 +208,7 @@ class MarkdownList(MarkdownSection):
                 )
             if len(indent_lengths) != depth + 1:
                 indent_lengths.append(len(marker_match.group()))
-            entry_text = entry[marker_match.end() :]  # noqa: E203
+            entry_text = entry[marker_match.end() :]
             entry_indent = total_indent + sum(indent_lengths[:-1])
             text_indent = total_indent + sum(indent_lengths)
 
