@@ -161,7 +161,7 @@ def _reformat_markdown_text(
         if start == index:
             words = f"Line {start + 1}"
         else:
-            words = f"Lines {start + 1}-{index}"
+            words = f"Lines {start + 1}-{index+1}"
         logger.info("%s: %s", words, repr(sections[-1]))
 
     if sections and isinstance(sections[-1], MarkdownBlankLine):
