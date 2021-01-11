@@ -11,10 +11,10 @@ from .detectors import (
     block_quote_ended,
     fenced_code_block_started,
     fenced_code_block_ended,
-    footnote_started,
-    footnote_ended,
     indented_code_block_started,
     indented_code_block_ended,
+    link_reference_definition_started,
+    link_reference_definition_ended,
     list_started,
     list_ended,
     paragraph_started,
@@ -33,8 +33,8 @@ from .formatters import (
     MarkdownATXHeading,
     MarkdownBlockQuote,
     MarkdownFencedCodeBlock,
-    MarkdownFootnote,
     MarkdownIndentedCodeBlock,
+    MarkdownLinkReferenceDefinition,
     MarkdownList,
     MarkdownParagraph,
     MarkdownSection,
@@ -55,15 +55,15 @@ class LineState(Enum):
     BLOCK_QUOTE = "block quote"
     CODE_BLOCK = "code block"
     FENCED_CODE_BLOCK = "fence code block"
-    FOOTNOTE = "footnote"
     HEADING = "headings"
     INDENTED_CODE_BLOCK = "indented code block"
-    THEMATIC_BREAK = "thematic break"
+    LINK_REFERENCE_DEFINITION = "link reference definition"
     LIST = "list"
     PARAGRAPH = "paragraph"
     SEPARATOR = "separator"
     SETEXT_HEADING = "setext heading"
     TABLE = "table"
+    THEMATIC_BREAK = "thematic break"
 
 
 def _reformat_markdown_text(text: str, width: Number = 88) -> str:
@@ -108,10 +108,10 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
                 state = LineState.FENCED_CODE_BLOCK
                 ended_function = fenced_code_block_ended
                 sections.append(MarkdownFencedCodeBlock(i))
-            elif footnote_started(line, i, lines):
-                state = LineState.FOOTNOTE
-                ended_function = footnote_ended
-                sections.append(MarkdownFootnote(i))
+            elif link_reference_definition_started(line, i, lines):
+                state = LineState.LINK_REFERENCE_DEFINITION
+                ended_function = link_reference_definition_ended
+                sections.append(MarkdownLinkReferenceDefinition(i))
             elif list_started(line, i, lines):
                 state = LineState.LIST
                 ended_function = list_ended
@@ -167,6 +167,7 @@ def reformat_markdown_text(text: str, width: Number = 88) -> str:
         The reformatted Markdown text
     """
     new_text = _reformat_markdown_text(text, width)
+    # exit()
     if new_text != _reformat_markdown_text(new_text, width):
         raise ReformatInconsistentException(
             f"Reformat of reformatted code results in different text."
