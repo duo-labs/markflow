@@ -11,7 +11,7 @@ from ..detectors.fenced_code_block import (
 )
 
 from .base import MarkdownSection
-from .textwrap import wrap
+from .._utils.textwrap import wrap
 
 __all__ = ["MarkdownList"]
 

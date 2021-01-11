@@ -1,7 +1,7 @@
 import re
 
 from typing import List, Tuple
-from ..typing import Number
+from markflow.typing import Number
 
 INLINE_CODE_MARKER_REGEX = re.compile(r"(((?!<\\)`)+)")
 FOOTNOTE_REGEX = re.compile(r"\[[^\[]+\]\[[^\]]+\]")

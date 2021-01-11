@@ -27,8 +27,8 @@ https://spec.commonmark.org/0.29/#setext-headings
 from ..typing import Number
 
 from .base import MarkdownSection
-from .textwrap import wrap
-from .util import truncate_str
+from .._utils.textwrap import wrap
+from .._utils import truncate_str
 
 __all__ = ["MarkdownSetextHeading"]
 

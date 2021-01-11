@@ -4,7 +4,7 @@ from typing import List
 from ..typing import Number
 
 from .base import MarkdownSection
-from .textwrap import wrap
+from .._utils.textwrap import wrap
 
 __all__ = ["MarkdownBlockQuote"]
 
