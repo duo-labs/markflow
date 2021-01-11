@@ -138,8 +138,7 @@ def link_reference_definition_started(line: str, index: int, lines: List[str]) -
     closing_regex = re.compile(r"(?<!\\)(\\\\)*{}".format(quotation))
 
     for index, line in enumerate(
-        itertools.chain([rest_of_line[1:]], lines[index + 1 :]),
-        start=index,
+        itertools.chain([rest_of_line[1:]], lines[index + 1 :]), start=index,
     ):
         match = closing_regex.search(line.rstrip())
         if match:
