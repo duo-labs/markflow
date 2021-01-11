@@ -87,7 +87,34 @@ Indented code blocks simply have their trailing whitespace removed.
 
 ### Footnotes (or Link Reference Definitions)
 
-Footnote lines begin and end with no whitespace.
+Footnotes will have their whitespace corrected and their titles wrapped. The tool will
+however respect what line URLs should appear on, even if they overflow. For example, the
+next two examples would be unchanged.
+
+```markdown
+[really_really_really_long_link_that_could_go_on_a_new_line]: /but/doesnt/because/the/tool/understands/that/you/may/not/want/that
+```
+
+```markdown
+[short_link]:
+/that/stays/on/separate/lines
+'Even if title would fit'
+```
+
+Titles will be kept on whatever line you write them on, as long as they wouldn't be
+wrapped off the line.
+
+```markdown
+[really_really_really_long_link_that_could_go_on_a_new_line]: /but/doesnt/because/the/tool/understands/that/you/may/not/want/that "But the title is moved to the next line and itself is wrapped because it is also really long."
+```
+
+becomes:
+
+```markdown
+[really_really_really_long_link_that_could_go_on_a_new_line]: /but/doesnt/because/the/tool/understands/that/you/may/not/want/that
+"But the title is moved to the next line and itself is wrapped because it is also really
+long."
+```
 
 ### Headings
 
