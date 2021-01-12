@@ -3,7 +3,7 @@ try:
     from typing import Protocol
 except ImportError:
     # Python <3.8
-    from typing_extensions import Protocol
+    from typing_extensions import Protocol  # type: ignore
 
 Number = Union[int, float]
 SectionEndedFunc = Callable[[str, int, List[str]], bool]

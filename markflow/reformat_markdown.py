@@ -39,17 +39,17 @@ logger = logging.getLogger(__name__)
 
 
 class MarkdownSectionEnum(Enum):
-    ATX_HEADING = "atx heading"
-    BLANK_LINE = "blank line"
-    BLOCK_QUOTE = "block quote"
-    FENCED_CODE_BLOCK = "fenced code block"
-    INDENTED_CODE_BLOCK = "indented code block"
-    LINK_REFERENCE_DEFINITION = "link reference definition"
-    LIST = "list"
-    PARAGRAPH = "paragraph"
-    SETEXT_HEADING = "setext heading"
-    TABLE = "table"
-    THEMATIC_BREAK = "thematic break"
+    ATX_HEADING = "ATX Heading"
+    BLANK_LINE = "Blank Line"
+    BLOCK_QUOTE = "Block Quote"
+    FENCED_CODE_BLOCK = "Fenced Code Block"
+    INDENTED_CODE_BLOCK = "Indented Code Block"
+    LINK_REFERENCE_DEFINITION = "Link Reference Definition"
+    LIST = "List"
+    PARAGRAPH = "Paragraph"
+    SETEXT_HEADING = "Setext Heading"
+    TABLE = "Table"
+    THEMATIC_BREAK = "Thematic Break"
 
 
 SPLITTERS: List[Tuple[MarkdownSectionEnum, SplitFunc]] = [
@@ -82,14 +82,28 @@ FORMATTERS: Dict[MarkdownSectionEnum, Type[MarkdownSection]] = {
 }
 
 
-def _reformat_markdown_text(text: str, width: Number = 88) -> str:
-    lines = text.splitlines()
+def _reformat_markdown_text(log_text: str, width: Number = 88) -> str:
+    remaining_lines = log_text.splitlines()
     sections = []
-    while lines:
+    current_line = 1
+    while remaining_lines:
         for section_type, splitter in SPLITTERS:
-            section_content, lines = splitter(lines)
+            section_content, remaining_lines = splitter(remaining_lines)
             if section_content:
+                content_length = len(section_content)
+                if content_length > 1:
+                    log_text = (
+                        f"Lines {current_line}-{current_line + content_length - 1}"
+                    )
+                else:
+                    log_text = f"Line {current_line}"
+                logger.debug(
+                    "%s type: %s",
+                    log_text,
+                    section_type.value,
+                )
                 sections.append((section_type, section_content))
+                current_line += len(section_content)
                 break
         else:
             raise RuntimeError(
@@ -101,14 +115,21 @@ def _reformat_markdown_text(text: str, width: Number = 88) -> str:
     current_blank_lines = []
     offset = 0
     for section_type, section_content in sections:
-        if section_type == MarkdownSectionEnum.BLANK_LINE:
-            current_blank_lines.append(
-                FORMATTERS[section_type](offset, section_content)
+        formatter = FORMATTERS[section_type](offset, section_content)
+        content_length = len(section_content)
+        if content_length > 1:
+            log_text = (
+                f"Lines {offset + 1}-{offset + content_length}"
             )
+        else:
+            log_text = f"Line {offset + 1}"
+        logger.info(f"%s: %s", log_text, repr(formatter))
+        if section_type == MarkdownSectionEnum.BLANK_LINE:
+            current_blank_lines.append(formatter)
         else:
             formatters += current_blank_lines
             current_blank_lines = []
-            formatters.append(FORMATTERS[section_type](offset, section_content))
+            formatters.append(formatter)
 
         offset += len(section_content)
     return "\n".join(f.reformatted(width) for f in formatters) + "\n"
