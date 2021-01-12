@@ -31,6 +31,8 @@ def split_atx_heading(
     if get_indent(lines[0]) >= 4:
         pass
     elif lines[0].lstrip().startswith("#"):
+        # The standard says we must require a space, but it also notes that not everyone
+        # follows this. Let's be lax and fix it for them in the formatter.
         atx_headings = [lines[0]]
         remaining_lines = lines[1:]
     else:
