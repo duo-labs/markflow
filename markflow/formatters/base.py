@@ -1,19 +1,17 @@
 import abc
 
-from typing import List
+from typing import List, Optional
 from ..typing import Number
 
 __all__ = ["MarkdownSection"]
 
 
 class MarkdownSection:
-    def __init__(self, line_index: int):
+    def __init__(self, line_index: int, lines: Optional[List[str]] = None):
         self.line_index = line_index
-        self.lines: List[str] = []
-
-    @abc.abstractmethod
-    def append(self, line: str) -> None:
-        """Append a line to this section"""
+        if lines is None:
+            lines = []
+        self.lines: List[str] = lines
 
     @abc.abstractmethod
     def reformatted(self, width: Number = 88) -> str:

@@ -24,11 +24,11 @@ blank line is needed between them.
 https://spec.commonmark.org/0.29/#setext-headings
 """
 
-from typing import List
+from typing import List, Tuple
 
 from .list import list_started
 from .paragraph import paragraph_started, paragraph_ended
-from .._utils import line_is_indented_at_least
+from .._utils import get_indent
 
 
 def _is_underline(str_: str) -> bool:
@@ -41,7 +41,7 @@ def setext_heading_started(line: str, index: int, lines: List[str]) -> bool:
     if list_started(line, index, lines):
         # Lists can't be headings
         return False
-    elif line_is_indented_at_least(line, 4):
+    elif get_indent(line) >= 4:
         return False
 
     # Avoid looking beyond the end of the file. This is clearly not a setext heading at
@@ -80,3 +80,26 @@ def setext_heading_started(line: str, index: int, lines: List[str]) -> bool:
 
 def setext_heading_ended(line: str, index: int, lines: List[str]) -> bool:
     return _is_underline(lines[index - 1])
+
+
+def split_setext_heading(
+    lines: List[str], line_offset: int = 0
+) -> Tuple[List[str], List[str]]:
+    # ToDo: Instead of using this pattern, leverage the unified `_paragraph_split` which
+    #  will provide a way to split out a paragraph, not caring if it is a setext or not.
+    #  `paragraph_split` will handle that for paragraphs.
+    setext_heading = []
+    remaining_lines = lines
+
+    index = 0
+    if setext_heading_started(lines[index], index, lines):
+        setext_heading.append(lines[index])
+        for index, line in enumerate(lines[1:], start=index + 1):
+            if setext_heading_ended(line, index, lines):
+                break
+            setext_heading.append(line)
+        else:
+            index += 1
+    remaining_lines = lines[index:]
+
+    return setext_heading, remaining_lines

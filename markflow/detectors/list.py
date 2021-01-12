@@ -1,6 +1,6 @@
 import re
 
-from typing import List
+from typing import List, Tuple
 
 from .blank_line import blank_line_started
 from .table import table_started
@@ -27,3 +27,21 @@ def list_ended(line: str, index: int, lines: List[str]) -> bool:
         or table_started(line, index, lines)
         or thematic_break_started(line, index, lines)
     )
+
+
+def split_list(lines: List[str], line_offset: int = 0) -> Tuple[List[str], List[str]]:
+    list_ = []
+    remaining_lines = lines
+
+    index = 0
+    if list_started(lines[index], index, lines):
+        list_.append(lines[index])
+        for index, line in enumerate(lines[1:], start=index + 1):
+            if list_ended(line, index, lines):
+                break
+            list_.append(line)
+        else:
+            index += 1
+    remaining_lines = lines[index:]
+
+    return list_, remaining_lines

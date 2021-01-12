@@ -17,15 +17,15 @@ If you want a thematic break in a list item, use a different bullet.
 https://spec.commonmark.org/0.29/#thematic-breaks
 """
 
-from typing import List
+from typing import List, Tuple
 
-from .._utils import line_is_indented_at_least
+from .._utils import get_indent
 
 SEPARATOR_SYMBOLS = ["*", "_", "-"]
 
 
 def thematic_break_started(line: str, index: int, lines: List[str]) -> bool:
-    if line_is_indented_at_least(line, 4):
+    if get_indent(line) >= 4:
         return False
 
     spaceless_line = "".join(line.split())
@@ -41,3 +41,25 @@ def thematic_break_started(line: str, index: int, lines: List[str]) -> bool:
 
 def thematic_break_ended(line: str, index: int, lines: List[str]) -> bool:
     return True
+
+
+def split_thematic_break(
+    lines: List[str], line_offset: int = 0
+) -> Tuple[List[str], List[str]]:
+    thematic_break = []
+    remaining_lines = lines
+
+    spaceless_line = "".join(lines[0].split())
+
+    if get_indent(lines[0]) > 4:
+        pass
+    elif len(spaceless_line) < 3:
+        # Thematic breaks must be at least three characters long
+        pass
+    else:
+        for symbol in SEPARATOR_SYMBOLS:
+            if all(char == symbol for char in spaceless_line.strip()):
+                thematic_break.append(lines[0])
+                remaining_lines = lines[1:]
+
+    return thematic_break, remaining_lines

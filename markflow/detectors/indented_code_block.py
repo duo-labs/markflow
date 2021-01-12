@@ -16,28 +16,33 @@ TODO: Keep in mind for paragraphs
 https://spec.commonmark.org/0.29/#indented-code-blocks
 """
 
-from typing import List
+from typing import List, Tuple
 
-from .._utils import line_is_indented_at_least, line_is_indented_less_than
-
-
-def indented_code_block_started(line: str, index: int, lines: List[str]) -> bool:
-    return bool(line.strip()) and line_is_indented_at_least(line, 4)
+from .._utils import get_indent
 
 
-def indented_code_block_ended(line: str, index: int, lines: List[str]) -> bool:
-    # TODO: This can be done without the conditional here
-    if not line.strip():
-        # If we find a blank line, we need to check and see if the next non-blank line
-        # is not indented
-        for line in lines[index:]:
-            # We've found a blank line
+def split_indented_code_block(
+    lines: List[str], line_offset: int = 0
+) -> Tuple[List[str], List[str]]:
+    indented_code_block = []
+    remaining_lines = lines
+    indexed_line_generator = enumerate(lines)
+
+    # By default, everything to the end of the document is a block quote
+    index, line = next(indexed_line_generator)
+    close_index = index + 1
+    if line.strip() and get_indent(line) >= 4:
+        # Find the next line that isn't indented at least 4, excluding trailing blank
+        # lines
+        for index, line in indexed_line_generator:
             if not line.strip():
                 continue
-            return line_is_indented_less_than(line, 4)
-        else:
-            return False
-    elif line_is_indented_at_least(line, 4):
-        return False
-    else:
-        return True
+            elif get_indent(line) >= 4:
+                close_index = index
+            else:
+                break
+
+        indented_code_block = lines[:close_index]
+        remaining_lines = lines[close_index:]
+
+    return indented_code_block, remaining_lines

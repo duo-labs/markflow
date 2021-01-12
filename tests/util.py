@@ -12,9 +12,7 @@ LIST_NUMBERING_START = re.compile(r" start=\"[0-9]+\"")
 
 
 def create_section(class_: Type[MarkdownSection], text: str) -> MarkdownSection:
-    obj = class_(0)
-    for line in text.splitlines():
-        obj.append(line)
+    obj = class_(0, text.splitlines())
     return obj
 
 

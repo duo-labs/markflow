@@ -1,8 +1,7 @@
 import textwrap
 
 from markflow._utils._utils import (
-    line_is_indented_at_least,
-    line_is_indented_less_than,
+    get_indent,
     truncate_str,
 )
 from markflow._utils.textwrap import (
@@ -28,14 +27,11 @@ class TestTruncateStr:
         assert truncate_str("123456789", 2) == ".."
 
 
-class TestIndentChecks:
+class TestGetIndent:
     def test_is_indented_at_least(self) -> None:
-        assert line_is_indented_at_least("  Test", 2)
-        assert not line_is_indented_at_least("  Test", 3)
-
-    def test_is_indented_less_than(self) -> None:
-        assert not line_is_indented_less_than("  Test", 2)
-        assert line_is_indented_less_than("  Test", 3)
+        # This is a little silly, but I expect we may have more cases to support since
+        # we currently conflate tabs and spaces.
+        assert get_indent("  Test") == 2
 
 
 class TestTextWrap:

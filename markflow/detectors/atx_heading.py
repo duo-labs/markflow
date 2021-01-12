@@ -17,13 +17,30 @@ space. However, the space was required by the original ATX implementation.
 https://spec.commonmark.org/0.29/#atx-headings
 """
 
-from typing import List
+from typing import List, Tuple
 
-from .._utils import line_is_indented_at_least
+from .._utils import get_indent
+
+
+def split_atx_heading(
+    lines: List[str], line_offset: int = 0
+) -> Tuple[List[str], List[str]]:
+    atx_headings = []
+    remaining_lines = lines
+
+    if get_indent(lines[0]) >= 4:
+        pass
+    elif lines[0].lstrip().startswith("#"):
+        atx_headings = [lines[0]]
+        remaining_lines = lines[1:]
+    else:
+        pass
+
+    return atx_headings, remaining_lines
 
 
 def atx_heading_started(line: str, index: int, lines: List[str]) -> bool:
-    if line_is_indented_at_least(line, 4):
+    if get_indent(line) >= 4:
         return False
 
     # The standard says we must require a space, but it also notes that not everyone
