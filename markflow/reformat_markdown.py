@@ -98,9 +98,7 @@ def _reformat_markdown_text(log_text: str, width: Number = 88) -> str:
                 else:
                     log_text = f"Line {current_line}"
                 logger.debug(
-                    "%s type: %s",
-                    log_text,
-                    section_type.value,
+                    "%s type: %s", log_text, section_type.value,
                 )
                 sections.append((section_type, section_content))
                 current_line += len(section_content)
@@ -118,9 +116,7 @@ def _reformat_markdown_text(log_text: str, width: Number = 88) -> str:
         formatter = FORMATTERS[section_type](offset, section_content)
         content_length = len(section_content)
         if content_length > 1:
-            log_text = (
-                f"Lines {offset + 1}-{offset + content_length}"
-            )
+            log_text = f"Lines {offset + 1}-{offset + content_length}"
         else:
             log_text = f"Line {offset + 1}"
         logger.info(f"%s: %s", log_text, repr(formatter))

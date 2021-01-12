@@ -1,4 +1,5 @@
 from typing import Callable, List, Tuple, Union
+
 try:
     from typing import Protocol
 except ImportError:
