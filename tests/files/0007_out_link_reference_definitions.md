@@ -42,8 +42,7 @@ wouldn\'t believe'
 wouldn\'t believe'
 
 [link_with_a_trailing_paragraph]: /link
-'Paragraph after this' Paragraph'
-Paragraph
+'Paragraph after this' Paragraph' Paragraph
 
 [link with space]
 

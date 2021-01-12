@@ -34,7 +34,9 @@ https://spec.commonmark.org/0.29/#fenced-code-blocks
 
 import logging
 
-from typing import List
+from typing import List, Tuple
+
+from .._utils import get_indent
 
 logger = logging.getLogger(__name__)
 
@@ -103,3 +105,38 @@ def fenced_code_block_ended(line: str, index: int, lines: List[str]) -> bool:
         __LAST_FENCE_INDEX = -1
         return True
     return False
+
+
+def split_fenced_code_block(
+    lines: List[str], line_offset: int = 0
+) -> Tuple[List[str], List[str]]:
+    # TODO: Fenced code blocks can't be indented
+    fenced_code_block: List[str] = []
+    remaining_lines = lines
+    indexed_line_generator = enumerate(lines)
+
+    index, line = next(indexed_line_generator)
+    for fence in FENCES:
+        if line.strip().startswith(fence * 3):
+            count = len(line.lstrip()) - len(line.lstrip().lstrip(fence))
+            fence_indent = get_indent(line)
+            full_fence = fence * count
+            break
+    else:
+        return fenced_code_block, remaining_lines
+
+    fenced_code_block.append(line)
+
+    for index, line in indexed_line_generator:
+        fenced_code_block.append(line)
+        if line.strip() == full_fence:
+            if get_indent(line) > 3 + fence_indent:
+                logger.warning(
+                    "Detected that the fence on line %d is over indented per the "
+                    "standard. If this is intentional, please file a bug report."
+                    % (index + line_offset + 1)
+                )
+            break
+
+    remaining_lines = remaining_lines[index + 1 :]
+    return fenced_code_block, remaining_lines

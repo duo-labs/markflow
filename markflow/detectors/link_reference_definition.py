@@ -27,9 +27,9 @@ import itertools
 import logging
 import re
 
-from typing import List
+from typing import List, Tuple
 
-from .._utils import line_is_indented_at_least
+from .._utils import get_indent
 
 logger = logging.getLogger(__name__)
 
@@ -38,135 +38,93 @@ LINK_REFERENCE_DEFINITION_FIRST_ELEMENT_REGEX = re.compile(
     r"[^\]]{1,999}"  # At least one and up to 999 characters as the name
     r"\]:"  # End bracket and colon
 )
-
-# Blech
-__QUOTATION = "ERROR"
-__END_INDEX = -1
+QUOTATION_CHARACTERS = "'\""
 
 
-def link_reference_definition_started(line: str, index: int, lines: List[str]) -> bool:
-    global __END_INDEX
-    global __QUOTATION
-    if line_is_indented_at_least(line, 4):
-        return False
+def split_link_reference_definition(
+    lines: List[str], line_offset: int = 0
+) -> Tuple[List[str], List[str]]:
+    link_reference_definition: List[str] = []
+    remaining_lines = lines
+    indexed_line_generator = enumerate(lines)
+
+    index, line = next(indexed_line_generator)
+
+    if get_indent(line) >= 4:
+        return link_reference_definition, remaining_lines
 
     rest_of_line = line.lstrip()
     match = LINK_REFERENCE_DEFINITION_FIRST_ELEMENT_REGEX.match(rest_of_line)
     if not match:
-        return False
+        return link_reference_definition, remaining_lines
 
-    # We've already validated that the first word is the link definition
     rest_of_line = rest_of_line[match.end() :]
     url_and_title = rest_of_line.split(maxsplit=1)
-    # At the end of this, index is set to the line with the beginning of the title and
-    # rest of line contains the title whether, even if it is the entire line. If there
-    # is no title, we exit in here.
-    # URL index will be set to the URL index only if in the event that we don't find a
-    # title, it's not on the same line as the URL and label so we still have a LRD, just
-    # not one with a title.
-    url_index = None
-    if len(url_and_title) == 1:
-        # The URL is also present on the first line
-        if index + 1 == len(lines):
-            # We're at the end of the document
-            __END_INDEX = index + 1
-            return True
-        if lines[index + 1].lstrip().startswith("'") or lines[
-            index + 1
-        ].lstrip().startswith('"'):
-            # The next line starts a potential title
-            rest_of_line = lines[index + 1]
-            index += 1
-            url_index = index
-        else:
-            # There's no title so the reference is complete.
-            __END_INDEX = index + 1
-            return True
-    elif len(url_and_title) == 2:
-        # The label, URL, and title are on this line, assuming the title is quoted
-        if url_and_title[1].startswith("'") or url_and_title[1].startswith('"'):
-            rest_of_line = url_and_title[1]
-            # index = index
-        else:
-            return False
+    # At the end of this, index is set to the line with the beginning of the title_text
+    # contains that first text. Is complete gets set from this loop when we know that
+    # we have a valid title. In this first loop, we only set it when we know the lines
+    # with the label and URL can stand on their own.
+    # The later loops checks to ensure our closing quotation is the last non-whitespace
+    # character on whatever line it ends on and the first occurence of that character,
+    # unescaped.
+    is_complete = False
+    if len(url_and_title) == 2:
+        # The label, URL, and possible title (or part of it) are on this line
+        title_text = url_and_title[1]
+    elif len(url_and_title) == 1:
+        # Only the label and URL are on the first line
+        try:
+            index, line = next(indexed_line_generator)
+            title_text = line
+        except StopIteration:
+            title_text = ""
+        is_complete = True
     else:
-        # Just the label is on the first line
-        if not lines[index + 1].strip() or lines[index + 1].startswith("["):
-            # There's not a URL, but it seems odd that this would be like this, so let's
-            # assume it's mid-edit
+        # Just the label was on the first line
+        try:
+            index, line = next(indexed_line_generator)
+        except StopIteration:
+            line = ""
+        if line.startswith("[") or not line.strip():
+            # According to this standard, this is just paragraph text, but this tool
+            # should be usable during development.
+            # ToDo: Does that match up with our treatment of misquoted titles?
             logger.warning(
                 "The text on line %d seems to be a link reference definition, but it "
                 "does not contain a link. We will be treating it as if it were.",
-                index + 1,
+                index,  # We are just pass where the issue exists
             )
-            __END_INDEX = index + 1
-            return True
-
-        url_and_title = lines[index + 1].split(maxsplit=1)
-        if len(url_and_title) == 1:
-            # Only the URL is on the next line
-            if lines[index + 2].lstrip().startswith("'") or lines[
-                index + 2
-            ].lstrip().startswith('"'):
-                # There's a title starting on the line after that
-                rest_of_line = lines[index + 2].lstrip()
-                index = index + 2
-                url_index = index + 1
-            else:
-                # There's no title, just the label and URL on separate lines
-                __END_INDEX = index + 2
-                return True
+            link_reference_definition = [lines[0]]
+            remaining_lines = lines[1:]
+            return link_reference_definition, remaining_lines
+        elif len(line.split(maxsplit=1)) == 1:
+            # Only the URL is on the second line
+            index, line = next(indexed_line_generator)
+            is_complete = True
+            title_text = line
         else:
-            # The title may also be on the next line
-            if url_and_title[1].startswith("'") or url_and_title[1].startswith('"'):
-                rest_of_line = url_and_title[1]
-                index = index + 1
-            else:
-                # The next line is incorrectly formatted, so we fall back to assuming
-                # the link is mid-edit
-                logger.warning(
-                    "The text on line %d seems to be a link reference definition, but "
-                    "it does not contain a link. We will be treating it as if it were.",
-                    index + 1,
-                )
-                __END_INDEX = index + 1
-                return True
+            # The URL and possible title (or part of it) are on the second line
+            title_text = line.split(maxsplit=1)[1]
 
-    if line[match.end() :] == rest_of_line:
-        raise RuntimeError(
-            "`rest_of_line` went unchanged. Please open a bug report or shoot me "
-            "an email at jholland@duosecurity.com"
-        )
-
-    quotation = rest_of_line[0]
-    closing_regex = re.compile(r"(?<!\\)(\\\\)*{}".format(quotation))
-
-    for index, line in enumerate(
-        itertools.chain([rest_of_line[1:]], lines[index + 1 :]), start=index,
-    ):
-        match = closing_regex.search(line.rstrip())
-        if match:
-            if match.end() == len(line.rstrip()):
-                __END_INDEX = index + 1
-                return True
-            else:
-                if url_index is not None:
-                    __END_INDEX = url_index + 1
-                    return True
-                else:
-                    return False
-
-    if url_index is not None:
-        __END_INDEX = url_index + 1
-        return True
+    if title_text.strip():
+        quotation_character = title_text[0]
     else:
-        return False
+        quotation_character = "NO QUOTE"
 
+    if quotation_character in QUOTATION_CHARACTERS:
+        closing_regex = re.compile(r"(?<!\\)(\\\\)*{}".format(quotation_character))
+        for index, line in itertools.chain(
+            [(index, title_text[1:])], indexed_line_generator
+        ):
+            match = closing_regex.search(line.rstrip())
+            if match:
+                if match.end() == len(line.rstrip()):
+                    is_complete = True
+                    index += 1
+                break
 
-def link_reference_definition_ended(line: str, index: int, lines: List[str]) -> bool:
-    global __END_INDEX
-    if __END_INDEX == index:
-        __END_INDEX = -1
-        return True
-    else:
-        return False
+    if is_complete:
+        link_reference_definition = lines[:index]
+        remaining_lines = lines[index:]
+
+    return link_reference_definition, remaining_lines

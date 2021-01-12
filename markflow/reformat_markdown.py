@@ -1,35 +1,25 @@
 from enum import Enum
 import logging
 
-from typing import List
-from .typing import Number, SectionEndedFunc
+from typing import Dict, List, Tuple, Type
+from .typing import Number, SplitFunc
 
 from .detectors import (
-    atx_heading_started,
-    atx_heading_ended,
-    blank_line_started,
-    blank_line_ended,
-    block_quote_started,
-    block_quote_ended,
-    fenced_code_block_started,
-    fenced_code_block_ended,
-    indented_code_block_started,
-    indented_code_block_ended,
-    link_reference_definition_started,
-    link_reference_definition_ended,
-    list_started,
-    list_ended,
-    paragraph_started,
-    paragraph_ended,
-    setext_heading_started,
-    setext_heading_ended,
-    table_started,
-    table_ended,
-    thematic_break_started,
-    thematic_break_ended,
+    split_atx_heading,
+    split_blank_line,
+    split_block_quote,
+    split_fenced_code_block,
+    split_indented_code_block,
+    split_link_reference_definition,
+    split_list,
+    split_paragraph,
+    split_setext_heading,
+    split_table,
+    split_thematic_break,
 )
 from .exceptions import ReformatInconsistentException
 from .formatters import (
+    MarkdownSection,
     MarkdownATXHeading,
     MarkdownBlockQuote,
     MarkdownFencedCodeBlock,
@@ -37,7 +27,6 @@ from .formatters import (
     MarkdownLinkReferenceDefinition,
     MarkdownList,
     MarkdownParagraph,
-    MarkdownSection,
     MarkdownBlankLine,
     MarkdownSetextHeading,
     MarkdownTable,
@@ -49,14 +38,11 @@ __all__ = ["reformat_markdown_text"]
 logger = logging.getLogger(__name__)
 
 
-class LineState(Enum):
-    DEFAULT = "default"
+class MarkdownSectionEnum(Enum):
     ATX_HEADING = "atx heading"
     BLANK_LINE = "blank line"
     BLOCK_QUOTE = "block quote"
-    CODE_BLOCK = "code block"
-    FENCED_CODE_BLOCK = "fence code block"
-    HEADING = "headings"
+    FENCED_CODE_BLOCK = "fenced code block"
     INDENTED_CODE_BLOCK = "indented code block"
     LINK_REFERENCE_DEFINITION = "link reference definition"
     LIST = "list"
@@ -66,113 +52,66 @@ class LineState(Enum):
     THEMATIC_BREAK = "thematic break"
 
 
-def _reformat_markdown_text(
-    text: str, width: Number = 88, log_sections: bool = True
-) -> str:
-    """Reformat a block of markdown text
+SPLITTERS: List[Tuple[MarkdownSectionEnum, SplitFunc]] = [
+    (MarkdownSectionEnum.ATX_HEADING, split_atx_heading),
+    (MarkdownSectionEnum.BLANK_LINE, split_blank_line),
+    (MarkdownSectionEnum.BLOCK_QUOTE, split_block_quote),
+    (MarkdownSectionEnum.FENCED_CODE_BLOCK, split_fenced_code_block),
+    (MarkdownSectionEnum.INDENTED_CODE_BLOCK, split_indented_code_block),
+    (MarkdownSectionEnum.LINK_REFERENCE_DEFINITION, split_link_reference_definition),
+    (MarkdownSectionEnum.LIST, split_list),
+    # ToDo: setext must be detected before paragraph
+    (MarkdownSectionEnum.SETEXT_HEADING, split_setext_heading),
+    (MarkdownSectionEnum.PARAGRAPH, split_paragraph),
+    (MarkdownSectionEnum.TABLE, split_table),
+    (MarkdownSectionEnum.THEMATIC_BREAK, split_thematic_break),
+]
 
-    See the README for how the Markdown text gets reformatted.
+FORMATTERS: Dict[MarkdownSectionEnum, Type[MarkdownSection]] = {
+    MarkdownSectionEnum.ATX_HEADING: MarkdownATXHeading,
+    MarkdownSectionEnum.BLANK_LINE: MarkdownBlankLine,
+    MarkdownSectionEnum.BLOCK_QUOTE: MarkdownBlockQuote,
+    MarkdownSectionEnum.FENCED_CODE_BLOCK: MarkdownFencedCodeBlock,
+    MarkdownSectionEnum.INDENTED_CODE_BLOCK: MarkdownIndentedCodeBlock,
+    MarkdownSectionEnum.LINK_REFERENCE_DEFINITION: MarkdownLinkReferenceDefinition,
+    MarkdownSectionEnum.LIST: MarkdownList,
+    MarkdownSectionEnum.PARAGRAPH: MarkdownParagraph,
+    MarkdownSectionEnum.SETEXT_HEADING: MarkdownSetextHeading,
+    MarkdownSectionEnum.TABLE: MarkdownTable,
+    MarkdownSectionEnum.THEMATIC_BREAK: MarkdownThematicBreak,
+}
 
-    Args:
-        text: The Markdown text to rerender
-        width: The maximum line length. Note, for table a code blocks, this length is
-            not enforced as the would change the documents appearance when rendered.
-        log_sections: Whether or not sections should be logged. Useful for shutting down
-            logging during second passes. I wonder if this would be done better by
-            configuring a specific logger. (ToDo)
 
-    Returns:
-        The reformatted Markdown text
-    """
+def _reformat_markdown_text(text: str, width: Number = 88) -> str:
     lines = text.splitlines()
-    sections: List[MarkdownSection] = []
-    state = LineState.DEFAULT
-    ended_function: SectionEndedFunc = lambda _line, _i, _lines: False
-    start = -1
-
-    for index, line in enumerate(lines):
-        if ended_function(line, index, lines):
-            state = LineState.DEFAULT
-
-        if state == LineState.DEFAULT:
-            if sections and log_sections:
-                if start + 1 == index:
-                    words = f"Line {start + 1}"
-                else:
-                    words = f"Lines {start + 1}-{index}"
-                logger.info("%s: %s", words, repr(sections[-1]))
-            start = index
-
-            if atx_heading_started(line, index, lines):
-                state = LineState.ATX_HEADING
-                ended_function = atx_heading_ended
-                sections.append(MarkdownATXHeading(index))
-            elif blank_line_started(line, index, lines):
-                state = LineState.BLANK_LINE
-                ended_function = blank_line_ended
-                sections.append(MarkdownBlankLine(index))
-            elif block_quote_started(line, index, lines):
-                state = LineState.CODE_BLOCK
-                ended_function = block_quote_ended
-                sections.append(MarkdownBlockQuote(index))
-            elif indented_code_block_started(line, index, lines):
-                state = LineState.INDENTED_CODE_BLOCK
-                ended_function = indented_code_block_ended
-                sections.append(MarkdownIndentedCodeBlock(index))
-            elif fenced_code_block_started(line, index, lines):
-                state = LineState.FENCED_CODE_BLOCK
-                ended_function = fenced_code_block_ended
-                sections.append(MarkdownFencedCodeBlock(index))
-            elif link_reference_definition_started(line, index, lines):
-                state = LineState.LINK_REFERENCE_DEFINITION
-                ended_function = link_reference_definition_ended
-                sections.append(MarkdownLinkReferenceDefinition(index))
-            elif list_started(line, index, lines):
-                state = LineState.LIST
-                ended_function = list_ended
-                sections.append(MarkdownList(index))
-            # This must be checked before paragraph checking.
-            elif setext_heading_started(line, index, lines):
-                state = LineState.SETEXT_HEADING
-                ended_function = setext_heading_ended
-                sections.append(MarkdownSetextHeading(index))
-            elif paragraph_started(line, index, lines):
-                state = LineState.PARAGRAPH
-                ended_function = paragraph_ended
-                sections.append(MarkdownParagraph(index))
-            elif table_started(line, index, lines):
-                state = LineState.TABLE
-                ended_function = table_ended
-                sections.append(MarkdownTable(index))
-            elif thematic_break_started(line, index, lines):
-                state = LineState.THEMATIC_BREAK
-                ended_function = thematic_break_ended
-                sections.append(MarkdownThematicBreak(index))
-            else:
-                raise RuntimeError(
-                    f"Could not detect section type on line {index + 1}."
-                )
-
-        sections[-1].append(line)
-
-        logger.debug("Line %d state: %s", index + 1, state)
-
-    if sections and log_sections:
-        if start == index:
-            words = f"Line {start + 1}"
+    sections = []
+    while lines:
+        for section_type, splitter in SPLITTERS:
+            section_content, lines = splitter(lines)
+            if section_content:
+                sections.append((section_type, section_content))
+                break
         else:
-            words = f"Lines {start + 1}-{index+1}"
-        logger.info("%s: %s", words, repr(sections[-1]))
+            raise RuntimeError(
+                "Could not determine section type on line %d",
+                sum(len(content) for type, content in sections) + 1,
+            )
 
-    if sections and isinstance(sections[-1], MarkdownBlankLine):
-        sections.pop()
+    formatters = []
+    current_blank_lines = []
+    offset = 0
+    for section_type, section_content in sections:
+        if section_type == MarkdownSectionEnum.BLANK_LINE:
+            current_blank_lines.append(
+                FORMATTERS[section_type](offset, section_content)
+            )
+        else:
+            formatters += current_blank_lines
+            current_blank_lines = []
+            formatters.append(FORMATTERS[section_type](offset, section_content))
 
-    while sections and isinstance(sections[0], MarkdownBlankLine):
-        sections.pop(0)
-    while sections and isinstance(sections[-1], MarkdownBlankLine):
-        sections.pop(-1)
-
-    return "\n".join([section.reformatted(width=width) for section in sections]) + "\n"
+        offset += len(section_content)
+    return "\n".join(f.reformatted(width) for f in formatters) + "\n"
 
 
 def reformat_markdown_text(text: str, width: Number = 88) -> str:
