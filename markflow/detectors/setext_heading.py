@@ -1,4 +1,23 @@
 """
+Markflow Setext Heading Detection Library
+
+Setexet headings are basically any paragraph that is followed by a line composed of all
+all equals signs (=) or dashes (-). The former indicates a heading of level 1 while the
+latter indicates a heading of level 2.
+
+Examples:
+    ```
+    Heading 1
+    =========
+    ```
+
+    ```
+    Heading 2
+    -
+    ```
+"""
+
+"""
 4.3 Setext headings
 
 A setext heading consists of one or more lines of text, each containing at least one
@@ -38,6 +57,7 @@ def _is_underline(str_: str) -> bool:
 
 
 def setext_heading_started(line: str, index: int, lines: List[str]) -> bool:
+    """DEPRECATED"""
     if list_started(line, index, lines):
         # Lists can't be headings
         return False
@@ -79,6 +99,7 @@ def setext_heading_started(line: str, index: int, lines: List[str]) -> bool:
 
 
 def setext_heading_ended(line: str, index: int, lines: List[str]) -> bool:
+    """DEPRECATED"""
     return _is_underline(lines[index - 1])
 
 

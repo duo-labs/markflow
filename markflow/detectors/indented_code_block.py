@@ -1,4 +1,16 @@
 """
+MarkFlow Indented Code Block Detection Library
+
+Indented code blocks are one or more lines of text that are indented at least four
+spaces that are not in the middle of a paragraph.
+
+Example:
+    ```
+        print("Hello world!")
+    ```
+"""
+
+"""
 4.4 Indented code blocks
 
 An indented code block is composed of one or more indented chunks separated by blank
@@ -24,6 +36,18 @@ from .._utils import get_indent
 def split_indented_code_block(
     lines: List[str], line_offset: int = 0
 ) -> Tuple[List[str], List[str]]:
+    """Split leading indented code block from lines if one exists
+
+    Args:
+        lines: The lines to evaluate.
+        line_offset (optional): The offset into the overall document we are at. This is
+            used for reporting errors in the original document.
+
+    Returns:
+        A tuple of two values. The first is the indented code block lines if they were
+        found, otherwise it is `None`. The second value is the remaining text. (If lines
+        does not start with an indented code block, it is the same as lines.)
+    """
     indented_code_block = []
     remaining_lines = lines
     indexed_line_generator = enumerate(lines)

@@ -11,6 +11,7 @@ from .._utils import get_indent
 
 
 def paragraph_started(line: str, index: int, lines: List[str]) -> bool:
+    """DEPRECATED"""
     if get_indent(line) >= 4:
         return False
 
@@ -27,6 +28,7 @@ def paragraph_started(line: str, index: int, lines: List[str]) -> bool:
 
 
 def paragraph_ended(line: str, index: int, lines: List[str]) -> bool:
+    """DEPRECATED"""
     return (
         ((index > 0) and lines[index - 1].endswith("  "))
         or atx_heading_started(line, index, lines)

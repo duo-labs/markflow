@@ -1,4 +1,24 @@
 """
+MarkFlow Fenced Code Block Detection Library
+
+Fenced code blocks are multiple lines of text that open with a line beginning with at
+least two asterisks or tildas that ends with that same sequence on its own line.
+
+Examples:
+    ```
+    ``
+    print("Hello world!")
+    ``
+    ```
+
+    ```
+    ~~~~
+    print("Hello world!")
+    ~~~~
+    ```
+"""
+
+"""
 4.5 Fenced code blocks
 
 A code fence is a sequence of at least three consecutive backtick characters (`) or
@@ -52,6 +72,7 @@ __LAST_FENCE_INDEX = -1
 
 
 def fenced_code_block_started(line: str, index: int, lines: List[str]) -> bool:
+    """DEPRECATED"""
     global __LAST_FENCE
     global __LAST_FENCE_INDEX
     for fence in FENCES:
@@ -64,6 +85,7 @@ def fenced_code_block_started(line: str, index: int, lines: List[str]) -> bool:
 
 
 def fenced_code_block_ended(line: str, index: int, lines: List[str]) -> bool:
+    """DEPRECATED"""
     # We'll catch even over indented fences assuming that that was an accident.
     global __LAST_FENCE
     global __LAST_FENCE_INDEX
@@ -110,6 +132,18 @@ def fenced_code_block_ended(line: str, index: int, lines: List[str]) -> bool:
 def split_fenced_code_block(
     lines: List[str], line_offset: int = 0
 ) -> Tuple[List[str], List[str]]:
+    """Split leading fenced code block from lines if one exists
+
+    Args:
+        lines: The lines to evaluate.
+        line_offset (optional): The offset into the overall document we are at. This is
+            used for reporting errors in the original document.
+
+    Returns:
+        A tuple of two values. The first is the fenced code block lines if they were
+        found, otherwise it is `None`. The second value is the remaining text. (If lines
+        does not start with a fenced code block, it is the same as lines.)
+    """
     # TODO: Fenced code blocks can't be indented
     fenced_code_block: List[str] = []
     remaining_lines = lines

@@ -1,4 +1,28 @@
 """
+MarkFlow Link Reference Definition Detection Library
+
+Link reference definitions are intended to be unrendered portions of a document that
+provide a short hand for links. The start with a series of non-whitespace characters
+enclosed in brackets ([]) that serve as the label. It is followed by a colon (:) and
+optional whitespace. That is then followed by a series of non-whitespace characters that
+serve as the link. This can optionally be followed by white-space and then a quotation
+(' or ") enclosed series of characters that serves as the title. Any of the optional
+whitespace may be a new line.
+
+Examples:
+    ```
+    [label]: link 'title'
+
+    [label]: link
+    'title'
+
+    [label]:
+    link
+    'title'
+    ```
+"""
+
+"""
 4.7 Link reference definitions
 
 A link reference definition consists of a link label, indented up to three spaces,
@@ -44,6 +68,18 @@ QUOTATION_CHARACTERS = "'\""
 def split_link_reference_definition(
     lines: List[str], line_offset: int = 0
 ) -> Tuple[List[str], List[str]]:
+    """Split leading link reference definition from lines if one exists
+
+    Args:
+        lines: The lines to evaluate.
+        line_offset (optional): The offset into the overall document we are at. This is
+            used for reporting errors in the original document.
+
+    Returns:
+        A tuple of two values. The first is the indented code block lines if they were
+        found, otherwise it is `None`. The second value is the remaining text. (If lines
+        does not start with a link reference definition, it is the same as lines.)
+    """
     link_reference_definition: List[str] = []
     remaining_lines = lines
     indexed_line_generator = enumerate(lines)
