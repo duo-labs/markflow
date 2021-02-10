@@ -11,11 +11,24 @@ some rules (see [Future Architecture Ideas](#future-architecture-ideas).
 
 ## Parsing Markdown
 
-We parse markdown via a state machine that iterates over each line in some text. We
-start in the default state which indicates to the machine we need to figure out what
-type of section we just started seeing. At the beginning of each loop, we check to see
-if whatever section we are in ended. This determination is configured each time we
-change states.
+We parse markdown by continuously iterating over a series of splitter functions. These
+functions are designed per [CommonMark][commonmark_spec] section type. They take in a
+string and if that string starts with their section type, they return a tuple of that
+section and the remaining text. Otherwise, the return a None value for the first part of
+the tuple and the entire part of the document as itself. Once we detect a section, we
+break out and start over with the remaining text.
+
+The functions are designed to be mutually exclusive: if one splitter splits the text, no
+others will. This isn't really tested (hint, hint), but is hopefully achieved by
+adhering to the [CommonMark][commonmark_spec] standard.
+
+This means that we could endlessly iterate over the functions until no text is
+remaining. But, if all of our splitters are incapable of processing the text, we end up
+in an endless loop without extra tracking code. We also get the benefit of putting
+resource intensive parsing later in the cycle so we only have to run it after we've
+eliminated easier to parse sections.
+
+[commonmark_spec]: https://spec.commonmark.org/0.29/
 
 ## Reformatting Sections
 
@@ -25,12 +38,16 @@ format different types of Markdown. The various enforced rules can be checked ou
 complicated ones should be fairly well documented. (If you see one that is confusing,
 open an issue.)
 
+<!-- ToDo: I think this should change to functions. I'm not sure what benefit we get
+from having classes. -->
+
 ## Ensuring Consistency
 
-Once everything is reformatted, that output is taken and then run through reformatting.
-The two outputs are then compared to ensure consistency. This is important as the tool
-provides a check so people can easily ensure their documents follow the formatting
-rules.
+Once everything is reformatted, that output is taken and then run through the parsing
+and reformatting steps. The resulting document is then compared to our original
+calculation to ensure they are the same. This allows us to be more confident that we
+didn't mess up formatting since we calculate the same document structure between the
+initial and resulting documents.
 
 ## Future Architecture Ideas
 
