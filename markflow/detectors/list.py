@@ -12,6 +12,7 @@ LIST_REGEX = re.compile(
     r"("
     r"\*|"  # Asterisk list marker
     r"-|"  # Dash list marker
+    r"\+|"  # Plus list marker
     r"[0-9]+\."  # Numeric list marker
     r") "  # Lists need a space after their identifier
 )

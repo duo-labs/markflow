@@ -30,7 +30,7 @@ class TestSplitCode:
 
 
 class TestMarkdownList:
-    def test_basic(self) -> None:
+    def test_basic_asterisk(self) -> None:
         input_ = textwrap.dedent(
             """\
             * I am a list that is pretty badly
@@ -47,6 +47,58 @@ class TestMarkdownList:
               this look very nice, like bullets that break
               across lines and missing spaces.
             * Which also is a problem when working with nested
+              lists since they could be missing leading spaces
+              and make things look extra confusing."""
+        )
+        lst = create_section(MarkdownList, input_)
+        assert lst.reformatted(width=50) == expected
+        lst = create_section(MarkdownList, expected)
+        assert lst.reformatted(width=50) == expected
+        assert render(expected) == render(input_)
+
+    def test_basic_dash(self) -> None:
+        input_ = textwrap.dedent(
+            """\
+            - I am a list that is pretty badly
+            formatted
+            - There are all sorts of problems that don't make this look very nice, like
+            bullets that break across lines and missing spaces.
+            - Which also is a problem when working with nested lists since they could be
+            missing leading spaces and make things look extra confusing."""
+        )
+        expected = textwrap.dedent(
+            """\
+            - I am a list that is pretty badly formatted
+            - There are all sorts of problems that don't make
+              this look very nice, like bullets that break
+              across lines and missing spaces.
+            - Which also is a problem when working with nested
+              lists since they could be missing leading spaces
+              and make things look extra confusing."""
+        )
+        lst = create_section(MarkdownList, input_)
+        assert lst.reformatted(width=50) == expected
+        lst = create_section(MarkdownList, expected)
+        assert lst.reformatted(width=50) == expected
+        assert render(expected) == render(input_)
+
+    def test_basic_plus(self) -> None:
+        input_ = textwrap.dedent(
+            """\
+            + I am a list that is pretty badly
+            formatted
+            + There are all sorts of problems that don't make this look very nice, like
+            bullets that break across lines and missing spaces.
+            + Which also is a problem when working with nested lists since they could be
+            missing leading spaces and make things look extra confusing."""
+        )
+        expected = textwrap.dedent(
+            """\
+            + I am a list that is pretty badly formatted
+            + There are all sorts of problems that don't make
+              this look very nice, like bullets that break
+              across lines and missing spaces.
+            + Which also is a problem when working with nested
               lists since they could be missing leading spaces
               and make things look extra confusing."""
         )
