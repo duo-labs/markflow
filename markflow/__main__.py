@@ -2,6 +2,7 @@ import argparse
 import logging
 import math
 import pathlib
+import re
 import sys
 
 from typing import List, TextIO
@@ -23,6 +24,39 @@ from ._argparse import (
 )
 
 logger = logging.getLogger(__name__)
+
+# So we don't need a dependency on TOML. This only should get used in dev.
+PYPROJECT_VERSION_REGEX_STR = r"\s*version\s*=\s*\"(?P<version>[0-9.]+)\"\s*"
+SITE_PACKAGES_VERSION_REGEX_FORMAT_STR = (
+    r"{install_name}-(?P<version>[0-9.]+)\.dist-info"
+)
+
+
+def get_version() -> str:
+    this_dir = pathlib.Path(__file__).parent
+
+    pyproject = this_dir.parent / "pyproject.toml"
+    if pyproject.exists():
+        regex = re.compile(PYPROJECT_VERSION_REGEX_STR)
+        for line in pyproject.read_text().splitlines():
+            match = regex.match(line)
+            if match:
+                return match.group("version") + " (development)"
+        else:
+            raise RuntimeError("No version specified in pyproject.toml")
+
+    # i.e. site-packages
+    site_packages = this_dir.parent
+    install_name = this_dir.name
+    regex = re.compile(
+        SITE_PACKAGES_VERSION_REGEX_FORMAT_STR.format(install_name=install_name)
+    )
+    for folder in site_packages.iterdir():
+        match = regex.match(folder.name)
+        if match:
+            return match.group("version")
+
+    raise RuntimeError("Could not determine the version of MarkFlow")
 
 
 def print_markdown(markdown_text: str) -> None:
@@ -92,6 +126,12 @@ def parse_args(argv: List[str]) -> argparse.Namespace:
         default=0,
         action="count",
         help="Decrease output verbosity. Pass multiple times to reduce output further.",
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"MarkFlow version {get_version()}",
+        help="Show the version number then exit.",
     )
 
     dev_arguments = parser.add_argument_group("developer arguments")
