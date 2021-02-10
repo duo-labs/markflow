@@ -13,9 +13,11 @@ some rules (see [Future Architecture Ideas](#future-architecture-ideas).
 
 We parse markdown by continuously iterating over a series of splitter functions. These
 functions are designed per [CommonMark][commonmark_spec] section type. They take in a
-string and if that string starts with their section type, they return a tuple of that
-section and the remaining text. Otherwise, the return a None value for the first part of
-the tuple and the entire part of the document as itself. Once we detect a section, we
+list of lines if that list starts with their section type, they return a tuple of that
+section (as a list of lines) and the remaining text (also as a list of lines). We use
+lists of lines as a performance gain and so we don't have to write
+`lst = str_.splitlines()` and `"\n".join(lst)` Otherwise, they return `None` as the
+first member and the list of lines pass in as the second. Once we detect a section, we
 break out and start over with the remaining text.
 
 The functions are designed to be mutually exclusive: if one splitter splits the text, no
