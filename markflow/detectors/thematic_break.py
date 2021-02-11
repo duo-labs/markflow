@@ -17,30 +17,10 @@ Examples:
 
 from typing import List, Tuple
 
+from ._lines import is_thematic_break_line
 from .._utils import get_indent
 
 SEPARATOR_SYMBOLS = ["*", "_", "-"]
-
-
-def thematic_break_started(line: str, index: int, lines: List[str]) -> bool:
-    """DEPRECATED"""
-    if get_indent(line) >= 4:
-        return False
-
-    spaceless_line = "".join(line.split())
-    if len(spaceless_line) < 3:
-        # Thematic breaks must be at least three characters long
-        return False
-    else:
-        for symbol in SEPARATOR_SYMBOLS:
-            if all(char == symbol for char in spaceless_line.strip()):
-                return True
-        return False
-
-
-def thematic_break_ended(line: str, index: int, lines: List[str]) -> bool:
-    """DEPRECATED"""
-    return True
 
 
 def split_thematic_break(
@@ -58,20 +38,7 @@ def split_thematic_break(
         found, otherwise it is `None`. The second value is the remaining text. (If lines
         does not start with a thematic break, it is the same as lines.)
     """
-    thematic_break = []
-    remaining_lines = lines
-
-    spaceless_line = "".join(lines[0].split())
-
-    if get_indent(lines[0]) > 4:
-        pass
-    elif len(spaceless_line) < 3:
-        # Thematic breaks must be at least three characters long
-        pass
+    if is_thematic_break_line(lines[0]):
+        return [lines[0]], lines[1:]
     else:
-        for symbol in SEPARATOR_SYMBOLS:
-            if all(char == symbol for char in spaceless_line.strip()):
-                thematic_break.append(lines[0])
-                remaining_lines = lines[1:]
-
-    return thematic_break, remaining_lines
+        return [], lines

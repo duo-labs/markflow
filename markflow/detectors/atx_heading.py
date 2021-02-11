@@ -19,6 +19,7 @@ Examples:
 
 from typing import List, Tuple
 
+from ._lines import is_atx_heading_line
 from .._utils import get_indent
 
 
@@ -41,36 +42,7 @@ def split_atx_heading(
         otherwise it is `None`. The second value is the remaining text. (If lines does
         not start with an ATX heading, it is the same as lines.)
     """
-    atx_headings = []
-    remaining_lines = lines
-
-    if get_indent(lines[0]) >= 4:
-        pass
-    elif lines[0].lstrip().startswith("#"):
-        # The standard says we must require a space, but it also notes that not everyone
-        # follows this. Let's be lax and fix it for them in the formatter.
-        # ToDo: warn?
-        atx_headings = [lines[0]]
-        remaining_lines = lines[1:]
+    if is_atx_heading_line(lines[0]):
+        return [lines[0]], lines[1:]
     else:
-        pass
-
-    return atx_headings, remaining_lines
-
-
-def atx_heading_started(line: str, index: int, lines: List[str]) -> bool:
-    """DEPRECATED"""
-    if get_indent(line) >= 4:
-        return False
-
-    # The standard says we must require a space, but it also notes that not everyone
-    # follows this. Let's be lax and fix it for them in the formatter.
-    if line.lstrip().startswith("#"):
-        return True
-    else:
-        return False
-
-
-def atx_heading_ended(line: str, index: int, lines: List[str]) -> bool:
-    """DEPRECATED"""
-    return True
+        return [], lines

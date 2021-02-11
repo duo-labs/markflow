@@ -12,15 +12,7 @@ Example:
 
 from typing import List, Tuple
 
-
-def blank_line_started(line: str, index: int, lines: List[str]) -> bool:
-    """DEPRECATED"""
-    return not line.strip()
-
-
-def blank_line_ended(line: str, index: int, lines: List[str]) -> bool:
-    """DEPRECATED"""
-    return True
+from ._lines import is_blank_line_line
 
 
 def split_blank_line(
@@ -38,11 +30,7 @@ def split_blank_line(
         single-element list), otherwise it is `None`. The second value is the remaining
         text. (If lines does not start with a blank line, it is the same as lines.)
     """
-    blank_line = []
-    remaining_lines = lines
-
-    if not lines[0].strip():
-        blank_line = [lines[0]]
-        remaining_lines = lines[1:]
-
-    return blank_line, remaining_lines
+    if is_blank_line_line(lines[0]):
+        return [lines[0]], lines[1:]
+    else:
+        return [], lines

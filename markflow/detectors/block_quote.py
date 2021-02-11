@@ -1,21 +1,17 @@
 from typing import List, Tuple
 
-from .list import list_started
-from .blank_line import blank_line_started
-from .._utils import get_indent
+from ._lines import is_block_quote_line
+from ._lines import is_list_start_line, is_blank_line_line
 
 
 def block_quote_started(line: str, index: int, lines: List[str]) -> bool:
     """DEPRECATED"""
-    if get_indent(line) >= 4:
-        return False
-
-    return line.lstrip().startswith(">")
+    return is_block_quote_line(line)
 
 
 def block_quote_ended(line: str, index: int, lines: List[str]) -> bool:
     """DEPRECATED"""
-    return blank_line_started(line, index, lines) or list_started(line, index, lines)
+    return is_blank_line_line(line) or is_list_start_line(line)
 
 
 def split_block_quote(
