@@ -112,7 +112,7 @@ def is_indented_code_block_start_line(line: str) -> bool:
     Returns:
         True if the line is could start an indented code block. False otherwise.
     """
-    return line.strip() and get_indent(line) >= 4
+    return bool(line.strip()) and get_indent(line) >= 4
 
 
 def is_list_start_line(line: str) -> bool:
