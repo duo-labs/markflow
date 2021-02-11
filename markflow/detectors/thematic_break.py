@@ -34,8 +34,8 @@ def split_thematic_break(
 
     Returns:
         A tuple of two values. The first is the indented code block lines if they were
-        found, otherwise it is `None`. The second value is the remaining text. (If lines
-        does not start with a thematic break, it is the same as lines.)
+        found, otherwise it is an empty list. The second value is the remaining text.
+        (If lines does not start with a thematic break, it is the same as lines.)
     """
     if is_thematic_break_line(lines[0]):
         return [lines[0]], lines[1:]

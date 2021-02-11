@@ -1,7 +1,7 @@
 """
-Markflow Setext Heading Detection Library
+MarkFlow Setext Heading Detection Library
 
-Setexet headings are basically any paragraph that is followed by a line composed of all
+Setext headings are basically any paragraph that is followed by a line composed of all
 all equals signs (=) or dashes (-). The former indicates a heading of level 1 while the
 latter indicates a heading of level 2.
 

@@ -52,8 +52,9 @@ def split_link_reference_definition(
 
     Returns:
         A tuple of two values. The first is the indented code block lines if they were
-        found, otherwise it is `None`. The second value is the remaining text. (If lines
-        does not start with a link reference definition, it is the same as lines.)
+        found, otherwise it is an empty list. The second value is the remaining text.
+        (If lines does not start with a link reference definition, it is the same as
+        lines.)
     """
     link_reference_definition: List[str] = []
     remaining_lines = lines

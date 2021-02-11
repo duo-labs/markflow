@@ -107,8 +107,8 @@ def split_fenced_code_block(
 
     Returns:
         A tuple of two values. The first is the fenced code block lines if they were
-        found, otherwise it is `None`. The second value is the remaining text. (If lines
-        does not start with a fenced code block, it is the same as lines.)
+        found, otherwise it is an empty list. The second value is the remaining text.
+        (If lines does not start with a fenced code block, it is the same as lines.)
     """
     # TODO: Fenced code blocks can't be indented
     fenced_code_block: List[str] = []
