@@ -120,7 +120,7 @@ def _reformat_markdown_text(log_text: str, width: Number = 88) -> str:
             log_text = f"Lines {offset + 1}-{offset + content_length}"
         else:
             log_text = f"Line {offset + 1}"
-        logger.info(f"%s: %s", log_text, repr(formatter))
+        logger.info("%s: %s", log_text, repr(formatter))
         if section_type == MarkdownSectionEnum.BLANK_LINE:
             current_blank_lines.append(formatter)
         else:
@@ -154,8 +154,8 @@ def reformat_markdown_text(text: str, width: Number = 88) -> str:
     logger.setLevel(level)
     if new_new_text != new_text:
         raise ReformatInconsistentException(
-            f"Reformat of reformatted code results in different text. Please open a "
-            f"bug report or email jholland@duosecurity.com."
+            "Reformat of reformatted code results in different text. Please open a bug "
+            "report or email jholland@duosecurity.com."
         )
 
     return new_text

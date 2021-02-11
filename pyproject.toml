@@ -12,7 +12,7 @@ rich = "*"
 [tool.poetry.dev-dependencies]
 black = "==19.10b0"
 commonmark = "*"
-flake8 = "3.7.9"
+flake8 = "*"
 isort = "*"
 mypy = "*"
 pytest = "*"
