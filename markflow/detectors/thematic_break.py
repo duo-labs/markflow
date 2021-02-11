@@ -18,7 +18,6 @@ Examples:
 from typing import List, Tuple
 
 from ._lines import is_thematic_break_line
-from .._utils import get_indent
 
 SEPARATOR_SYMBOLS = ["*", "_", "-"]
 

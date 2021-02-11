@@ -20,7 +20,6 @@ Examples:
 from typing import List, Tuple
 
 from ._lines import is_atx_heading_line
-from .._utils import get_indent
 
 
 def split_atx_heading(
