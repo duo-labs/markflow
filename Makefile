@@ -44,6 +44,11 @@ audits:
 		status=$$(($$status + $$?)); \
 		echo ""; \
 	done; \
+	if [ $$status -eq 0 ]; then \
+	    echo "All Audits Succeeded!"; \
+	else \
+		echo "Some audits failed. :("; \
+	fi; \
 	exit $$status
 
 black: _venv_3.8

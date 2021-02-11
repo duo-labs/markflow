@@ -49,14 +49,14 @@ class MarkdownSetextHeading(MarkdownSection):
             raise RuntimeError(
                 f"Attempted access of uninitialized {self.__class__.__name__}."
             )
-        return " ".join(l.strip() for l in self.lines[:-1])
+        return " ".join(line.strip() for line in self.lines[:-1])
 
     def append(self, line: str) -> None:
         self.lines.append(line)
 
     def reformatted(self, width: Number = 88) -> str:
         heading_str = wrap(self.content, width)
-        heading_len = max(len(l) for l in heading_str.splitlines())
+        heading_len = max(len(line) for line in heading_str.splitlines())
         return heading_str + "\n" + self.char * heading_len
 
     def __repr__(self) -> str:

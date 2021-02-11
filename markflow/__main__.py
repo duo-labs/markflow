@@ -351,7 +351,7 @@ def _reformat_stdin(args: argparse.Namespace, stdin: TextIO) -> int:
 
     if args.check:
         if new_contents != old_contents:
-            print_markdown(f"STDIN would be reformatted.")
+            print_markdown("STDIN would be reformatted.")
             return 1
         else:
             print_markdown("STDIN would be unchanged.")
