@@ -146,7 +146,6 @@ class MarkdownList(MarkdownSection):
                 elif depth_to_check < depth:
                     break
 
-            print(entries[relevant_indexes[0]].lstrip())
             if entries[relevant_indexes[0]].lstrip().startswith("*"):
                 type_ = ListTypes.ASTERISK
             elif entries[relevant_indexes[0]].lstrip().startswith("-"):
