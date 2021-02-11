@@ -146,16 +146,17 @@ class MarkdownList(MarkdownSection):
                 elif depth_to_check < depth:
                     break
 
+            print(entries[relevant_indexes[0]].lstrip())
             if entries[relevant_indexes[0]].lstrip().startswith("*"):
-                type = ListTypes.ASTERISK
+                type_ = ListTypes.ASTERISK
             elif entries[relevant_indexes[0]].lstrip().startswith("-"):
-                type = ListTypes.DASH
+                type_ = ListTypes.DASH
             elif entries[relevant_indexes[0]].lstrip().startswith("+"):
-                type = ListTypes.PLUS
+                type_ = ListTypes.PLUS
             else:
-                type = ListTypes.NUMERIC
+                type_ = ListTypes.NUMERIC
 
-            if type == ListTypes.NUMERIC:
+            if type_ == ListTypes.NUMERIC:
                 max_number_len = len(str(len(relevant_indexes)))
                 max_marker_len = 0
                 for entry_number, entry_index in enumerate(relevant_indexes, start=1):
@@ -176,10 +177,7 @@ class MarkdownList(MarkdownSection):
                     first_indent -= max_marker_len - 2
                     total_indent = max(0, first_indent)
             else:
-                if type == ListTypes.ASTERISK:
-                    prefix = "* "
-                else:
-                    prefix = "- "
+                prefix = f"{type_.value} "
                 for entry_index in relevant_indexes:
                     entry_text = (
                         entries[entry_index].lstrip().split(" ", maxsplit=1)[1].lstrip()
@@ -234,4 +232,4 @@ class MarkdownList(MarkdownSection):
         return "\n".join(new_entries)
 
     def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}: ToDo>"
+        return f"<{self.__class__.__name__}: {self.lines[0]}>"
