@@ -1,7 +1,6 @@
 from typing import List, Tuple
 
-from ._lines import is_block_quote_line
-from ._lines import is_list_start_line, is_blank_line_line
+from ._lines import is_blank_line_line, is_block_quote_line, is_list_start_line
 
 
 def block_quote_started(line: str, index: int, lines: List[str]) -> bool:

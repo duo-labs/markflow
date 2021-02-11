@@ -19,7 +19,6 @@ Examples:
 """
 
 import logging
-
 from typing import List, Tuple
 
 from .._utils import get_indent

@@ -1,4 +1,4 @@
-from typing import Union, Text
+from typing import Text, Union
 
 class Highlighter:
     def __call__(self, text: Union[str, Text]) -> Text: ...

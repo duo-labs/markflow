@@ -10,7 +10,6 @@ https://spec.commonmark.org/0.29/#blank-lines
 """
 
 from ..typing import Number
-
 from .base import MarkdownSection
 
 __all__ = ["MarkdownBlankLine"]

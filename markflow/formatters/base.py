@@ -1,6 +1,6 @@
 import abc
-
 from typing import List, Optional
+
 from ..typing import Number
 
 __all__ = ["MarkdownSection"]

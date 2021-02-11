@@ -18,7 +18,6 @@ https://spec.commonmark.org/0.29/#thematic-breaks
 import math
 
 from ..typing import Number
-
 from .base import MarkdownSection
 
 __all__ = ["MarkdownThematicBreak"]

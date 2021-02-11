@@ -1,4 +1,4 @@
-from typing import List, Generator, Tuple
+from typing import Generator, List, Tuple
 
 from ._lines import is_paragraph_start_line, is_setext_underline
 from .atx_heading import split_atx_heading
