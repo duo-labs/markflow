@@ -38,8 +38,8 @@ def split_atx_heading(
 
     Returns:
         A tuple of two values. The first is the ATX heading lines if they were found,
-        otherwise it is `None`. The second value is the remaining text. (If lines does
-        not start with an ATX heading, it is the same as lines.)
+        otherwise it is an empty list. The second value is the remaining text. (If lines
+        does not start with an ATX heading, it is the same as lines.)
     """
     if is_atx_heading_line(lines[0]):
         return [lines[0]], lines[1:]

@@ -27,8 +27,8 @@ def split_indented_code_block(
 
     Returns:
         A tuple of two values. The first is the indented code block lines if they were
-        found, otherwise it is `None`. The second value is the remaining text. (If lines
-        does not start with an indented code block, it is the same as lines.)
+        found, otherwise it is an empty list. The second value is the remaining text.
+        (If lines does not start with an indented code block, it is the same as lines.)
     """
     indented_code_block = []
     remaining_lines = lines

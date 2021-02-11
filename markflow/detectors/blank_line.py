@@ -27,8 +27,9 @@ def split_blank_line(
 
     Returns:
         A tuple of two values. The first is the blank line if it was found (as a
-        single-element list), otherwise it is `None`. The second value is the remaining
-        text. (If lines does not start with a blank line, it is the same as lines.)
+        single-element list), otherwise it is an empty list. The second value is the
+        remaining text. (If lines does not start with a blank line, it is the same as
+        lines.)
     """
     if is_blank_line_line(lines[0]):
         return [lines[0]], lines[1:]
