@@ -15,7 +15,8 @@ understand what that's doing, though, read on.
 
 All tools that are available in the poetery environment (including MarkFlow) can easily
 be added to you command line as the commands themselves by running
-`source poetry-aliases.sh`.
+`source poetry-aliases.sh`. An additional alias, `markflow-markflow`, is also provided
+to easily run MarkFlow only on non-test files.
 
 ### Running Audits
 

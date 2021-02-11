@@ -54,7 +54,7 @@ flake8: _venv_3.8
 		xargs poetry run flake8
 
 markflow: _venv_3.8
-	git ls-files | egrep ".md$$" | grep -v "/files/" | xargs poetry run markflow --check
+	git ls-files | egrep ".md$$" | grep -v "tests/" | xargs poetry run markflow --check
 
 # --- TESTS ---
 .PHONY: tests tests_3.6 tests_3.7 tests_3.8 tests_3.9

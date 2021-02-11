@@ -123,7 +123,6 @@ class AddMarkdownFilesInDirOrPathsAction(argparse.Action):
             if value.is_file():
                 expanded_paths.append(value)
             else:
-                markdown_paths = glob.glob(str(value / "*.md"))
-                markdown_paths += glob.glob(str(value / "**" / "*.md"))
+                markdown_paths = glob.glob(str(value / "**" / "*.md"), recursive=True)
                 expanded_paths += [pathlib.Path(path) for path in markdown_paths]
         setattr(namespace, self.dest, expanded_paths)
