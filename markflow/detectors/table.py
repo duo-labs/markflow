@@ -2,10 +2,12 @@ from typing import List, Tuple
 
 
 def table_started(line: str, index: int, lines: List[str]) -> bool:
+    """DEPRECATED"""
     return line.lstrip().startswith("|")
 
 
 def table_ended(line: str, index: int, lines: List[str]) -> bool:
+    """DEPRECATED"""
     return not table_started(line, index, lines)
 
 

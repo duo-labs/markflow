@@ -6,6 +6,7 @@ from .._utils import get_indent
 
 
 def block_quote_started(line: str, index: int, lines: List[str]) -> bool:
+    """DEPRECATED"""
     if get_indent(line) >= 4:
         return False
 
@@ -13,6 +14,7 @@ def block_quote_started(line: str, index: int, lines: List[str]) -> bool:
 
 
 def block_quote_ended(line: str, index: int, lines: List[str]) -> bool:
+    """DEPRECATED"""
     return blank_line_started(line, index, lines) or list_started(line, index, lines)
 
 

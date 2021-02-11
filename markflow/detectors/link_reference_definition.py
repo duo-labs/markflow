@@ -1,26 +1,25 @@
 """
-4.7 Link reference definitions
+MarkFlow Link Reference Definition Detection Library
 
-A link reference definition consists of a link label, indented up to three spaces,
-followed by a colon (:), optional whitespace (including up to one line ending), a link
-destination, optional whitespace (including up to one line ending), and an optional link
-title, which if it is present must be separated from the link destination by whitespace.
-No further non-whitespace characters may occur on the line.
+Link reference definitions are intended to be unrendered portions of a document that
+provide a short hand for links. The start with a series of non-whitespace characters
+enclosed in brackets ([]) that serve as the label. It is followed by a colon (:) and
+optional whitespace. That is then followed by a series of non-whitespace characters that
+serve as the link. This can optionally be followed by white-space and then a quotation
+(' or ") enclosed series of characters that serves as the title. Any of the optional
+whitespace may be a new line.
 
-A link reference definition does not correspond to a structural element of a document.
-Instead, it defines a label which can be used in reference links and reference-style
-images elsewhere in the document. Link reference definitions can come either before or
-after the links that use them.
+Examples:
+    ```
+    [label]: link 'title'
 
-https://spec.commonmark.org/0.29/#link-reference-definitions
+    [label]: link
+    'title'
 
-A link label begins with a left bracket ([) and ends with the first right bracket (])
-that is not backslash-escaped. Between these brackets there must be at least one non-
-whitespace character. Unescaped square bracket characters are not allowed inside the
-opening and closing square brackets of link labels. A link label can have at most 999
-characters inside the square brackets.
-
-https://spec.commonmark.org/0.29/#link-label
+    [label]:
+    link
+    'title'
+    ```
 """
 
 import itertools
@@ -44,6 +43,18 @@ QUOTATION_CHARACTERS = "'\""
 def split_link_reference_definition(
     lines: List[str], line_offset: int = 0
 ) -> Tuple[List[str], List[str]]:
+    """Split leading link reference definition from lines if one exists
+
+    Args:
+        lines: The lines to evaluate.
+        line_offset (optional): The offset into the overall document we are at. This is
+            used for reporting errors in the original document.
+
+    Returns:
+        A tuple of two values. The first is the indented code block lines if they were
+        found, otherwise it is `None`. The second value is the remaining text. (If lines
+        does not start with a link reference definition, it is the same as lines.)
+    """
     link_reference_definition: List[str] = []
     remaining_lines = lines
     indexed_line_generator = enumerate(lines)

@@ -19,10 +19,12 @@ LIST_REGEX = re.compile(
 
 
 def list_started(line: str, index: int, lines: List[str]) -> bool:
+    """DEPRECATED"""
     return bool(LIST_REGEX.search(line))
 
 
 def list_ended(line: str, index: int, lines: List[str]) -> bool:
+    """DEPRECATED"""
     return (
         blank_line_started(line, index, lines)
         or table_started(line, index, lines)

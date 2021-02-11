@@ -1,35 +1,21 @@
 """
-4.5 Fenced code blocks
+MarkFlow Fenced Code Block Detection Library
 
-A code fence is a sequence of at least three consecutive backtick characters (`) or
-tildes (~). (Tildes and backticks cannot be mixed.) A fenced code block begins with a
-code fence, indented no more than three spaces.
+Fenced code blocks are multiple lines of text that open with a line beginning with at
+least two asterisks or tildas that ends with that same sequence on its own line.
 
-The line with the opening code fence may optionally contain some text following the
-code fence; this is trimmed of leading and trailing whitespace and called the info
-string. If the info string comes after a backtick fence, it may not contain any backtick
-characters. (The reason for this restriction is that otherwise some inline code would
-be incorrectly interpreted as the beginning of a fenced code block.)
+Examples:
+    ```
+    ``
+    print("Hello world!")
+    ``
+    ```
 
-The content of the code block consists of all subsequent lines, until a closing code
-fence of the same type as the code block began with (backticks or tildes), and with at
-least as many backticks or tildes as the opening code fence. If the leading code fence
-is indented N spaces, then up to N spaces of indentation are removed from each line of
-the content (if present). (If a content line is not indented, it is preserved unchanged.
-If it is indented less than N spaces, all of the indentation is removed.)
-
-The closing code fence may be indented up to three spaces, and may be followed only by
-spaces, which are ignored. If the end of the containing block (or document) is reached
-and no closing code fence has been found, the code block contains all of the lines after
-the opening code fence until the end of the containing block (or document). (An
-alternative spec would require backtracking in the event that a closing code fence is
-not found. But this makes parsing much less efficient, and there seems to be no real
-down side to the behavior described here.)
-
-A fenced code block may interrupt a paragraph, and does not require a blank line either
-before or after.
-
-https://spec.commonmark.org/0.29/#fenced-code-blocks
+    ```
+    ~~~~
+    print("Hello world!")
+    ~~~~
+    ```
 """
 
 import logging
@@ -52,6 +38,7 @@ __LAST_FENCE_INDEX = -1
 
 
 def fenced_code_block_started(line: str, index: int, lines: List[str]) -> bool:
+    """DEPRECATED"""
     global __LAST_FENCE
     global __LAST_FENCE_INDEX
     for fence in FENCES:
@@ -64,6 +51,7 @@ def fenced_code_block_started(line: str, index: int, lines: List[str]) -> bool:
 
 
 def fenced_code_block_ended(line: str, index: int, lines: List[str]) -> bool:
+    """DEPRECATED"""
     # We'll catch even over indented fences assuming that that was an accident.
     global __LAST_FENCE
     global __LAST_FENCE_INDEX
@@ -110,6 +98,18 @@ def fenced_code_block_ended(line: str, index: int, lines: List[str]) -> bool:
 def split_fenced_code_block(
     lines: List[str], line_offset: int = 0
 ) -> Tuple[List[str], List[str]]:
+    """Split leading fenced code block from lines if one exists
+
+    Args:
+        lines: The lines to evaluate.
+        line_offset (optional): The offset into the overall document we are at. This is
+            used for reporting errors in the original document.
+
+    Returns:
+        A tuple of two values. The first is the fenced code block lines if they were
+        found, otherwise it is `None`. The second value is the remaining text. (If lines
+        does not start with a fenced code block, it is the same as lines.)
+    """
     # TODO: Fenced code blocks can't be indented
     fenced_code_block: List[str] = []
     remaining_lines = lines

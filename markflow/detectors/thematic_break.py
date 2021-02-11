@@ -1,20 +1,18 @@
 """
-4.1 Thematic breaks
+MarkFlow Thematic Break Detection Library
 
-A line consisting of 0-3 spaces of indentation, followed by a sequence of three or more
-matching -, _, or * characters, each followed optionally by any number of spaces or
-tabs, forms a thematic break.
+A thematic break is a lines that is a sequence of at least three dashes (-), underscores
+(_), or asterisks (*), with optional whitespace (though no more that three leading
+spaces), and is not the underlining of a setext heading in the case of dashes.
 
-It is required that all of the non-whitespace characters be the same.
+Examples:
+    ```
+    ___
+    ```
 
-TODO: Revisit when working on lists.
-
-When both a thematic break and a list item are possible interpretations of a line, the
-thematic break takes precedence.
-
-If you want a thematic break in a list item, use a different bullet.
-
-https://spec.commonmark.org/0.29/#thematic-breaks
+    ```
+    ****************
+    ```
 """
 
 from typing import List, Tuple
@@ -25,6 +23,7 @@ SEPARATOR_SYMBOLS = ["*", "_", "-"]
 
 
 def thematic_break_started(line: str, index: int, lines: List[str]) -> bool:
+    """DEPRECATED"""
     if get_indent(line) >= 4:
         return False
 
@@ -40,12 +39,25 @@ def thematic_break_started(line: str, index: int, lines: List[str]) -> bool:
 
 
 def thematic_break_ended(line: str, index: int, lines: List[str]) -> bool:
+    """DEPRECATED"""
     return True
 
 
 def split_thematic_break(
     lines: List[str], line_offset: int = 0
 ) -> Tuple[List[str], List[str]]:
+    """Split leading thematic break from lines if one exists
+
+    Args:
+        lines: The lines to evaluate.
+        line_offset (optional): The offset into the overall document we are at. This is
+            used for reporting errors in the original document.
+
+    Returns:
+        A tuple of two values. The first is the indented code block lines if they were
+        found, otherwise it is `None`. The second value is the remaining text. (If lines
+        does not start with a thematic break, it is the same as lines.)
+    """
     thematic_break = []
     remaining_lines = lines
 

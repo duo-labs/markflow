@@ -1,4 +1,10 @@
 # flake8: noqa
+"""
+MarkFlow MarkDown Section Detection Library
+
+This library provide this functions MarkFlow uses to split a document into it's
+individual text types.
+"""
 from .atx_heading import *
 from .block_quote import *
 from .fenced_code_block import *
