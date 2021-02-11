@@ -25,7 +25,6 @@ Examples:
 import itertools
 import logging
 import re
-
 from typing import List, Tuple
 
 from .._utils import get_indent

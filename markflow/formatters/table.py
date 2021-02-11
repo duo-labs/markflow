@@ -2,10 +2,9 @@ import enum
 import math
 import re
 
-from ..typing import Number
-
-from .base import MarkdownSection
 from ..exceptions import MarkdownFormatException
+from ..typing import Number
+from .base import MarkdownSection
 
 __all__ = ["MarkdownTable"]
 

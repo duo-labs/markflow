@@ -1,6 +1,6 @@
 import re
-
 from typing import List, Tuple
+
 from markflow.typing import Number
 
 INLINE_CODE_MARKER_REGEX = re.compile(r"(((?!<\\)`)+)")

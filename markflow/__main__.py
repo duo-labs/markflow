@@ -4,24 +4,23 @@ import math
 import pathlib
 import re
 import sys
-
 from typing import List, TextIO
-from .typing import Number
 
 import rich.console
 import rich.logging
 import rich.markdown
 
-from .exceptions import MarkdownFormatException, ReformatInconsistentException
-from .reformat_markdown import reformat_markdown_text, _reformat_markdown_text
 from ._argparse import (
+    READABLE,
+    WRITABLE,
     AddMarkdownFilesInDirOrPathsAction,
     Directory,
     ExistingPath,
     File,
-    READABLE,
-    WRITABLE,
 )
+from .exceptions import MarkdownFormatException, ReformatInconsistentException
+from .reformat_markdown import _reformat_markdown_text, reformat_markdown_text
+from .typing import Number
 
 logger = logging.getLogger(__name__)
 

@@ -34,10 +34,9 @@ https://spec.commonmark.org/0.29/#fenced-code-blocks
 
 from typing import Optional
 
-from ..typing import Number
-
-from .base import MarkdownSection
 from .._utils import truncate_str
+from ..typing import Number
+from .base import MarkdownSection
 
 __all__ = ["MarkdownFencedCodeBlock"]
 

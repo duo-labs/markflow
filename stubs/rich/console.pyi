@@ -1,8 +1,8 @@
-from typing import Any, AnyStr, Callable, Dict, IO, Optional, Text, Union
-from typing_extensions import Literal
+from typing import IO, Any, AnyStr, Callable, Dict, Optional, Text, Union
 
 from rich.highlighter import ReprHighlighter
 from rich.style import Style
+from typing_extensions import Literal
 
 HighlighterType = Callable[[Union[str, Text]], Text]
 JustifyValues = Optional[Literal["left", "center", "right", "full"]]

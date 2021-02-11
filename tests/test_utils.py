@@ -1,9 +1,6 @@
 import textwrap
 
-from markflow._utils._utils import (
-    get_indent,
-    truncate_str,
-)
+from markflow._utils._utils import get_indent, truncate_str
 from markflow._utils.textwrap import (
     code_split,
     link_split,

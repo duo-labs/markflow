@@ -1,17 +1,15 @@
 import enum
 import itertools
 import re
-
 from typing import List
-from ..typing import Number, SectionEndedFunc
 
-from ..detectors.fenced_code_block import (
-    fenced_code_block_started,
-    fenced_code_block_ended,
-)
-
-from .base import MarkdownSection
 from .._utils.textwrap import wrap
+from ..detectors.fenced_code_block import (
+    fenced_code_block_ended,
+    fenced_code_block_started,
+)
+from ..typing import Number, SectionEndedFunc
+from .base import MarkdownSection
 
 __all__ = ["MarkdownList"]
 

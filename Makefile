@@ -36,10 +36,10 @@ _venv_3.9:
 # --- AUDITS ---
 .PHONY: audits black flake8 markflow
 
-# Runs all of our audits regardless of if any fail
+# Runs all of our audits regardless of if any fail so we can get all relevant issues
 audits:
 	@status=0; \
-	for target in black flake8 markflow; do \
+	for target in black flake8 isort markflow; do \
 		$(MAKE) $${target}; \
 		status=$$(($$status + $$?)); \
 		echo ""; \
@@ -47,14 +47,25 @@ audits:
 	exit $$status
 
 black: _venv_3.8
+	@echo Running $@ audit...
 	git ls-files | egrep '.*\.pyi?$$' | xargs poetry run black --check
+	@echo Success!
 
+# pyi files provide type stubbing and can look weird to flake8, so we filter them out
 flake8: _venv_3.8
-	git ls-files | egrep '.*\.py$$' | egrep -v 'docs/' | \
-		xargs poetry run flake8
+	@echo Running $@ audit...
+	git ls-files | egrep '.*\.py$$' | xargs poetry run flake8
+	@echo Success!
+
+isort: _venv_3.8
+	@echo Running $@ audit...
+	git ls-files | egrep '.*\.pyi?$$' | xargs poetry run isort --profile=black --check
+	@echo Success!
 
 markflow: _venv_3.8
+	@echo Running $@ audit...
 	git ls-files | egrep ".md$$" | grep -v "tests/" | xargs poetry run markflow --check
+	@echo Success!
 
 # --- TESTS ---
 .PHONY: tests tests_3.6 tests_3.7 tests_3.8 tests_3.9

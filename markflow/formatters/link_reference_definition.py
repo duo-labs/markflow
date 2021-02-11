@@ -25,11 +25,10 @@ https://spec.commonmark.org/0.29/#link-label
 
 import re
 
-from ..typing import Number
-
-from .base import MarkdownSection
-from .._utils.textwrap import wrap
 from .._utils import truncate_str
+from .._utils.textwrap import wrap
+from ..typing import Number
+from .base import MarkdownSection
 
 __all__ = ["MarkdownLinkReferenceDefinition"]
 

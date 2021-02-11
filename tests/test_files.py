@@ -1,7 +1,6 @@
 import logging
 import os
 import pathlib
-
 from typing import DefaultDict, List, Optional
 
 import pytest

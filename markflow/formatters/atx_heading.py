@@ -18,10 +18,9 @@ https://spec.commonmark.org/0.29/#atx-headings
 """
 import logging
 
-from ..typing import Number
-
-from .base import MarkdownSection
 from .._utils import truncate_str
+from ..typing import Number
+from .base import MarkdownSection
 
 __all__ = ["MarkdownATXHeading"]
 

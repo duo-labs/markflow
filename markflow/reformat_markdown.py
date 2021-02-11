@@ -1,8 +1,6 @@
-from enum import Enum
 import logging
-
+from enum import Enum
 from typing import Dict, List, Tuple, Type
-from .typing import Number, SplitFunc
 
 from .detectors import (
     split_atx_heading,
@@ -19,19 +17,20 @@ from .detectors import (
 )
 from .exceptions import ReformatInconsistentException
 from .formatters import (
-    MarkdownSection,
     MarkdownATXHeading,
+    MarkdownBlankLine,
     MarkdownBlockQuote,
     MarkdownFencedCodeBlock,
     MarkdownIndentedCodeBlock,
     MarkdownLinkReferenceDefinition,
     MarkdownList,
     MarkdownParagraph,
-    MarkdownBlankLine,
+    MarkdownSection,
     MarkdownSetextHeading,
     MarkdownTable,
     MarkdownThematicBreak,
 )
+from .typing import Number, SplitFunc
 
 __all__ = ["reformat_markdown_text"]
 

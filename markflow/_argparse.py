@@ -3,8 +3,7 @@ import dataclasses
 import glob
 import os
 import pathlib
-
-from typing import cast, Any, Callable, List, Optional, Sequence, Union
+from typing import Any, Callable, List, Optional, Sequence, Union, cast
 
 
 @dataclasses.dataclass(frozen=True)

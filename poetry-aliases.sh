@@ -1,5 +1,6 @@
 alias black="poetry run black"
 alias flake8="poetry run flake8"
+alias isort="poetry run isort --profile=black"
 alias markflow="poetry run markflow"
 alias mypy="poetry run mypy"
 alias pytest="poetry run pytest"
