@@ -83,6 +83,7 @@ FORMATTERS: Dict[MarkdownSectionEnum, Type[MarkdownSection]] = {
 
 
 def _reformat_markdown_text(log_text: str, width: Number = 88) -> str:
+    # TODO: Sanitize newlines
     remaining_lines = log_text.splitlines()
     sections = []
     current_line = 1
@@ -105,8 +106,9 @@ def _reformat_markdown_text(log_text: str, width: Number = 88) -> str:
                 break
         else:
             raise RuntimeError(
-                "Could not determine section type on line %d",
-                sum(len(content) for type, content in sections) + 1,
+                "Could not determine section type on line {}".format(
+                    sum(len(content) for type, content in sections) + 1
+                ),
             )
 
     formatters = []

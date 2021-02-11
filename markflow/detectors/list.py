@@ -1,34 +1,24 @@
-import re
-
 from typing import List, Tuple
 
-from .blank_line import blank_line_started
-from .table import table_started
-from .thematic_break import thematic_break_started
-
-
-LIST_REGEX = re.compile(
-    r"^\s*"  # Leading spaces are OK and often expected
-    r"("
-    r"\*|"  # Asterisk list marker
-    r"-|"  # Dash list marker
-    r"\+|"  # Plus list marker
-    r"[0-9]+\."  # Numeric list marker
-    r") "  # Lists need a space after their identifier
+from ._lines import (
+    is_blank_line_line,
+    is_list_start_line,
+    is_table_start_line,
+    is_thematic_break_line,
 )
 
 
 def list_started(line: str, index: int, lines: List[str]) -> bool:
     """DEPRECATED"""
-    return bool(LIST_REGEX.search(line))
+    return is_list_start_line(line)
 
 
 def list_ended(line: str, index: int, lines: List[str]) -> bool:
     """DEPRECATED"""
     return (
-        blank_line_started(line, index, lines)
-        or table_started(line, index, lines)
-        or thematic_break_started(line, index, lines)
+        is_blank_line_line(line)
+        or is_table_start_line(line)
+        or is_thematic_break_line(line)
     )
 
 
