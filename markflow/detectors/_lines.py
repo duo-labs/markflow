@@ -60,8 +60,11 @@ def is_blank_line_line(line: str) -> bool:
     return not line.strip()
 
 
-def is_block_quote_line(line: str) -> bool:
-    """Evaluates whether a line is a block quote line
+def is_explicit_block_quote_line(line: str) -> bool:
+    """Evaluates whether a line is explicitly block quote line
+
+    The distinction here is that paragraph continuation lines can be part of a block
+    quote. This ensures that is what is desired.
 
     Example:
         ```
@@ -155,7 +158,7 @@ def is_paragraph_start_line(line: str) -> bool:
         is_indented_code_block_start_line,
         is_atx_heading_line,
         is_blank_line_line,
-        is_block_quote_line,
+        is_explicit_block_quote_line,
         is_fenced_code_block_start_line,
         is_list_start_line,
         is_table_start_line,

@@ -21,3 +21,7 @@ More Quote
 > Surrounded By Block Quote Newlines
 > 
 > 
+
+> A lazy continuation
+in the middle of
+> normal block quote lines

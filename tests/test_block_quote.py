@@ -22,12 +22,12 @@ class TestBlockQuote:
         )
         expected = textwrap.dedent(
             """\
-            >> Double Indented \\> Quote
+            > > Double Indented > Quote
             >
-            >>
+            > >
             > Quote \\> More Quote
-            >>> Triple Indented Quote Part of
-            >>> that Triple Indented Quote"""
+            > >> Triple Indented Quote Part of
+            > >> that Triple Indented Quote"""
         )
         block_quote = create_section(MarkdownBlockQuote, input_)
         assert block_quote.reformatted(width=35) == expected

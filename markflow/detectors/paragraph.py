@@ -10,11 +10,14 @@ from .table import split_table
 from .thematic_break import split_thematic_break
 
 
-def paragraph_continues(lines: List[str], line_offset: int = 0) -> bool:
+def _is_paragraph_continuation_text(lines: List[str], line_offset: int = 0) -> bool:
     """Indicates whether the first line of lines would continue a paragraph
 
     This ensures that any valid interrupting section of a paragraph could not result in
     a valid block instead.
+
+    We have a separate definition from the one used in block quote detection to avoid
+    circular imports. That one also gets to skip block quote checking.
 
     Args:
         lines: The lines to evaluate.
@@ -94,7 +97,9 @@ def split_paragraph_ignoring_setext(
         paragraph_lines.append(lines[0])
         tail_lines_generator = list_tail_generator(lines[1:])
         for tail in tail_lines_generator:
-            if paragraph_continues(tail, line_offset + len(paragraph_lines)):
+            if _is_paragraph_continuation_text(
+                tail, line_offset + len(paragraph_lines)
+            ):
                 paragraph_lines.append(tail[0])
                 # ToDo: This should be handled in `wrap` as a double space is always a
                 #  newline in any section type.

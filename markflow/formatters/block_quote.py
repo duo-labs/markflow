@@ -1,60 +1,90 @@
+import logging
 import re
 from typing import List
 
-from .._utils.textwrap import wrap
+from .._utils import get_indent, redirect_info_logs_to_debug, truncate_str
+from ..detectors._lines import is_explicit_block_quote_line
 from ..typing import Number
 from .base import MarkdownSection
 
 __all__ = ["MarkdownBlockQuote"]
 
+REPR_CONTENT_LEN = 20
 NON_ESCAPED_QUOTE_MARKER = re.compile(r"(?<= )>")
+LEADING_QUOTE_MARKER = re.compile(r"^ {0,3}>")
+
+logger = logging.getLogger(__name__)
+
+
+def _reformat_markdown(lines: List[str], width: Number) -> str:
+    # Prevents issues from circular imports. Since this module would already be loaded
+    # whenever we call this function, we know it's cached.
+    from ..reformat_markdown import _reformat_markdown_text
+
+    with redirect_info_logs_to_debug():
+        text = _reformat_markdown_text("\n".join(lines) + "\n", width)
+
+    return text
 
 
 class MarkdownBlockQuote(MarkdownSection):
+    @property
+    def first_line(self) -> str:
+        return self.lines[0]
+
     def append(self, line: str) -> None:
         self.lines.append(line)
 
     def reformatted(self, width: Number = 88) -> str:
-        indent = len(self.lines[0].lstrip(" ")) - len(self.lines[0])
-        depths: List[int] = []
-        real_lines: List[str] = []
+        indent = len(self.lines[0].lstrip()) - len(self.lines[0])
 
-        # A new-line at any depth is required to de-indent a block-quote
-        previous_line_was_blank = False
+        depth = 0
+        fully_quoted_lines = []
         for line in self.lines:
-            current_depth = len(line.replace(" ", "")) - len(
-                line.replace(" ", "").lstrip(">")
-            )
-            cleaned_up_line = line.strip().lstrip("> ")
-            # B;ank lines always get what they want
-            if not cleaned_up_line:
-                real_lines.append("")
-                depths.append(current_depth)
-                previous_line_was_blank = True
+            if is_explicit_block_quote_line(line):
+                spaceless_string = "".join(line.split())
+                depth = len(spaceless_string) - len(spaceless_string.lstrip(">"))
+                fully_quoted_lines.append(line)
             else:
-                # We change depths if:
-                # 1. We don't have a depth
-                # 2. We are at a deeper depth
-                # 3. The previous line was blank.
-                if not depths or depths[-1] < current_depth or previous_line_was_blank:
-                    real_lines.append(cleaned_up_line)
-                    depths.append(current_depth)
-                else:
-                    real_lines[-1] += " " + cleaned_up_line
-                previous_line_was_blank = False
+                fully_quoted_lines.append((">" * depth) + line)
 
-        new_lines = []
-        for depth, line in zip(depths, real_lines):
-            line_prefix = " " * indent + ">" * depth + " "
-            line_width = width - len(line_prefix)
-            line = NON_ESCAPED_QUOTE_MARKER.sub("\\>", line)
+        stripped_lines: List[str] = []
+        for line in fully_quoted_lines:
+            stripped_lines.append(LEADING_QUOTE_MARKER.sub("", line))
 
-            if line:
-                for sub_line in wrap(line, line_width).splitlines():
-                    new_lines.append(line_prefix + sub_line)
-            else:
-                new_lines.append(line_prefix.rstrip())
-        return "\n".join(new_lines)
+        for line in stripped_lines:
+            if not line.strip():
+                continue
+            if get_indent(line) == 1:
+                has_space = True
+                break
+            elif get_indent(line) == 0:
+                has_space = False
+                break
+        else:
+            has_space = False
+
+        if has_space:
+            restripped_lines: List[str] = []
+            for line in stripped_lines:
+                restripped_lines += [line[1:] if line and line[0] == " " else line]
+            stripped_lines = restripped_lines
+
+        sub_width = width - indent - 1
+        prefix = " " * indent + ">"
+        if has_space:
+            sub_width -= 1
+            prefix += " "
+
+        # ToDo (jmholla): Issues with leading > in paragraphs will be handled by a later
+        #  change.
+        text = _reformat_markdown(stripped_lines, width=sub_width)
+        text = "\n".join((prefix + line).strip() for line in text.splitlines())
+
+        return text
 
     def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}: ToDo>"
+        first_line = self.first_line
+        if first_line is not None:
+            first_line = truncate_str(first_line, REPR_CONTENT_LEN)
+        return f"{self.__class__.__name__}: first_line={repr(first_line)}>"
