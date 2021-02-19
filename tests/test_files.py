@@ -15,6 +15,9 @@ logger = logging.getLogger(__name__)
 # TODO: File bug report for 0015
 PYCOMMONMARK_BUG_FILES = ["0015"]
 MARKFLOW_BUG_FILES = ["0016", "0017", "0018"]
+MARKFLOW_DIFFERENT_FILES = [
+    "0023"  # This file contains a block quote immediately followed by a setext heading
+]
 
 
 class FilePair:
@@ -101,5 +104,7 @@ class TestFiles:
             logger.info(
                 "Skipping render check due to a bug in the commonmark Python library."
             )
+        elif any(num in file_pair.input.name for num in MARKFLOW_DIFFERENT_FILES):
+            logger.info("Skipping render check as our parsing differs from the spec.")
         else:
             assert render(output_text) == render(input_text)
