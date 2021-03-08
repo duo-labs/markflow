@@ -34,7 +34,7 @@ _venv_3.9:
 
 
 # --- AUDITS ---
-.PHONY: audits black flake8 markflow
+.PHONY: audits black flake8 isort markflow
 
 # Runs all of our audits regardless of if any fail so we can get all relevant issues
 audits:
