@@ -2,7 +2,8 @@
 
 MarkFlow is a pretty simple tool that formats code in three steps:
 
-* [Parse the text](#parsing-markdown)
+* [Parse the text](#parsing-markdown) and some really really long text just for testing
+  right now
 * [Reformat each section and stitch the sections back together](#reformatting-sections)
 * [Rerun with the output as the input to guarantee consistency](#ensuring-consistency)
 
@@ -76,5 +77,11 @@ rendering consistency.
 
 If you end up debugging an issue because of this, you can pass `--write-renders` to save
 off the inputs. Pass `--dev-help` to see other developer options.
+
+1. Hello
+2. World
+   * Red
+   * Blue
+3. Green
 
 [commonmark_pkg]: https://github.com/readthedocs/commonmark.py

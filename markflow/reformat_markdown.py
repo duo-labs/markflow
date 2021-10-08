@@ -39,7 +39,7 @@ FORMATTERS: Dict[MarkdownSectionEnum, Type[MarkdownSection]] = {
 }
 
 
-def _reformat_markdown_text(text: str, width: Number = 88, line_index: int = 1) -> str:
+def _reformat_markdown_text(text: str, width: Number = 88, line_index: int = 0) -> str:
     sections = parse_markdown(text.splitlines())
 
     formatters = []
