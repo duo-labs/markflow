@@ -2,7 +2,7 @@ from typing import List, Tuple
 
 from ._lines import (
     is_blank_line_line,
-    is_list_start_line,
+    is_bullet_list_start_line,
     is_table_start_line,
     is_thematic_break_line,
 )
@@ -10,7 +10,7 @@ from ._lines import (
 
 def list_started(line: str, index: int, lines: List[str]) -> bool:
     """DEPRECATED"""
-    return is_list_start_line(line)
+    return is_bullet_list_start_line(line)
 
 
 def list_ended(line: str, index: int, lines: List[str]) -> bool:
