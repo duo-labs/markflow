@@ -8,33 +8,30 @@ from ._lines import (
 )
 
 
-def list_started(line: str, index: int, lines: List[str]) -> bool:
-    """DEPRECATED"""
-    return is_ordered_list_start_line(line)
-
-
-def list_ended(line: str, index: int, lines: List[str]) -> bool:
-    """DEPRECATED"""
-    return (
-        is_blank_line_line(line)
-        or is_table_start_line(line)
-        or is_thematic_break_line(line)
-    )
-
-
-def split_ordered_list(lines: List[str], line_offset: int = 0) -> Tuple[List[str], List[str]]:
-    list_ = []
+def split_ordered_list(
+    lines: List[str], line_offset: int = 0
+) -> Tuple[List[str], List[str]]:
+    ordered_list: List[str] = []
     remaining_lines = lines
+    indexed_line_generator = enumerate(lines)
 
-    index = 0
-    if list_started(lines[index], index, lines):
-        list_.append(lines[index])
-        for index, line in enumerate(lines[1:], start=index + 1):
-            if list_ended(line, index, lines):
-                break
-            list_.append(line)
+    index, line = next(indexed_line_generator)
+    if not is_ordered_list_start_line(line):
+        return ordered_list, remaining_lines
+
+    ordered_list.append(line)
+    for index, line in indexed_line_generator:
+        if (
+            is_blank_line_line(line)
+            or is_table_start_line(line)
+            or is_thematic_break_line(line)
+        ):
+            break
         else:
-            index += 1
-    remaining_lines = lines[index:]
+            ordered_list.append(line)
+    else:
+        # We consumed the last line, so increment our index to chop it off
+        index += 1
 
-    return list_, remaining_lines
+    remaining_lines = remaining_lines[index:]
+    return ordered_list, remaining_lines
