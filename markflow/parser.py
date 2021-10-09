@@ -25,10 +25,11 @@ class MarkdownSectionEnum(Enum):
     ATX_HEADING = "ATX Heading"
     BLANK_LINE = "Blank Line"
     BLOCK_QUOTE = "Block Quote"
+    BULLET_LIST = "Bullet List"
     FENCED_CODE_BLOCK = "Fenced Code Block"
     INDENTED_CODE_BLOCK = "Indented Code Block"
     LINK_REFERENCE_DEFINITION = "Link Reference Definition"
-    LIST = "List"
+    ORDERED_LIST = "Ordered List"
     PARAGRAPH = "Paragraph"
     SETEXT_HEADING = "Setext Heading"
     TABLE = "Table"
@@ -39,10 +40,11 @@ SPLITTERS: List[Tuple[MarkdownSectionEnum, SplitFunc]] = [
     (MarkdownSectionEnum.ATX_HEADING, split_atx_heading),
     (MarkdownSectionEnum.BLANK_LINE, split_blank_line),
     (MarkdownSectionEnum.BLOCK_QUOTE, split_block_quote),
+    (MarkdownSectionEnum.BULLET_LIST, split_list),
     (MarkdownSectionEnum.FENCED_CODE_BLOCK, split_fenced_code_block),
     (MarkdownSectionEnum.INDENTED_CODE_BLOCK, split_indented_code_block),
     (MarkdownSectionEnum.LINK_REFERENCE_DEFINITION, split_link_reference_definition),
-    (MarkdownSectionEnum.LIST, split_list),
+    (MarkdownSectionEnum.ORDERED_LIST, split_list),
     (MarkdownSectionEnum.PARAGRAPH, split_paragraph),
     (MarkdownSectionEnum.SETEXT_HEADING, split_setext_heading),
     (MarkdownSectionEnum.TABLE, split_table),

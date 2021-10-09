@@ -10,12 +10,26 @@ import re
 from .._utils import get_indent
 
 FENCED_CODE_BLOCK_FENCE_CHARACTERS = ["`", "~"]
+BULLET_LIST_START_REGEX = re.compile(
+    r"^\s*"  # Leading spaces are OK and often expected
+    r"("
+    r"\*|"  # Asterisk list marker
+    r"-|"  # Dash list marker
+    r"\+|"  # Plus list marker
+    r") "  # Lists need a space after their identifier
+)
+ORDERED_LIST_START_REGEX = re.compile(
+    r"^\s*"  # Leading spaces are OK and often expected
+    r"("
+    r"[0-9]+\."  # Numeric list marker
+    r") "  # Lists need a space after their identifier
+)
 LIST_START_REGEX = re.compile(
     r"^\s*"  # Leading spaces are OK and often expected
     r"("
     r"\*|"  # Asterisk list marker
     r"-|"  # Dash list marker
-    r"\+|"  # Plust list marker
+    r"\+|"  # Plus list marker
     r"[0-9]+\."  # Numeric list marker
     r") "  # Lists need a space after their identifier
 )
@@ -135,6 +149,46 @@ def is_list_start_line(line: str) -> bool:
     """
     return not is_indented_code_block_start_line(line) and bool(
         LIST_START_REGEX.search(line)
+    )
+
+
+def is_ordered_list_start_line(line: str) -> bool:
+    """Evaluates whether a line could start an ordered list
+
+    Example:
+        ```
+        1. Entry
+        ```
+
+    Args:
+        line: The line to evaluate
+
+    Returns:
+        True if the line is could start an ordered list. False otherwise.
+    """
+    return not is_indented_code_block_start_line(line) and bool(
+        ORDERED_LIST_START_REGEX.search(line)
+    )
+
+
+def is_bullet_list_start_line(line: str) -> bool:
+    """Evaluates whether a line could start a bullet list
+
+    Example:
+        ```
+        * Asterisk List
+        - Dash List
+        + Plus List
+        ```
+
+    Args:
+        line: The line to evaluate
+
+    Returns:
+        True if the line is could start a bullet list. False otherwise.
+    """
+    return not is_indented_code_block_start_line(line) and bool(
+        BULLET_LIST_START_REGEX.search(line)
     )
 
 
