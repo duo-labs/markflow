@@ -22,7 +22,7 @@ def list_ended(line: str, index: int, lines: List[str]) -> bool:
     )
 
 
-def split_list(lines: List[str], line_offset: int = 0) -> Tuple[List[str], List[str]]:
+def split_ordered_list(lines: List[str], line_offset: int = 0) -> Tuple[List[str], List[str]]:
     list_ = []
     remaining_lines = lines
 

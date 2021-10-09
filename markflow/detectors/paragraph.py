@@ -4,8 +4,9 @@ from ._lines import is_paragraph_start_line, is_setext_underline
 from .atx_heading import split_atx_heading
 from .blank_line import split_blank_line
 from .block_quote import split_block_quote
+from .bullet_list import split_bullet_list
 from .fenced_code_block import split_fenced_code_block
-from .list import split_list
+from .ordered_list import split_ordered_list
 from .table import split_table
 from .thematic_break import split_thematic_break
 
@@ -31,8 +32,9 @@ def _is_paragraph_continuation_text(lines: List[str], line_offset: int = 0) -> b
         split_atx_heading,
         split_blank_line,
         split_block_quote,
+        split_bullet_list,
         split_fenced_code_block,
-        split_list,
+        split_ordered_list,
         split_table,
         split_thematic_break,
     ]:
