@@ -4,7 +4,6 @@ import pathlib
 from typing import DefaultDict, List, Optional
 
 import pytest
-
 from markflow import reformat_markdown_text
 
 from .util import render

@@ -1,7 +1,6 @@
 import textwrap
 
 import pytest
-
 from markflow.formatters.list import MarkdownList, split_code
 
 from .util import create_section, render

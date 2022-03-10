@@ -70,7 +70,9 @@ def parse_markdown(lines: List[str]) -> List[Tuple[MarkdownSectionEnum, List[str
                 else:
                     log_text = f"Line {current_line}"
                 logger.debug(
-                    "%s: %s", log_text, section_type.value,
+                    "%s: %s",
+                    log_text,
+                    section_type.value,
                 )
                 sections.append((section_type, section_content))
                 current_line += len(section_content)

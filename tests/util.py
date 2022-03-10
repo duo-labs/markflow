@@ -2,7 +2,6 @@ import re
 from typing import Type
 
 import commonmark
-
 from markflow.formatters import MarkdownSection
 
 IGNORED_HTML_CHARACTERS = re.compile(r"[\n\s]")
