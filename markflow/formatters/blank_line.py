@@ -26,7 +26,7 @@ class MarkdownBlankLine(MarkdownSection):
         if self.lines:
             raise RuntimeError(
                 f"`{self.__class__.__name__}`s can only contain one line. Please open "
-                f"a bug report or email jholland@duoescurity,com."
+                f"a bug report or email jholland@duosecurity.com."
             )
         self.lines.append(line)
 

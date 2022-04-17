@@ -6,5 +6,5 @@ alias mypy="poetry run mypy"
 alias pytest="poetry run pytest"
 alias python="poetry run python"
 
-# Alias for running MarkFlow on our files that avoids clobbering out tests.
-alias markflow-markflow='git ls-files | egrep ".md\$\$" | grep -v "tests/" | xargs poetry run markflow --check'
+# Alias for running MarkFlow on our files that avoids clobbering our tests.
+alias markflow-markflow='git ls-files | egrep ".md\$\$" | grep -v "tests/" | xargs poetry run markflow'
