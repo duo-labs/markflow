@@ -1,32 +1,8 @@
 import textwrap
 
-import pytest
-
-from markflow.formatters.list import MarkdownList, split_code
+from markflow.formatters.lists import MarkdownBulletList, MarkdownOrderedList
 
 from .util import create_section, render
-
-
-class TestSplitCode:
-    def test_nosplit(self) -> None:
-        input_ = """\
-        test
-        test"""
-        expected = [input_]
-        assert split_code(input_) == expected
-
-    def test_split(self) -> None:
-        input_ = textwrap.dedent(
-            """\
-            plaintext
-            ```
-            code
-            code
-            ```
-            plaintext"""
-        )
-        expected = ["plaintext", "```\ncode\ncode\n```", "plaintext"]
-        assert split_code(input_) == expected
 
 
 class TestMarkdownList:
@@ -50,9 +26,9 @@ class TestMarkdownList:
               lists since they could be missing leading spaces
               and make things look extra confusing."""
         )
-        lst = create_section(MarkdownList, input_)
+        lst = create_section(MarkdownBulletList, input_)
         assert lst.reformatted(width=50) == expected
-        lst = create_section(MarkdownList, expected)
+        lst = create_section(MarkdownBulletList, expected)
         assert lst.reformatted(width=50) == expected
         assert render(expected) == render(input_)
 
@@ -76,9 +52,9 @@ class TestMarkdownList:
               lists since they could be missing leading spaces
               and make things look extra confusing."""
         )
-        lst = create_section(MarkdownList, input_)
+        lst = create_section(MarkdownBulletList, input_)
         assert lst.reformatted(width=50) == expected
-        lst = create_section(MarkdownList, expected)
+        lst = create_section(MarkdownBulletList, expected)
         assert lst.reformatted(width=50) == expected
         assert render(expected) == render(input_)
 
@@ -102,9 +78,9 @@ class TestMarkdownList:
               lists since they could be missing leading spaces
               and make things look extra confusing."""
         )
-        lst = create_section(MarkdownList, input_)
+        lst = create_section(MarkdownBulletList, input_)
         assert lst.reformatted(width=50) == expected
-        lst = create_section(MarkdownList, expected)
+        lst = create_section(MarkdownBulletList, expected)
         assert lst.reformatted(width=50) == expected
         assert render(expected) == render(input_)
 
@@ -121,9 +97,9 @@ class TestMarkdownList:
             * Test
             * Test"""
         )
-        lst = create_section(MarkdownList, input_)
+        lst = create_section(MarkdownBulletList, input_)
         assert lst.reformatted() == expected
-        lst = create_section(MarkdownList, expected)
+        lst = create_section(MarkdownBulletList, expected)
         assert lst.reformatted() == expected
         # Since we correct lists that have mismatched indicators, we update the strings
         # to have consistent bullets.
@@ -146,9 +122,9 @@ class TestMarkdownList:
             2. Test
             3. Test"""
         )
-        lst = create_section(MarkdownList, input_)
+        lst = create_section(MarkdownOrderedList, input_)
         assert lst.reformatted() == expected
-        lst = create_section(MarkdownList, expected)
+        lst = create_section(MarkdownOrderedList, expected)
         assert lst.reformatted() == expected
         assert render(expected) == render(input_)
 
@@ -171,9 +147,9 @@ class TestMarkdownList:
               - This one's ok though
             * So is this one"""
         )
-        lst = create_section(MarkdownList, input_)
+        lst = create_section(MarkdownBulletList, input_)
         assert lst.reformatted(width=50) == expected
-        lst = create_section(MarkdownList, expected)
+        lst = create_section(MarkdownBulletList, expected)
         assert lst.reformatted(width=50) == expected
         # Since we correct lists that have mismatched indicators, we update the strings
         # to have consistent bullets.
@@ -203,9 +179,9 @@ class TestMarkdownList:
                3. This one isn't great
             2. So is this one"""
         )
-        lst = create_section(MarkdownList, input_)
+        lst = create_section(MarkdownOrderedList, input_)
         assert lst.reformatted(width=50) == expected
-        lst = create_section(MarkdownList, expected)
+        lst = create_section(MarkdownOrderedList, expected)
         assert lst.reformatted(width=50) == expected
         input_ = input_.replace("-", "*")
         expected = expected.replace("-", "*")
@@ -234,9 +210,9 @@ class TestMarkdownList:
               * This one's ok though, minus the symbol
             * So is this one"""
         )
-        lst = create_section(MarkdownList, input_)
+        lst = create_section(MarkdownBulletList, input_)
         assert lst.reformatted(width=50) == expected
-        lst = create_section(MarkdownList, expected)
+        lst = create_section(MarkdownBulletList, expected)
         assert lst.reformatted(width=50) == expected
         # Since we correct lists that have mismatched indicators, we update the strings
         # to have consistent bullets.
@@ -256,27 +232,27 @@ class TestMarkdownList:
               http://example.com/very/nested/directory)
             * [URL](http://example.com)"""
         )
-        lst = create_section(MarkdownList, input_)
+        lst = create_section(MarkdownBulletList, input_)
         assert lst.reformatted(width=30) == expected
-        lst = create_section(MarkdownList, expected)
+        lst = create_section(MarkdownBulletList, expected)
         assert lst.reformatted(width=30) == expected
         assert render(expected) == render(input_)
 
     def test_indented(self) -> None:
         input_ = "  * Entry 1\n* Entry 2"
-        expected = "  * Entry 1\n  * Entry 2"
-        lst = create_section(MarkdownList, input_)
+        expected = "* Entry 1\n* Entry 2"
+        lst = create_section(MarkdownBulletList, input_)
         assert lst.reformatted() == expected
-        lst = create_section(MarkdownList, expected)
+        lst = create_section(MarkdownBulletList, expected)
         assert lst.reformatted() == expected
         assert render(expected) == render(input_)
 
     def test_indented_numerics(self) -> None:
         input_ = "  1. Test\n  2. Test\n 10. Test"
-        expected = " 1. Test\n 2. Test\n 3. Test"
-        lst = create_section(MarkdownList, input_)
+        expected = "1. Test\n2. Test\n3. Test"
+        lst = create_section(MarkdownOrderedList, input_)
         assert lst.reformatted() == expected
-        lst = create_section(MarkdownList, expected)
+        lst = create_section(MarkdownOrderedList, expected)
         assert lst.reformatted() == expected
         assert render(expected) == render(input_)
 
@@ -294,15 +270,12 @@ class TestMarkdownList:
             "9. i"
         )
         expected = input_
-        lst = create_section(MarkdownList, input_)
+        lst = create_section(MarkdownOrderedList, input_)
         assert lst.reformatted() == expected
-        lst = create_section(MarkdownList, expected)
+        lst = create_section(MarkdownOrderedList, expected)
         assert lst.reformatted() == expected
         assert render(expected) == render(input_)
 
-    @pytest.mark.xfail(
-        reason="TODO: Indentation isn't properly detected with ordered lists."
-    )
     def test_nested_ordered_bad_indent(self) -> None:
         input_ = textwrap.dedent(
             """\
@@ -325,9 +298,9 @@ class TestMarkdownList:
             4. This one isn't great
             5. So is this one"""
         )
-        lst = create_section(MarkdownList, input_)
+        lst = create_section(MarkdownOrderedList, input_)
         assert lst.reformatted(width=50) == expected
-        lst = create_section(MarkdownList, expected)
+        lst = create_section(MarkdownOrderedList, expected)
         assert lst.reformatted(width=50) == expected
         input_ = input_.replace("-", "*")
         expected = expected.replace("-", "*")

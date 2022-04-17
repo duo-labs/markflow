@@ -6,10 +6,11 @@ from .formatters import (
     MarkdownATXHeading,
     MarkdownBlankLine,
     MarkdownBlockQuote,
+    MarkdownBulletList,
     MarkdownFencedCodeBlock,
     MarkdownIndentedCodeBlock,
     MarkdownLinkReferenceDefinition,
-    MarkdownList,
+    MarkdownOrderedList,
     MarkdownParagraph,
     MarkdownSection,
     MarkdownSetextHeading,
@@ -28,10 +29,11 @@ FORMATTERS: Dict[MarkdownSectionEnum, Type[MarkdownSection]] = {
     MarkdownSectionEnum.ATX_HEADING: MarkdownATXHeading,
     MarkdownSectionEnum.BLANK_LINE: MarkdownBlankLine,
     MarkdownSectionEnum.BLOCK_QUOTE: MarkdownBlockQuote,
+    MarkdownSectionEnum.BULLET_LIST: MarkdownBulletList,
     MarkdownSectionEnum.FENCED_CODE_BLOCK: MarkdownFencedCodeBlock,
     MarkdownSectionEnum.INDENTED_CODE_BLOCK: MarkdownIndentedCodeBlock,
     MarkdownSectionEnum.LINK_REFERENCE_DEFINITION: MarkdownLinkReferenceDefinition,
-    MarkdownSectionEnum.LIST: MarkdownList,
+    MarkdownSectionEnum.ORDERED_LIST: MarkdownOrderedList,
     MarkdownSectionEnum.PARAGRAPH: MarkdownParagraph,
     MarkdownSectionEnum.SETEXT_HEADING: MarkdownSetextHeading,
     MarkdownSectionEnum.TABLE: MarkdownTable,
@@ -39,7 +41,7 @@ FORMATTERS: Dict[MarkdownSectionEnum, Type[MarkdownSection]] = {
 }
 
 
-def _reformat_markdown_text(text: str, width: Number = 88, line_index: int = 1) -> str:
+def _reformat_markdown_text(text: str, width: Number = 88, line_index: int = 0) -> str:
     sections = parse_markdown(text.splitlines())
 
     formatters = []
