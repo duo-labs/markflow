@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 # TODO: File bug report for 0015
 PYCOMMONMARK_BUG_FILES = ["0015"]
-MARKFLOW_BUG_FILES = ["0016", "0017", "0018"]
+MARKFLOW_BUG_FILES: List[str] = []
 MARKFLOW_DIFFERENT_FILES = [
     "0023"  # This file contains a block quote immediately followed by a setext heading
 ]

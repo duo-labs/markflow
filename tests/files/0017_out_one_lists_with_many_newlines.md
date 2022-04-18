@@ -1,6 +1,11 @@
 1. One
+
 2. Two
+
 3. Three
-4. Four
-5. Five
-6. Six
+
+0. Four
+
+6. Five
+
+7. Six
