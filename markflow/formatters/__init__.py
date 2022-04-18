@@ -6,7 +6,7 @@ from .block_quote import *
 from .fenced_code_block import *
 from .indented_code_block import *
 from .link_reference_definition import *
-from .list import *
+from .lists import *
 from .paragraph import *
 from .setext_heading import *
 from .table import *
