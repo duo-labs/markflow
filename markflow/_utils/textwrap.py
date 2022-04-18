@@ -16,7 +16,7 @@ def join(split_text: List[str], leading_spaces: List[bool], width: Number) -> st
             potential_new_string = f"{new_split_text[-1]} {word}"
         else:
             potential_new_string = f"{new_split_text[-1]}{word}"
-        if len(potential_new_string) <= width or not new_split_text[-1]:
+        if len(potential_new_string) <= width or not new_split_text[-1] or width <= 0:
             new_split_text[-1] = potential_new_string
         else:
             new_split_text.append(word)
