@@ -23,9 +23,8 @@ jobs:
         python3 -m pip install --upgrade pip
         pip install setuptools wheel twine
         curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
-        # Remove this once this issue is no longer in preview: https://github.com/python-poetry/poetry/issues/2742
         source $HOME/.poetry/env
-        poetry self update --preview
+        poetry self update
     - name: Audit
       run: |
         export PATH="$HOME/.poetry/bin:${PATH}"
@@ -47,9 +46,8 @@ jobs:
         python3 -m pip install --upgrade pip
         pip install setuptools wheel twine
         curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
-        # Remove this once this issue is no longer in preview: https://github.com/python-poetry/poetry/issues/2742
         source $HOME/.poetry/env
-        poetry self update --preview
+        poetry self update
     - name: Test
       run: |
         export PATH="$HOME/.poetry/bin:${PATH}"
