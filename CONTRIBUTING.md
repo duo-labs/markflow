@@ -2,6 +2,13 @@
 
 The following are the contributing guidelines when making changes to this project.
 
+Development depends on the installation of **make**, for coordinating execution of the
+underlying tools, **poetry**, for managing our **Python** environments and the
+**MarkFlow** package itself, and the supported versions of **Python** (current, 3.6,
+3.7, 3.8, and 3.9). You can generally get away with only having one version of
+**Python** installed and testing against that. The GitHub builds will validate your
+changes against all versions of **Python** anyway.
+
 ## Making Changes
 
 ([Step 0: Checkout the documentation on the implementation of the tool.](
@@ -13,10 +20,10 @@ understand what that's doing, though, read on.
 
 ### Running Tools
 
-All tools that are available in the poetery environment (including MarkFlow) can easily
-be added to you command line as the commands themselves by running
-`source poetry-aliases.sh`. An additional alias, `markflow-markflow`, is also provided
-to easily run MarkFlow only on non-test files.
+All tools that are available in the poetry environment (including **MarkFlow**) can
+easily be added to your command line as the commands themselves by running
+`. poetry-aliases.sh`. An additional alias, `markflow-markflow`, is also provided to
+easily run **MarkFlow** against non-test files.
 
 ### Running Audits
 
@@ -28,22 +35,25 @@ audits we run are as follows:
 make markflow
 # Ensure all python files would not be reformatted by black
 make black
+# Ensure our import are all sorted
+make isort
 # Ensure all pythons follow a few other rules enforced by flake8
 make flake
-# Run all of the above. Every command will be run regardless of other failing.
+# Run all of the above. Every command will be run regardless of the others failing.
 make audits
 ```
 
-The poetry environment comes with [black][black] and of course MarkFlow so you can
-quickly run the tools with `poetry run black` or `poetry run markflow` or just drop down
-to a shell with them by running `poetry shell`.
+The poetry environment comes with [**black**][black], and of course **MarkFlow**, so you
+can quickly run the tools with `poetry run black` or `poetry run markflow` or just drop
+into a shell with them by running `poetry shell`.
 
 [black]: https://black.readthedocs.io/en/latest/
 
 ### Running Tests
 
-We test our code through unit and system tests that are run by [pytest][pytest] and
-strict type checking enforced via [mypy][mypy]. The commands to run them are as follows:
+We test our code through unit and system tests that are run by [**pytest**][pytest] and
+strict type checking enforced via [**mypy**][mypy]. The commands to run them are as
+follows:
 
 ```shell
 # Run tests in /tests
@@ -58,21 +68,21 @@ make tests
 
 Why do we exit on first failure unlike audits? Tests are noisier and this makes the
 failures more obvious. In most cases the audits are unlikely to fill up your screen, but
-even then. (Hint: Run our `make black` command without `--check` to shrink that output
-quickly.)
+even then.
 
 [mypy]: http://mypy-lang.org/
 [pytest]: https://docs.pytest.org/en/latest/
 
 ### Submitting Changes
 
-Once you've got your changes all made, make a [pull request][pr]. Someone will be with
-you shortly.
+Once you've made all your changes, create a [pull request][pr]. Someone will be with you
+shortly.
 
-If you are correcting a bug you've seen when processing a Markdown file, add it and the
-expected output to `tests/files`. In the folder, inputs and outputs are matched up based
-on their leading numeric. So, `0010_in_tests.md`'s expected output is
-`0010_out_tests.md`.
+If you are correcting a bug you've seen when processing a **Markdown** file, add it and
+the expected output to `tests/files`. In the folder, inputs and outputs are matched up
+based on their leading numeric. So, `0010_in_tests.md`'s expected output is
+`0010_out_tests.md`. The [README has a section on anonymizing text](README.md#issues) if
+you're worried about leaking sensitive information.
 
 [pr]: https://github.com/duo-labs/markflow/pulls
 
@@ -83,11 +93,11 @@ feel free to open an [issue][issues].
 
 [issues]: https://github.com/duo-labs/markflow/issues
 
-# Duplicate CI Locally
+# Duplicating CI Locally
 
 The build in CI simply runs the make commands in the container defined by the root
-`Dockerfile`. You'll of course need [docker][docker]. Once you do, to build the image
-run:
+`Dockerfile`. You'll of course need [**docker**][docker]. Once you do, to build the
+image run:
 
 ```shell
 make container

@@ -52,7 +52,7 @@ class MarkdownLinkReferenceDefinition(MarkdownSection):
         if match is None:
             raise RuntimeError(
                 "Invalid link reference definition created. Please open a bug report "
-                "or email jholland@duoescurity.com."
+                "or email jholland@duosecurity.com."
             )
         return match.group("name")
 
@@ -62,7 +62,7 @@ class MarkdownLinkReferenceDefinition(MarkdownSection):
         if match is None:
             raise RuntimeError(
                 "Invalid link reference definition created. Please open a bug report "
-                "or email jholland@duoescurity.com."
+                "or email jholland@duosecurity.com."
             )
         return match.group("link")
 
@@ -72,7 +72,7 @@ class MarkdownLinkReferenceDefinition(MarkdownSection):
         if match is None:
             raise RuntimeError(
                 "Invalid link reference definition created. Please open a bug report "
-                "or email jholland@duoescurity.com."
+                "or email jholland@duosecurity.com."
             )
         title = match.group("title")
         return " ".join(title.split())

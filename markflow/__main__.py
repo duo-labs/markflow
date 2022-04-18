@@ -92,7 +92,7 @@ def parse_args(argv: List[str]) -> argparse.Namespace:
         default=88,
         type=int,
         help=(
-            "The desired maximum length of lines in your file. Pass any number less"
+            "The desired maximum length of lines in your file. Pass any number less "
             "than 1 to set the line length to infinity. (default: %(default)s)"
         ),
     )

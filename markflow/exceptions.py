@@ -1,5 +1,5 @@
 class MarkdownFormatException(Exception):
-    """Raised if the passed in file is formatted incorrectly """
+    """Raised if the passed in file is formatted incorrectly"""
 
 
 class ReformatInconsistentException(RuntimeError):
