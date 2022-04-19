@@ -43,7 +43,7 @@ class TestTextWrap:
             abc abc abc abc abc abc abc abc abc
             ``abc ``` abc[0][0] ``abc abc abc abc <br />
             <br />
-            abc abc [url](http://example.com) abc[url][
+            abc abc [url](http://example.com)abc[url][
             http://example.com]abc[url][URL][url][URL] <br/>
             abc<br/>"""
         )
@@ -96,16 +96,14 @@ class TestTextWrap:
     def test_link_split(self) -> None:
         input_ = "a[URL][url] b [URL](http://example.com)c"
         expected_split_text = [
-            "a",
-            "[URL][",
+            "a[URL][",
             "url]",
             "b",
             "[URL](",
-            "http://example.com)",
-            "c",
+            "http://example.com)c",
         ]
-        expected_leading_spaces = [False, False, False, True, True, False, False]
-        expected_evaluates = [True, True, False, True, True, False, True]
+        expected_leading_spaces = [False, False, True, True, False]
+        expected_evaluates = [True, False, True, True, False]
         split_text, leading_spaces, evaluates = link_split(input_, False)
         assert len(split_text) == len(leading_spaces) == len(evaluates)
         assert split_text == expected_split_text
@@ -115,16 +113,14 @@ class TestTextWrap:
     def test_link_split_sentence(self) -> None:
         input_ = "a[URL][url]. b [URL](http://example.com).c"
         expected_split_text = [
-            "a",
-            "[URL][",
+            "a[URL][",
             "url].",
             "b",
             "[URL](",
-            "http://example.com).",
-            "c",
+            "http://example.com).c",
         ]
-        expected_leading_spaces = [False, False, False, True, True, False, False]
-        expected_evaluates = [True, True, False, True, True, False, True]
+        expected_leading_spaces = [False, False, True, True, False]
+        expected_evaluates = [True, False, True, True, False]
         split_text, leading_spaces, evaluates = link_split(input_, False)
         assert len(split_text) == len(leading_spaces) == len(evaluates)
         assert split_text == expected_split_text
