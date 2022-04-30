@@ -4,9 +4,9 @@ from typing import List, Tuple
 from markflow.typing import Number
 
 INLINE_CODE_MARKER_REGEX = re.compile(r"(((?!<\\)`)+)")
-FOOTNOTE_REGEX = re.compile(r"\[[^\[]+\]\[[^\]]+\]")
+FOOTNOTE_REGEX = re.compile(r"[^\s\]\)]*\[[^\[]+\]\[[^\]]+\][^\s\[\(]*")
 HTML_NEWLINE_REGEX = re.compile(r"<br ?/?>")
-URL_REGEX = re.compile(r"\[[^\[]+\]\([^\)]+\)")
+URL_REGEX = re.compile(r"[^\s\]\)]*\[[^\[]+\]\([^\)]+\)[^\s\[\(]*")
 
 
 def join(split_text: List[str], leading_spaces: List[bool], width: Number) -> str:
@@ -134,7 +134,7 @@ def link_split(
     leading_spaces: List[bool] = []
     evaluates: List[bool] = []
     last_end = 0
-    # Each iteration of this for loop operates operates on non-link text followed by
+    # Each iteration of this for loop operates on non-link text followed by
     # link text.
     for match in matches:
         non_link_text = text[last_end : match.start()]
